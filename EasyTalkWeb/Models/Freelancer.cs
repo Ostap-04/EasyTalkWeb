@@ -19,5 +19,6 @@ namespace EasyTalkWeb.Models
         public ICollection<Project>? Projects { get; set; }
 
         public ICollection<Technology>? Technologies { get; set; }
+        public ICollection<Proposal> Proposals { get; set; }
     }
 }

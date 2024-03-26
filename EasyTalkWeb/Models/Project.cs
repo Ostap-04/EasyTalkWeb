@@ -18,4 +18,5 @@
 
         public ICollection<Topic>? Topics { get; set; }
     }
+    
 }

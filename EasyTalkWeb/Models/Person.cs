@@ -29,9 +29,5 @@
         public ICollection<Message> Messages { get; set; } = null!;
     }
 
-    public enum Gender
-    {
-        Male,
-        Female
-    }
+   
 }
