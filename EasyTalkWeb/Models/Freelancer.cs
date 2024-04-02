@@ -4,6 +4,7 @@ namespace EasyTalkWeb.Models
 {
     public class Freelancer
     {
+        public Guid? FreelancerId { get; set; }
         public Guid? PersonId { get; set; }
 
         public DateTime CreatedDate { get; set; }

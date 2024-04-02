@@ -1,3 +1,6 @@
+using EasyTalkWeb.Persistance;
+using Microsoft.EntityFrameworkCore;
+
 namespace EasyTalkWeb
 {
     public class Program
@@ -8,8 +11,10 @@ namespace EasyTalkWeb
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql((builder.Configuration.GetConnectionString("EasyTalkConnectionString"))));
+          
 
-            var app = builder.Build();
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

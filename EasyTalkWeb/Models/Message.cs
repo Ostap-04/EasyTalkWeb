@@ -14,6 +14,6 @@ namespace EasyTalkWeb.Models
 
         public Chat? Chat { get; set; }
 
-        public Attachment? Attachment { get; set; }
+        public ICollection<Attachment>? Attachments { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 {
     public class Attachment
     {
+        public Guid AttachmentId { get; set; }
         public Guid MessageId { get; set; }
 
         public DateTime CreatedDate { get; set; }

@@ -4,7 +4,8 @@ namespace EasyTalkWeb.Models
 {
     public class Client
     {
-        public Guid? PersonId { get; set; }
+		public Guid? ClientId { get; set; }
+		public Guid? PersonId { get; set; }
 
         public DateTime CreatedDate { get; set; }
 

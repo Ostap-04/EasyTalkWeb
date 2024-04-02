@@ -1,4 +1,6 @@
-﻿namespace EasyTalkWeb.Models
+﻿using EasyTalkWeb.Enum;
+
+namespace EasyTalkWeb.Models
 {
     public class Person : BaseEntity
     {
