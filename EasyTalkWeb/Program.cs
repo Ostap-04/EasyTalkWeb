@@ -1,4 +1,7 @@
+using EasyTalkWeb.Identity;
+using EasyTalkWeb.Models;
 using EasyTalkWeb.Persistance;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace EasyTalkWeb
@@ -10,10 +13,13 @@ namespace EasyTalkWeb
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddPersistanceServices(builder.Configuration);
+            builder.Services.AddIdentityServices();
+            builder.Services.AddAuthorization();
+            builder.Services
+                .AddIdentityApiEndpoints<Person>();
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql((builder.Configuration.GetConnectionString("EasyTalkConnectionString"))));
           
-
 			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -24,6 +30,7 @@ namespace EasyTalkWeb
                 app.UseHsts();
             }
 
+            app.MapIdentityApi<Person>();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

@@ -19,6 +19,13 @@ namespace Persistance.EntityConfiguration
                 .ValueGeneratedOnAdd()
                 .IsRequired();
             builder
+                .Property(p => p.ModifiedDate);
+            builder
+                .Property(p => p.Price);
+            builder
+                .Property(p => p.Status)
+                .HasMaxLength(50);
+            builder
                 .Property(p => p.Name)
                 .HasMaxLength(256);
             builder

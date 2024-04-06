@@ -1,6 +1,10 @@
-﻿namespace EasyTalkWeb.Models
+﻿using EasyTalkWeb.Persistance.EntityConfigutation;
+using Microsoft.EntityFrameworkCore;
+
+namespace EasyTalkWeb.Models
 {
-	public class JobPost : BaseEntity
+    [EntityTypeConfiguration(typeof(JobPostConfiguration))]
+    public class JobPost : BaseEntity
 	{
 		public string? Title {  get; set; }
 		public decimal? Price { get; set; }

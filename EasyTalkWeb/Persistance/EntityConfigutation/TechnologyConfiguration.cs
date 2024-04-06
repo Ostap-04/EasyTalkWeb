@@ -15,6 +15,8 @@ namespace Persistance.EntityConfiguration
                 .ValueGeneratedOnAdd()
                 .IsRequired();
             builder
+                .Property(p => p.Name);
+            builder
                 .HasMany(t => t.Freelancers)
                 .WithMany(f => f.Technologies);
         }

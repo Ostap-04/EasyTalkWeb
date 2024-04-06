@@ -1,8 +1,12 @@
 ﻿using EasyTalkWeb.Enum;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Persistance.EntityConfiguration;
 
 namespace EasyTalkWeb.Models
 {
-    public class Person : BaseEntity
+    [EntityTypeConfiguration(typeof(PersonConfiguration))]
+    public class Person : IdentityUser<Guid>
     {
         public Gender? Gender { get; set; }
 
@@ -14,13 +18,15 @@ namespace EasyTalkWeb.Models
 
         public string? Location { get; set; }
 
-        public string? Email { get; set; }
-
         public string? Password { get; set; }
 
         public string? Salt { get; set; }
 
         public string? PhotoLocation { get; set; }
+        
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
 
         public Client? Client { get; set; }
 
@@ -30,6 +36,4 @@ namespace EasyTalkWeb.Models
 
         public ICollection<Message> Messages { get; set; } = null!;
     }
-
-   
 }

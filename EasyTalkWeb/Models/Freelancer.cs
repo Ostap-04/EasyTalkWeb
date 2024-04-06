@@ -1,10 +1,14 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Persistance.EntityConfiguration;
+using System;
 
 namespace EasyTalkWeb.Models
 {
+    [EntityTypeConfiguration(typeof(FreelancerConfiguration))]
     public class Freelancer
     {
         public Guid? FreelancerId { get; set; }
+
         public Guid? PersonId { get; set; }
 
         public DateTime CreatedDate { get; set; }
@@ -20,6 +24,7 @@ namespace EasyTalkWeb.Models
         public ICollection<Project>? Projects { get; set; }
 
         public ICollection<Technology>? Technologies { get; set; }
+
         public ICollection<Proposal> Proposals { get; set; }
     }
 }

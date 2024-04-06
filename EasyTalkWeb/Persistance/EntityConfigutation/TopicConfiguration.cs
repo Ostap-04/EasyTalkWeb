@@ -19,6 +19,10 @@ namespace Persistance.EntityConfiguration
                 .ValueGeneratedOnAdd()
                 .IsRequired();
             builder
+                .Property(p => p.ModifiedDate);
+            builder
+                .Property(p => p.Name);
+            builder
                 .HasOne(t => t.Project)
                 .WithMany(p => p.Topics)
                 .HasForeignKey(t => t.ProjectId)

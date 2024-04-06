@@ -1,5 +1,9 @@
-﻿namespace EasyTalkWeb.Models
+﻿using Microsoft.EntityFrameworkCore;
+using Persistance.EntityConfiguration;
+
+namespace EasyTalkWeb.Models
 {
+    [EntityTypeConfiguration(typeof(TechnologyConfiguration))]
     public class Technology
     {
         public Guid Id { get; set; }
