@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Persistance.EntityConfiguration;
+using System;
 
 namespace EasyTalkWeb.Models
 {
+    [EntityTypeConfiguration(typeof(FreelancerConfiguration))]
     public class Freelancer
     {
         public Guid? FreelancerId { get; set; }

@@ -1,7 +1,12 @@
-﻿namespace EasyTalkWeb.Models
+﻿using Microsoft.EntityFrameworkCore;
+using Persistance.EntityConfiguration;
+
+namespace EasyTalkWeb.Models
 {
+    [EntityTypeConfiguration(typeof(ProjectConfiguration))]
     public class Project : BaseEntity
     {
+
         public string? Name { get; set; }
 
         public string? Description { get; set; }

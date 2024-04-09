@@ -19,6 +19,12 @@ namespace Persistance.EntityConfiguration
                 .ValueGeneratedOnAdd()
                 .IsRequired();
             builder
+               .Property(f => f.ModifiedDate);
+            builder
+                .Property(f => f.Specialization);
+            builder
+                .Property(f => f.Rate);
+            builder
                 .HasOne(f => f.Person)
                 .WithOne(p => p.Freelancer)
                 .HasForeignKey<Freelancer>(f => f.PersonId)
@@ -30,6 +36,10 @@ namespace Persistance.EntityConfiguration
             builder
                 .HasMany(f => f.Technologies)
                 .WithMany(t => t.Freelancers);
+            builder
+                .HasMany(f => f.Proposals)
+                .WithOne(p => p.Freelancer)
+                .HasForeignKey(p => p.FreelancerId);
         }
     }
 }

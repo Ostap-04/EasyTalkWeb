@@ -19,6 +19,8 @@ namespace Persistance.EntityConfiguration
                .ValueGeneratedOnAdd()
                .IsRequired();
             builder
+             .Property(a => a.ModifiedDate);
+            builder
                 .HasOne(c => c.Person)
                 .WithOne(p => p.Client)
                 .HasForeignKey<Client>(c => c.PersonId)
@@ -28,6 +30,10 @@ namespace Persistance.EntityConfiguration
                 .HasMany(c => c.Projects)
                 .WithOne(p => p.Client)
                 .HasForeignKey(p => p.ClientId);
+            builder
+               .HasMany(c => c.JobPosts)
+               .WithOne(jp => jp.Client)
+               .HasForeignKey(jp => jp.ClientId);
         }
     }
 }

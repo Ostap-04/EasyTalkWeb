@@ -18,7 +18,9 @@ namespace EasyTalkWeb.Persistance.EntityConfigutation
 				.Property(p => p.CreatedDate)
 				.ValueGeneratedOnAdd()
 				.IsRequired();
-			builder
+            builder
+                .Property(p => p.ModifiedDate);
+            builder
 				.Property(p => p.Title)
 				.HasMaxLength(256);
 			builder

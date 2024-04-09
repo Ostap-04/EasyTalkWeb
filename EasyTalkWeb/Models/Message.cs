@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Persistance.EntityConfiguration;
+using System;
 
 namespace EasyTalkWeb.Models
 {
+    [EntityTypeConfiguration(typeof(MessageConfiguration))]
     public class Message : BaseEntity
     {
         public string? Text { get; set; }
