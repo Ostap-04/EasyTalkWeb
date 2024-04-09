@@ -2,7 +2,8 @@
 
 namespace EasyTalkWeb.Models
 {
-    public class UserRole : IdentityUserRole<int>
+    public class UserRole : IdentityRole<Guid>
     {
+
     }
 }
