@@ -15,6 +15,12 @@ namespace Persistance.EntityConfiguration
                 .ValueGeneratedOnAdd()
                 .IsRequired();
             builder
+                .Property(p => p.FirstName);
+            builder
+                .Property(p => p.LastName);
+            builder
+                .Property(p => p.DateOfBirth);
+            builder
                 .Property(p => p.Password)
                 .IsRequired();
             builder
@@ -27,6 +33,14 @@ namespace Persistance.EntityConfiguration
                 .Property(p => p.CreatedDate)
                 .ValueGeneratedOnAdd()
                 .IsRequired();
+            builder
+               .Property(p => p.Gender);
+            builder
+                .Property(p => p.ModifiedDate);
+            builder
+                .Property(p => p.PhotoLocation);
+            builder
+                .Property(p => p.Location);
             builder
                 .HasOne(p => p.Client)
                 .WithOne(p => p.Person)

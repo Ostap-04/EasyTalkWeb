@@ -1,6 +1,10 @@
-﻿namespace EasyTalkWeb.Models
+﻿using EasyTalkWeb.Persistance.EntityConfigutation;
+using Microsoft.EntityFrameworkCore;
+
+namespace EasyTalkWeb.Models
 {
-	public class Proposal : BaseEntity
+    [EntityTypeConfiguration(typeof(ProposalConfiguration))]
+    public class Proposal : BaseEntity
 	{
 		public string Title { get; set; }
 		public string Text { get; set; }

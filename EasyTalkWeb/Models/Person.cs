@@ -1,7 +1,10 @@
 ﻿using EasyTalkWeb.Enum;
+using Microsoft.EntityFrameworkCore;
+using Persistance.EntityConfiguration;
 
 namespace EasyTalkWeb.Models
 {
+    [EntityTypeConfiguration(typeof(PersonConfiguration))]
     public class Person : BaseEntity
     {
         public Gender? Gender { get; set; }
