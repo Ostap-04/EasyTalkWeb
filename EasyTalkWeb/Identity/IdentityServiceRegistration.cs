@@ -1,5 +1,7 @@
 ﻿using EasyTalkWeb.Models;
 using EasyTalkWeb.Persistance;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 
 namespace EasyTalkWeb.Identity
 {
@@ -13,7 +15,16 @@ namespace EasyTalkWeb.Identity
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequiredLength = 8;
-            }).AddEntityFrameworkStores<AppDbContext>();
+
+                options.Lockout.MaxFailedAccessAttempts = 5;
+
+                options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedEmail = false;
+
+            })
+                .AddRoles<UserRole>()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<AppDbContext>();
 
             return services;
         }

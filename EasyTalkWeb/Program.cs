@@ -16,11 +16,11 @@ namespace EasyTalkWeb
             builder.Services.AddPersistanceServices(builder.Configuration);
             builder.Services.AddIdentityServices();
             builder.Services.AddAuthorization();
-            builder.Services
-                .AddIdentityApiEndpoints<Person>();
+            builder.Services.AddIdentityApiEndpoints<Person>();
             builder.Services.AddControllersWithViews();
-          
+
 			var app = builder.Build();
+            RoleSeeder.SeedRolesAsync(app).Wait();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

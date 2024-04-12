@@ -18,13 +18,9 @@ namespace EasyTalkWeb.Models
 
         public string? Location { get; set; }
 
-        public string? Password { get; set; }
-
-        public string? Salt { get; set; }
-
         public string? PhotoLocation { get; set; }
         
-        public DateTime CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
 
@@ -32,8 +28,8 @@ namespace EasyTalkWeb.Models
 
         public Freelancer? Freelancer { get; set; }
 
-        public ICollection<Chat> Chats { get; set; } = null!;
+        public ICollection<Chat>? Chats { get; set; }
 
-        public ICollection<Message> Messages { get; set; } = null!;
+        public ICollection<Message>? Messages { get; set; }
     }
 }
