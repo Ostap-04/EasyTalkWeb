@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EasyTalkWeb.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace EasyTalkWeb.Persistance
 {
@@ -8,12 +9,12 @@ namespace EasyTalkWeb.Persistance
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<UserRole>>();
                 await SeedRoles(roleManager);
             }
         }
 
-        private static async Task SeedRoles(RoleManager<IdentityRole> roleManager)
+        private static async Task SeedRoles(RoleManager<UserRole> roleManager)
         {
             string[] roleNames = { "Admin", "Client", "Freelancer" };
 
@@ -21,7 +22,7 @@ namespace EasyTalkWeb.Persistance
             {
                 if (!await roleManager.RoleExistsAsync(roleName))
                 {
-                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                    await roleManager.CreateAsync(new UserRole(roleName));
                 }
             }
         }

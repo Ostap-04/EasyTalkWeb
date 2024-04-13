@@ -1,4 +1,5 @@
-﻿using EasyTalkWeb.Models;
+﻿using EasyTalkWeb.Identity.EmailHost;
+using EasyTalkWeb.Models;
 using EasyTalkWeb.Persistance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -19,13 +20,12 @@ namespace EasyTalkWeb.Identity
                 options.Lockout.MaxFailedAccessAttempts = 5;
 
                 options.User.RequireUniqueEmail = true;
-                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedEmail = true;
 
             })
                 .AddRoles<UserRole>()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<AppDbContext>();
-
             return services;
         }
     }

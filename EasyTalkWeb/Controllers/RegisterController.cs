@@ -1,17 +1,22 @@
-﻿using EasyTalkWeb.Models;
+﻿using EasyTalkWeb.Identity.EmailHost;
+using EasyTalkWeb.Models;
 using EasyTalkWeb.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EasyTalkWeb.Controllers
 {
     public class RegisterController : Controller
     {
         private readonly UserManager<Person> _userManager;
+        private readonly IMailService _mailService;
 
-        public RegisterController(UserManager<Person> userManager)
+
+        public RegisterController(UserManager<Person> userManager, IMailService mailService)
         {
             _userManager = userManager;
+            _mailService = mailService;
         }
 
         public IActionResult Register()
@@ -20,11 +25,11 @@ namespace EasyTalkWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> OnPost(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                Person user = new Person { 
+                Person user = new Person {
                     UserName = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
@@ -32,18 +37,25 @@ namespace EasyTalkWeb.Controllers
                     Location = model.Location,
                     DateOfBirth = model.DateOfBirth,
                     Gender = model.Gender,
-                    //Role
+                    Role = model.Role,
                     CreatedDate = DateTime.UtcNow,
                     ModifiedDate = DateTime.UtcNow,
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
-
                 if (result.Succeeded)
                 {
-                    var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //return Redirect(Url.PageLink(pageName: "/Account/ConfirmEmail",
-                    //    values: new {userId= user.Id, token= confirmationToken}));
+                    await _userManager.AddToRoleAsync(user, user.Role);
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
+                    bool emailResponse = _mailService.SendEmail(user.Email, confirmationLink);
+
+                    if (emailResponse)
+                        return RedirectToAction("Login", "Login");
+                    else
+                    {
+                        ModelState.AddModelError(nameof(model.Email), "Problem with email confirmation");
+                    }
                 }
 
                 foreach (var error in result.Errors)
@@ -54,11 +66,6 @@ namespace EasyTalkWeb.Controllers
 
             return View("Register", model);
         }
-
-        //public async Task<IActionResult> ConfirmEmail(Guid id, string confirmationToken)
-        //{
-
-        //}
 
     }
 }

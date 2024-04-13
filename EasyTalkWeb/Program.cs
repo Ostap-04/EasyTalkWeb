@@ -1,4 +1,5 @@
 using EasyTalkWeb.Identity;
+using EasyTalkWeb.Identity.EmailHost;
 using EasyTalkWeb.Models;
 using EasyTalkWeb.Persistance;
 using Microsoft.AspNetCore.Identity;
@@ -12,21 +13,21 @@ namespace EasyTalkWeb
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             builder.Services.AddPersistanceServices(builder.Configuration);
             builder.Services.AddIdentityServices();
             builder.Services.AddAuthorization();
             builder.Services.AddIdentityApiEndpoints<Person>();
             builder.Services.AddControllersWithViews();
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+            builder.Services.AddTransient<IMailService, MailService>();
 
-			var app = builder.Build();
+
+            var app = builder.Build();
             RoleSeeder.SeedRolesAsync(app).Wait();
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

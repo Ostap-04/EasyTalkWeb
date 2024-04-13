@@ -24,6 +24,8 @@ namespace EasyTalkWeb.Models
 
         public DateTime? ModifiedDate { get; set; }
 
+        public string? Role {  get; set; }
+
         public Client? Client { get; set; }
 
         public Freelancer? Freelancer { get; set; }

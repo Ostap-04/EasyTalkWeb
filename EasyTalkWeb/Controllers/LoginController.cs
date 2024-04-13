@@ -2,8 +2,6 @@
 using EasyTalkWeb.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Migrations.Internal;
-using System.Net;
 
 namespace EasyTalkWeb.Controllers
 {
@@ -23,23 +21,25 @@ namespace EasyTalkWeb.Controllers
             return View();
         }
 
-        public async Task<IActionResult> OnPost(LoginViewModel model)
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid) return View("Login");
+            Person appUser = await _userManager.FindByEmailAsync(model.Email);
             var result = await _signInManager.PasswordSignInAsync(
                 model.Email,
                 model.Password,
                 model.RememberMe,
                 lockoutOnFailure: false);
-                
+              
 
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Profile");
             }
             else
             {
-                if(result.IsLockedOut)
+                if (result.IsLockedOut)
                 {
                     ModelState.AddModelError("Login", "You are locked out");
                 }
@@ -47,6 +47,16 @@ namespace EasyTalkWeb.Controllers
                 {
                     ModelState.AddModelError("Login", "Failed to login");
                 }
+            }
+            bool emailStatus = await _userManager.IsEmailConfirmedAsync(appUser);
+            if (emailStatus == false)
+            {
+                ModelState.AddModelError(nameof(model.Email), "Email is unconfirmed, please confirm it first");
+            }
+            
+            if (emailStatus == false)
+            {
+                ModelState.AddModelError(nameof(model.Email), "Email is unconfirmed, please confirm it first");
             }
 
             return View("Login", model);
@@ -57,7 +67,5 @@ namespace EasyTalkWeb.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-
-
     }
 }
