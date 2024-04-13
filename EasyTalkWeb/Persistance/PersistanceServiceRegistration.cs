@@ -13,15 +13,7 @@ namespace EasyTalkWeb.Persistance
                 options.UseNpgsql(configuration.GetConnectionString("EasyTalkConnectionString"));
             });
 
-            // Need to specify
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Account/Login";
-                options.AccessDeniedPath = "/Account/AccesDenied";
-            });
-
             return services;
         }
-
     }
 }

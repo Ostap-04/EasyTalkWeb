@@ -16,7 +16,7 @@ namespace EasyTalkWeb.Persistance.EntityConfigutation
 				.IsRequired();
 			builder
 				.Property(p => p.CreatedDate)
-                .ValueGeneratedOnAdd()
+        .ValueGeneratedOnAdd()
 				.IsRequired();
 			builder
 				.Property(p => p.ModifiedDate);

@@ -12,7 +12,7 @@ namespace EasyTalkWeb
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+          
             builder.Services.AddPersistanceServices(builder.Configuration);
             builder.Services.AddIdentityServices();
             builder.Services.AddAuthorization();
@@ -20,7 +20,6 @@ namespace EasyTalkWeb
             builder.Services.AddControllersWithViews();
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
             builder.Services.AddTransient<IMailService, MailService>();
-
 
             var app = builder.Build();
             RoleSeeder.SeedRolesAsync(app).Wait();
