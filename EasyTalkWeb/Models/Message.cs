@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Persistance.EntityConfiguration;
-using System;
 
 namespace EasyTalkWeb.Models
 {

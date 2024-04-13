@@ -23,5 +23,4 @@ namespace EasyTalkWeb.Models
 
         public ICollection<Topic>? Topics { get; set; }
     }
-    
 }

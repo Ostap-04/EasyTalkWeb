@@ -13,6 +13,5 @@ namespace EasyTalkWeb.Models
         public Project? Project { get; set; }
 
         public ICollection<Chatshot>? Chatshots { get; set; }
-
     }
 }

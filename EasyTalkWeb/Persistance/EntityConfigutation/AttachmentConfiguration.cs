@@ -25,7 +25,7 @@ namespace Persistance.EntityConfiguration
                 .ValueGeneratedOnAdd()
                 .IsRequired();
             builder
-               .Property(a => a.ModifiedDate);
+                .Property(a => a.ModifiedDate);
             builder
                 .HasOne(a => a.Message)
                 .WithMany(m => m.Attachments)

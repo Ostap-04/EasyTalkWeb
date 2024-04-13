@@ -1,4 +1,5 @@
 ﻿using EasyTalkWeb.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -21,18 +22,19 @@ namespace Persistance.EntityConfiguration
             builder
                 .Property(p => p.DateOfBirth);
             builder
-                .Property(p => p.Password)
-                .IsRequired();
-            builder
-                .Property(p => p.Salt)
-                .IsRequired();
-            builder
                 .Property(p => p.Email)
                 .IsRequired();
             builder
                 .Property(p => p.CreatedDate)
-                .ValueGeneratedOnAdd()
-                .IsRequired();
+                .ValueGeneratedOnAdd();
+            builder
+                .Property(p => p.Gender);
+            builder
+                .Property(p => p.ModifiedDate);
+            builder
+                .Property(p => p.PhotoLocation);
+            builder
+                .Property(p => p.Location);
             builder
                .Property(p => p.Gender);
             builder

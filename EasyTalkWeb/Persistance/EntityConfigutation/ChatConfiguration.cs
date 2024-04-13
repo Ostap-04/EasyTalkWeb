@@ -25,7 +25,7 @@ namespace Persistance.EntityConfiguration
                 .ValueGeneratedOnAdd()
                 .IsRequired();
             builder
-             .Property(a => a.ModifiedDate);
+                .Property(a => a.ModifiedDate);
             builder
                 .HasMany(c => c.Persons)
                 .WithMany(c => c.Chats);

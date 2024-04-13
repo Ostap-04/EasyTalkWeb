@@ -19,7 +19,7 @@ namespace Persistance.EntityConfiguration
                 .ValueGeneratedOnAdd()
                 .IsRequired();
             builder
-               .Property(p => p.ModifiedDate);
+                .Property(p => p.ModifiedDate);
             builder
                 .Property(p => p.Price);
             builder

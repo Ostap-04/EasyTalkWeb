@@ -1,9 +1,12 @@
 ﻿using EasyTalkWeb.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace EasyTalkWeb.Persistance
 {
-	public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<Person, UserRole, Guid>
 	{
 		public AppDbContext() : base() { }
 
@@ -32,7 +35,9 @@ namespace EasyTalkWeb.Persistance
 		DbSet<Message> Messages { get; set; }
 
 		DbSet<Attachment> Attachments { get; set; }
+
 		DbSet<JobPost> JobPosts { get; set; }
+		
 		DbSet<Proposal> Proposals { get; set; }
-	}
+    }
 }

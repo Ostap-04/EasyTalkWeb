@@ -1,5 +1,9 @@
-﻿namespace EasyTalkWeb.Models
+﻿using Microsoft.EntityFrameworkCore;
+using Persistance.EntityConfiguration;
+
+namespace EasyTalkWeb.Models
 {
+    [EntityTypeConfiguration(typeof(ChatshotConfiguration))]
     public class Chatshot
     {
         public Guid Id { get; set; }
