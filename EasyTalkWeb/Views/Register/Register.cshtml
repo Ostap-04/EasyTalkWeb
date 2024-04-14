@@ -1,9 +1,6 @@
 ﻿@model EasyTalkWeb.Models.ViewModels.RegisterViewModel
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<Person> SignInManager
-@{
-    var externalProviders = await SignInManager.GetExternalAuthenticationSchemesAsync();
-}
 <div class="container mx-auto">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-6">
@@ -69,13 +66,15 @@
                 <p>Or register with:</p>
                 @foreach (var provider in await SignInManager.GetExternalAuthenticationSchemesAsync())
                 {
-                    <button type="button"
+                    <a
                             class="btn btn-dark"
                             id="externalRegisterButton"
                             name="provider"
+                            asp-controller="ExternalAuth"
+                            asp-action="ExternalAuth"
                             asp-route-provider=@provider.Name>
                             @provider.Name
-                    </button>
+                    </a>
                 }
             </form>
         </div>

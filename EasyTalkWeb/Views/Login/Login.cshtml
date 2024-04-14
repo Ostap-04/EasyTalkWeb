@@ -1,8 +1,6 @@
 ﻿@model EasyTalkWeb.Models.ViewModels.LoginViewModel
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<Person> SignInManager
-@{
-}
 <div class="container mx-auto">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-6">
@@ -33,13 +31,15 @@
                 <p>Or login with:</p>
                 @foreach(var provider in await SignInManager.GetExternalAuthenticationSchemesAsync())
                 {
-                    <button type="button"
+                    <a
                         class="btn btn-dark"
                         id="externalLoginButton"
                         name="provider" 
+                        asp-controller="ExternalAuth"
+                        asp-action="ExternalAuth"
                         asp-route-provider="@provider.Name">
                         @provider.Name
-                    </button>
+                    </a>
                 }
             </form>
         </div>

@@ -17,7 +17,6 @@ namespace EasyTalkWeb.Controllers
         {
             _signInManager = signInManager;
             _userManager = userManager;
-            //OnGetAsync();
         }
 
         public IActionResult Login()
@@ -72,13 +71,9 @@ namespace EasyTalkWeb.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public async Task OnGetAsync()
-        {
-            _authenticationSchemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
-        }
-
         public IActionResult LoginExternally(string provider)
         {
+
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, null);
             properties.RedirectUri = Url.Action("ExternalLoginCallback", "Account");
 

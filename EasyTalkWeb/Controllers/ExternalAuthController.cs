@@ -1,4 +1,5 @@
 ﻿using EasyTalkWeb.Models;
+using EasyTalkWeb.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc; 
@@ -19,19 +20,13 @@ namespace EasyTalkWeb.Controllers
             _userManager = userManager;
         }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> ExternalAuth(string provider, string returnUrl = null)
         {
-            // Request a redirect to the external login provider
             var redirectUrl = Url.Action(nameof(ExternalAuthCallback), "ExternalAuth", new { returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return Challenge(properties, provider);
         }
 
-        //[HttpGet]
-        //[AllowAnonymous]
         public async Task<IActionResult> ExternalAuthCallback(string returnUrl = null, string remoteError = null)
         {
             if (remoteError != null)
@@ -66,9 +61,14 @@ namespace EasyTalkWeb.Controllers
                     if (identResult.Succeeded)
                     {
                         await _signInManager.SignInAsync(user, false);
-                        return RedirectToAction("Index", "Profile");
+                        return View("ChooseRole");
 
                     }
+                }
+                else
+                {
+                    return RedirectToAction("Error", "ExternalAuth");
+
                 }
             }
             if (result.IsLockedOut)
@@ -93,6 +93,45 @@ namespace EasyTalkWeb.Controllers
             else
             {
                 return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+        }
+
+        public IActionResult Error()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> ChooseRole()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> GetRole(RegisterViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            user.Role = model.Role;
+            var res = await _userManager.AddToRoleAsync(user, model.Role);
+
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: false);
+            if (result.Succeeded)
+            {
+                return RedirectToLocal("/Profile/Index");
+            }
+            if (result.IsLockedOut)
+            {
+                return RedirectToAction(nameof(Lockout));
+            }
+            else
+            {
+                ViewData["LoginProvider"] = info.LoginProvider;
+                ViewData["Email"] = info.Principal.FindFirstValue(ClaimTypes.Email);
+                return View("ExternalAuth");
             }
         }
     }
