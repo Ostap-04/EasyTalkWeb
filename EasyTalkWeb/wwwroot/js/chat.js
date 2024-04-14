@@ -1,12 +1,16 @@
 ﻿"use strict";
 
 const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
-console.log(connection);
-//Disable the send button until connection is established.
+const chatEvents = {
+    receiveMessage: "ReceiveMessage",
+    sendMessage: "SendMessage",
+}
+
 document.getElementById("sendButton").disabled = true;
-//const username = document.getElementById("user");
-connection.on("ReceiveMessage", function (user, message) {
-    cosnole.log('received message ', message, 'from ', user);
+const username = document.getElementById("user-name")?.innerText;
+console.log(username)
+connection.on(chatEvents.receiveMessage, function (user, message) {
+    console.log('received message ', message, 'from ', user);
     const li = document.createElement("li");
     document.getElementById("messagesList").appendChild(li);
     li.textContent = `${user} says ${message}`;
@@ -19,10 +23,15 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-    var user = document.getElementById("userInput").value;
+    const receiver = [...document
+        .querySelectorAll("input[name=selectedUser]")]
+        .find(input => input.checked)?.value;
+
     const message = document.getElementById("messageInput").value;
-    connection.invoke("SendMessage", user, message).catch(function (err) {
-        return console.error(err.toString());
-    });
+    if (receiver) {
+        connection.invoke(chatEvents.sendMessage, username, receiver, message).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
     event.preventDefault();
 });

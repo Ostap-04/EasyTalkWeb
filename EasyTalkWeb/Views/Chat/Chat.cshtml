@@ -1,9 +1,22 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<Person> userMnager
+@{
+    var users = userMnager.Users.ToList();
+}
 <div class="container">
-    <div class="row p-1">
-        <div class="col-1">User</div>
-        <div class="col-5"><input type="text" id="userInput"/></div>
-    </div>
+    <div id="user-name">@TempData["CurrentUsername"]</div>
+    <ul class="row">
+        @foreach(var user in users)
+        {
+            if (user.ToString() != TempData["CurrentUsername"].ToString())
+            {
+                <label>
+                    <input type="radio" name="selectedUser" value="@user" />
+                    <span class="receiver">@user</span>
+                </label>
+            }
+        }
+    </ul>   
     <div class="row p-1">
         <div class="col-1">Message</div>
         <div class="col-5"><input type="text" class="w-100" id="messageInput" /></div>

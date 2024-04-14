@@ -1,19 +1,25 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using EasyTalkWeb.Hubs.Interfaces;
+using EasyTalkWeb.Persistance;
+using Microsoft.AspNetCore.SignalR;
 
-// WTF : https://github.com/Azure/azure-signalr/issues/1233
 namespace EasyTalkWeb.Hubs
 {
-    public class ChatHub : Hub
+    public class ChatHub : Hub<IChatClient>
     {
-        public override async Task OnConnectedAsync()
+        private readonly AppDbContext _dbContext;
+        public ChatHub(AppDbContext dbContext)
         {
-            await Clients.All.SendAsync("ReceiveMessage", Context.ConnectionId);
+            _dbContext = dbContext;
         }
-        public async Task SendMessage(string user, string message)
+
+        public async Task SendMessage(string sender, string receiver, string message)
         {
-            await Console.Out.WriteLineAsync(Context.UserIdentifier.ToString());
-            await Console.Out.WriteLineAsync(user + " : " + message);
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            Console.WriteLine(sender + "  " + receiver + "  " + message);
+            var userId = _dbContext.Users.FirstOrDefault(u => u.Email.ToLower() == receiver.ToLower()).Id.ToString();
+            if (!string.IsNullOrEmpty(userId))
+            {
+                await Clients.User(userId).ReceiveMessage(sender, message);
+            }
         }
     }
 }
