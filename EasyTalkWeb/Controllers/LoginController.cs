@@ -1,5 +1,6 @@
 ﻿using EasyTalkWeb.Models;
 using EasyTalkWeb.Models.ViewModels;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,14 @@ namespace EasyTalkWeb.Controllers
     {
         private readonly UserManager<Person> _userManager;
         private readonly SignInManager<Person> _signInManager;
+        [BindProperty]
+        public IEnumerable<AuthenticationScheme> _authenticationSchemes { get; set; }
 
         public LoginController(SignInManager<Person> signInManager, UserManager<Person> userManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            //OnGetAsync();
         }
 
         public IActionResult Login()
@@ -66,6 +70,19 @@ namespace EasyTalkWeb.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public async Task OnGetAsync()
+        {
+            _authenticationSchemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
+        }
+
+        public IActionResult LoginExternally(string provider)
+        {
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, null);
+            properties.RedirectUri = Url.Action("ExternalLoginCallback", "Account");
+
+            return Challenge(properties, provider);
         }
     }
 }

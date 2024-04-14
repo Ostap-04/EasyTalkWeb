@@ -1,4 +1,6 @@
 ﻿@model EasyTalkWeb.Models.ViewModels.LoginViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Person> SignInManager
 @{
 }
 <div class="container mx-auto">
@@ -28,8 +30,26 @@
                 <div class="mb-3">
                     <button type="submit" class="btn btn-dark" asp-controller="Login" asp-action="Login">Login</button>
                 </div>
-
+                <p>Or login with:</p>
+                @foreach(var provider in await SignInManager.GetExternalAuthenticationSchemesAsync())
+                {
+                    <button type="button"
+                        class="btn btn-dark"
+                        id="externalLoginButton"
+                        name="provider" 
+                        asp-route-provider="@provider.Name">
+                        @provider.Name
+                    </button>
+                }
             </form>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.getElementById("externalLoginButton").addEventListener("click", function () {
+            window.location.href = "@Url.Action("ExternalAuth", "ExternalAuth")";
+        });
+    </script>
+}

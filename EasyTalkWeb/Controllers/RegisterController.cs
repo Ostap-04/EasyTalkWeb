@@ -47,11 +47,11 @@ namespace EasyTalkWeb.Controllers
                 {
                     await _userManager.AddToRoleAsync(user, user.Role);
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
+                    var confirmationLink = Url.Action("EmailConfirmed", "Email", new { token, email = user.Email }, Request.Scheme);
                     bool emailResponse = _mailService.SendEmail(user.Email, confirmationLink);
 
                     if (emailResponse)
-                        return RedirectToAction("Login", "Login");
+                        return RedirectToAction("ConfirmEmail", "Email");
                     else
                     {
                         ModelState.AddModelError(nameof(model.Email), "Problem with email confirmation");
@@ -66,6 +66,8 @@ namespace EasyTalkWeb.Controllers
 
             return View("Register", model);
         }
+
+        
 
     }
 }
