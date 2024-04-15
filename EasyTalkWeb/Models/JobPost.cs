@@ -11,5 +11,7 @@ namespace EasyTalkWeb.Models
 		public string? Description { get; set; }
 		public Guid ClientId { get; set; }
 		public Client Client { get; set; }
-	}
+        public ICollection<Technology>? Technologies { get; set; }
+
+    }
 }

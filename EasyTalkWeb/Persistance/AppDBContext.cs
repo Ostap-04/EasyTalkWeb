@@ -23,7 +23,7 @@ namespace EasyTalkWeb.Persistance
 
 		DbSet<Freelancer> Freelancers { get; set; }
 
-		DbSet<Technology> Technologies { get; set; }
+		public DbSet<Technology> Technologies { get; set; }
 
 		DbSet<Project> Projects { get; set; }
 
@@ -37,7 +37,7 @@ namespace EasyTalkWeb.Persistance
 
 		DbSet<Attachment> Attachments { get; set; }
 
-		DbSet<JobPost> JobPosts { get; set; }
+		public DbSet<JobPost> JobPosts { get; set; }
 		
 		DbSet<Proposal> Proposals { get; set; }
     }

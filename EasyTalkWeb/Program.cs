@@ -1,6 +1,7 @@
 using EasyTalkWeb.Identity;
 using EasyTalkWeb.Identity.EmailHost;
 using EasyTalkWeb.Models;
+using EasyTalkWeb.Models.Repositories;
 using EasyTalkWeb.Persistance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,8 @@ namespace EasyTalkWeb
             builder.Services.AddControllersWithViews();
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
             builder.Services.AddTransient<IMailService, MailService>();
+            builder.Services.AddScoped<IJobPostRepository, JobPostRepository>();
+            builder.Services.AddScoped<ITechRepository, TechRepository>();
 
             var app = builder.Build();
             RoleSeeder.SeedRolesAsync(app).Wait();
