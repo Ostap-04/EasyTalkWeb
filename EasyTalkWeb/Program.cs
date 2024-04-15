@@ -1,6 +1,7 @@
 using EasyTalkWeb.Identity;
 using EasyTalkWeb.Identity.EmailHost;
 using EasyTalkWeb.Models;
+using EasyTalkWeb.Models.Repositories;
 using EasyTalkWeb.Persistance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,13 @@ namespace EasyTalkWeb
             builder.Services.AddControllersWithViews();
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
             builder.Services.AddTransient<IMailService, MailService>();
-
+            builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = Environment.GetEnvironmentVariable("client_id");
+                googleOptions.ClientSecret = Environment.GetEnvironmentVariable("client_secret");
+                googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
+            });
+            
             var app = builder.Build();
             RoleSeeder.SeedRolesAsync(app).Wait();
 
@@ -41,7 +48,7 @@ namespace EasyTalkWeb
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
+            app.MapControllers();
             app.Run();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using EasyTalkWeb.Models;
 using EasyTalkWeb.Models.ViewModels;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,8 @@ namespace EasyTalkWeb.Controllers
     {
         private readonly UserManager<Person> _userManager;
         private readonly SignInManager<Person> _signInManager;
+        [BindProperty]
+        public IEnumerable<AuthenticationScheme> _authenticationSchemes { get; set; }
 
         public LoginController(SignInManager<Person> signInManager, UserManager<Person> userManager)
         {
@@ -54,11 +57,6 @@ namespace EasyTalkWeb.Controllers
                 ModelState.AddModelError(nameof(model.Email), "Email is unconfirmed, please confirm it first");
             }
             
-            if (emailStatus == false)
-            {
-                ModelState.AddModelError(nameof(model.Email), "Email is unconfirmed, please confirm it first");
-            }
-
             return View("Login", model);
         }
 
@@ -66,6 +64,15 @@ namespace EasyTalkWeb.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult LoginExternally(string provider)
+        {
+
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, null);
+            properties.RedirectUri = Url.Action("ExternalLoginCallback", "Account");
+
+            return Challenge(properties, provider);
         }
     }
 }
