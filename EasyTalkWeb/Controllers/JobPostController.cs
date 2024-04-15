@@ -9,15 +9,17 @@ namespace EasyTalkWeb.Controllers
 {
     public class JobPostController : Controller
     {
-        private readonly IJobPostRepository jobPostRepository;
+        private readonly JobPostRepository jobPostRepository;
         private readonly ITechRepository techRepository;
         private readonly UserManager<Person> userManager;
+        private readonly ClientRepository clientRepository;
 
-        public JobPostController(IJobPostRepository jobPostRepository,ITechRepository techRepository, UserManager<Person> userManager)
+        public JobPostController(JobPostRepository jobPostRepository,ITechRepository techRepository, UserManager<Person> userManager , ClientRepository clientRepository )
         {
             this.jobPostRepository = jobPostRepository;
             this.techRepository = techRepository;
             this.userManager = userManager;
+            this.clientRepository = clientRepository;
         }
 
         [HttpGet]
@@ -33,6 +35,9 @@ namespace EasyTalkWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(JobPostRequest jobPostRequest)
         {
+            var curuser = await userManager.GetUserAsync(User);
+            var client = clientRepository.GetClientByPersonId(curuser.Id);
+         
             var jobpost = new JobPost
             {
                 Id = Guid.NewGuid(),
@@ -41,9 +46,8 @@ namespace EasyTalkWeb.Controllers
                 Description = jobPostRequest.Description,
                 ModifiedDate = DateTime.UtcNow,
                 CreatedDate = DateTime.UtcNow,
-                ClientId = userManager.Users.First().Id,
-                Client = new Client { ClientId = userManager.Users.First().Id, CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow }
-
+                Client = client,
+                ClientId = client.ClientId,
             };
             var selectedTech = new List<Technology>();
             //map tags from selected tags 
@@ -76,7 +80,7 @@ namespace EasyTalkWeb.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             //Retrieve the result from the repo
-            var jobPost = await jobPostRepository.GetAsync(id);
+            var jobPost = await jobPostRepository.GetByIdAsync(id);
 
 
             if (jobPost != null)
@@ -111,7 +115,7 @@ namespace EasyTalkWeb.Controllers
                 ClientId = jobpostrequest.ClientId,
             };
             
-            var updatedPost= await jobPostRepository.UpdateAsync(jobpost);
+            var updatedPost=  jobPostRepository.Update(jobpost);
             if (updatedPost!= null)
             {
                 //show success 
@@ -123,13 +127,9 @@ namespace EasyTalkWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(EditJobPostRequest jobPostRequest)
         {
-            var deletedPost = await jobPostRepository.DeleteAsync(jobPostRequest.Id);
-            if (deletedPost != null)
-            {
-                return RedirectToAction("List");
-            }
-            //show error
-            return RedirectToAction("Edit", new { id = jobPostRequest.Id });
+             await jobPostRepository.DeleteAsync(jobPostRequest.Id);
+          
+            return RedirectToAction("List");
         }
 
     }

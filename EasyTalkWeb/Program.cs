@@ -21,8 +21,7 @@ namespace EasyTalkWeb
             builder.Services.AddControllersWithViews();
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
             builder.Services.AddTransient<IMailService, MailService>();
-            builder.Services.AddScoped<IJobPostRepository, JobPostRepository>();
-            builder.Services.AddScoped<ITechRepository, TechRepository>();
+           
             builder.Services.AddAuthentication().AddGoogle(googleOptions =>
             {
                 googleOptions.ClientId = Environment.GetEnvironmentVariable("client_id");

@@ -17,7 +17,7 @@ namespace EasyTalkWeb.Persistance
 			base.OnConfiguring(optionsBuilder);
 		}
 		
-		DbSet<Person> People { get; set; }
+		public DbSet<Person> People { get; set; }
 
 		DbSet<Client> Clients { get; set; }
 

@@ -7,7 +7,7 @@ namespace EasyTalkWeb.Models.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly AppDbContext _context;
+        public readonly AppDbContext _context;
 
         public DbSet<T> _table { get; }
 

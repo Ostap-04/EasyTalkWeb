@@ -24,7 +24,7 @@ namespace Persistance.EntityConfiguration
                 .HasOne(c => c.Person)
                 .WithOne(p => p.Client)
                 .HasForeignKey<Client>(c => c.PersonId)
-                .OnDelete(DeleteBehavior.Cascade)
+                //.OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
             builder
                 .HasMany(c => c.Projects)
