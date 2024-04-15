@@ -23,7 +23,12 @@ namespace EasyTalkWeb
             builder.Services.AddTransient<IMailService, MailService>();
             builder.Services.AddScoped<IJobPostRepository, JobPostRepository>();
             builder.Services.AddScoped<ITechRepository, TechRepository>();
-
+            builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = Environment.GetEnvironmentVariable("client_id");
+                googleOptions.ClientSecret = Environment.GetEnvironmentVariable("client_secret");
+                googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
+            });
             var app = builder.Build();
             RoleSeeder.SeedRolesAsync(app).Wait();
 
@@ -44,7 +49,7 @@ namespace EasyTalkWeb
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
+            app.MapControllers();
             app.Run();
         }
     }

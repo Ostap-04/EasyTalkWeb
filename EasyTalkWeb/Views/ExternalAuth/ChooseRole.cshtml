@@ -1,0 +1,18 @@
+﻿@model EasyTalkWeb.Models.ViewModels.RegisterViewModel
+@{
+    Layout = null;
+}
+<form>
+ <div class="mb-3" style="width: 100%; height:100%; display: flex; align-items: center; justify-content: center; flex-direction: column">
+
+                    <label class="form-label">Role</label><br />
+                    <div>
+                    <input type="radio" id="client" name="Role" value="Client" checked>
+                    <label for="client">Client</label><br>
+                    <input type="radio" id="freelancer" name="Role" value="Freelancer">
+                    <label for="freelancer">Freelancer</label>
+                    </div>
+                    <br>
+                    <button class="btn btn-dark" asp-controller="ExternalAuth" asp-action="GetRole">Choose</button>
+                </div>
+</form>
