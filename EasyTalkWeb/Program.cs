@@ -1,6 +1,7 @@
 using EasyTalkWeb.Identity;
 using EasyTalkWeb.Identity.EmailHost;
 using EasyTalkWeb.Models;
+using EasyTalkWeb.Models.Repositories;
 using EasyTalkWeb.Persistance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ namespace EasyTalkWeb
                 googleOptions.ClientSecret = Environment.GetEnvironmentVariable("client_secret");
                 googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
             });
+            
             var app = builder.Build();
             RoleSeeder.SeedRolesAsync(app).Wait();
 

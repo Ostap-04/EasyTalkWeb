@@ -1,4 +1,5 @@
 ﻿using EasyTalkWeb.Models;
+using EasyTalkWeb.Models.Repositories;
 using EasyTalkWeb.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,12 +13,16 @@ namespace EasyTalkWeb.Controllers
     {
         private readonly SignInManager<Person> _signInManager;
         private readonly UserManager<Person> _userManager;
+        private readonly FreelancerRepository _freelancerRepository;
+        private readonly ClientRepository _clientRepository;
 
 
-        public ExternalAuthController(UserManager<Person> userManager, SignInManager<Person> signInManager)
+        public ExternalAuthController(UserManager<Person> userManager, SignInManager<Person> signInManager, FreelancerRepository freelancerRepository, ClientRepository clientRepository)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _clientRepository = clientRepository;
+            _freelancerRepository = freelancerRepository;
         }
 
         public async Task<IActionResult> ExternalAuth(string provider, string returnUrl = null)
@@ -51,6 +56,8 @@ namespace EasyTalkWeb.Controllers
                 {
                     Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
                     UserName = info.Principal.FindFirst(ClaimTypes.Email).Value,
+                    CreatedDate = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow,
                     EmailConfirmed = true
                 };
 
@@ -111,6 +118,29 @@ namespace EasyTalkWeb.Controllers
             var user = await _userManager.GetUserAsync(User);
             user.Role = model.Role;
             var res = await _userManager.AddToRoleAsync(user, model.Role);
+
+            if (user.Role == "Client")
+            {
+                Client client = new()
+                {
+                    ClientId = new Guid(),
+                    PersonId = user.Id,
+                    CreatedDate = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow
+                };
+                await _clientRepository.AddAsync(client);
+            }
+            else if (user.Role == "Freelancer")
+            {
+                Freelancer freelaner = new()
+                {
+                    FreelancerId = new Guid(),
+                    PersonId = user.Id,
+                    CreatedDate = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow
+                };
+                await _freelancerRepository.AddAsync(freelaner);
+            }
 
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)

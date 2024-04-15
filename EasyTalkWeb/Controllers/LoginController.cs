@@ -57,11 +57,6 @@ namespace EasyTalkWeb.Controllers
                 ModelState.AddModelError(nameof(model.Email), "Email is unconfirmed, please confirm it first");
             }
             
-            if (emailStatus == false)
-            {
-                ModelState.AddModelError(nameof(model.Email), "Email is unconfirmed, please confirm it first");
-            }
-
             return View("Login", model);
         }
 
