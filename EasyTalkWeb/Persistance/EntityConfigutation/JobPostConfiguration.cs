@@ -31,6 +31,9 @@ namespace EasyTalkWeb.Persistance.EntityConfigutation
 				.WithMany(c => c.JobPosts)
 				.HasForeignKey(p => p.ClientId)
 				.IsRequired();
-		}
+            builder
+              .HasMany(f => f.Technologies)
+              .WithMany(t => t.Jobposts);
+        }
 	}
 }

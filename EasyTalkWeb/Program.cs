@@ -21,13 +21,14 @@ namespace EasyTalkWeb
             builder.Services.AddControllersWithViews();
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
             builder.Services.AddTransient<IMailService, MailService>();
+            builder.Services.AddScoped<IJobPostRepository, JobPostRepository>();
+            builder.Services.AddScoped<ITechRepository, TechRepository>();
             builder.Services.AddAuthentication().AddGoogle(googleOptions =>
             {
                 googleOptions.ClientId = Environment.GetEnvironmentVariable("client_id");
                 googleOptions.ClientSecret = Environment.GetEnvironmentVariable("client_secret");
                 googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
             });
-            
             var app = builder.Build();
             RoleSeeder.SeedRolesAsync(app).Wait();
 
