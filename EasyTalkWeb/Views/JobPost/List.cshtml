@@ -21,7 +21,7 @@
                         <td>@jobpost.Description</td>
                         <td>
                             <div class="d-flex">
-                                @foreach (var tech in jobpost.Technologies.ToList())
+                                @foreach (var tech in jobpost.Technologies)
                                 {
                                     <span class="badge bg-secondary me-1">@tech.Name</span>
                                 }

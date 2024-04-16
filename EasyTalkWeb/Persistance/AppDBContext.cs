@@ -19,26 +19,26 @@ namespace EasyTalkWeb.Persistance
 		
 		public DbSet<Person> People { get; set; }
 
-		DbSet<Client> Clients { get; set; }
+        public DbSet<Client> Clients { get; set; }
 
-		DbSet<Freelancer> Freelancers { get; set; }
+        public DbSet<Freelancer> Freelancers { get; set; }
 
 		public DbSet<Technology> Technologies { get; set; }
 
-		DbSet<Project> Projects { get; set; }
+        public DbSet<Project> Projects { get; set; }
 
-		DbSet<Topic> Topics { get; set; }
+        public DbSet<Topic> Topics { get; set; }
 
-		DbSet<Chatshot> Chatshots { get; set; }
+        public DbSet<Chatshot> Chatshots { get; set; }
 
-		DbSet<Chat> Chats { get; set; }
+        public DbSet<Chat> Chats { get; set; }
 
-		DbSet<Message> Messages { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
-		DbSet<Attachment> Attachments { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
 
 		public DbSet<JobPost> JobPosts { get; set; }
-		
-		DbSet<Proposal> Proposals { get; set; }
+
+        public DbSet<Proposal> Proposals { get; set; }
     }
 }
