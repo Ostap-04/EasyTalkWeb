@@ -47,8 +47,12 @@
                             else if (User.IsInRole("Freelancer"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="JobPost"
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Proposal"
                                        asp-action="Add">Add proposal</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Proposal"
+                                       asp-action="List">List of proposals</a>
                                 </li>
                             }
                         }
