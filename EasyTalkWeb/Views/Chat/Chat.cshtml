@@ -3,7 +3,8 @@
 @{
     var users = userMnager.Users.ToList();
 }
-<div class="container">
+<link rel="stylesheet" href="~/css/chat.css" />
+<div class="chat-container">
     <div id="user-name">@TempData["CurrentUsername"]</div>
     <ul class="row">
         @foreach(var user in users)
@@ -16,25 +17,38 @@
                 </label>
             }
         }
-    </ul>   
-    <div class="row p-1">
-        <div class="col-1">Message</div>
-        <div class="col-5"><input type="text" class="w-100" id="messageInput" /></div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6 text-end">
-            <input type="button" id="sendButton" value="Send Message" />
+    </ul>
+    <div class="chat-body">
+        <div class="message-list">
+            <div class="message incoming">
+                <div class="message-sender"></div>
+                <div class="message-content">woooooooooooooowwwww</div>
+            </div>
+            <div class="message incoming">
+                <div class="message-sender"></div>
+                <div class="message-content">woooooooooooooowwwww</div>
+            </div>
+            <div class="message">
+                <div class="message-sender"></div>
+                <div class="message-content">woooooooooooooowwwww</div>
+            </div>
+            <div class="message incoming">
+                <div class="message-sender"></div>
+                <div class="message-content">woooooooooooooowwwww</div>
+            </div>
+            <div class="message">
+                <div class="message-sender"></div>
+                <div class="message-content">woooooooooooooowwwww</div>
+            </div>
+            <div class="message">woooooooooooooowwwww</div>
+            <div class="message incoming">woooooooooooooowwwww</div>
+            <div class="message">woooooooooooooowwwww</div>
         </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6">
-            <hr />
-        </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6">
-            <ul id="messagesList"></ul>
-        </div>
+        <form action="/submit-chat" method="POST" enctype="multipart/form-data">
+            <input type="text" id="message" name="message" placeholder="message">
+            <input type="file" id="file" name="file">
+            <button type="submit" value="Send">Send</button>
+        </form>
     </div>
 </div>
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
