@@ -20,36 +20,13 @@
     </ul>
     <div class="chat-body">
         <div class="message-list">
-            <div class="message incoming">
-                <div class="message-sender"></div>
-                <div class="message-content">woooooooooooooowwwww</div>
-            </div>
-            <div class="message incoming">
-                <div class="message-sender"></div>
-                <div class="message-content">woooooooooooooowwwww</div>
-            </div>
-            <div class="message">
-                <div class="message-sender"></div>
-                <div class="message-content">woooooooooooooowwwww</div>
-            </div>
-            <div class="message incoming">
-                <div class="message-sender"></div>
-                <div class="message-content">woooooooooooooowwwww</div>
-            </div>
-            <div class="message">
-                <div class="message-sender"></div>
-                <div class="message-content">woooooooooooooowwwww</div>
-            </div>
-            <div class="message">woooooooooooooowwwww</div>
-            <div class="message incoming">woooooooooooooowwwww</div>
-            <div class="message">woooooooooooooowwwww</div>
         </div>
-        <form action="/submit-chat" method="POST" enctype="multipart/form-data">
-            <input type="text" id="message" name="message" placeholder="message">
-            <input type="file" id="file" name="file">
-            <button type="submit" value="Send">Send</button>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="text" id="messageInput" name="message" placeholder="message" autocomplete="off">
+            <input type="file" id="fileInput" name="file">
+            <button id="sendMessageBtn" type="button" value="Send">Send</button>
         </form>
     </div>
 </div>
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/chat.js"></script>
+<script defer src="~/js/chat.js"></script>
