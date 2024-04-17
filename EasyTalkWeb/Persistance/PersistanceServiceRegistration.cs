@@ -17,7 +17,6 @@ namespace EasyTalkWeb.Persistance
             services.AddTransient<AppDbContext>();
             services.AddTransient<FreelancerRepository>();
             services.AddTransient<ClientRepository>();
-            services.AddTransient<MessageRepository>();
             services.AddTransient<JobPostRepository>();
             services.AddTransient<ITechRepository, TechRepository>();
             services.AddTransient<MailService>();

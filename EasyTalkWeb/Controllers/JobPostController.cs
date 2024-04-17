@@ -37,17 +37,6 @@ namespace EasyTalkWeb.Controllers
         {
             var curuser = await userManager.GetUserAsync(User);
             var client = clientRepository.GetClientByPersonId(curuser.Id);
-         
-            var jobpost = new JobPost
-            {
-                Id = Guid.NewGuid(),
-                Title = jobPostRequest.Title,
-                Price = jobPostRequest.Price,
-                Description = jobPostRequest.Description,
-                ModifiedDate = DateTime.UtcNow,
-                CreatedDate = DateTime.UtcNow,
-                ClientId = client.ClientId,
-            };
             var selectedTech = new List<Technology>();
             foreach (var selectedTId in jobPostRequest.SelectedTech)
             {
@@ -58,9 +47,22 @@ namespace EasyTalkWeb.Controllers
                     selectedTech.Add(existingTag);
                 }
             }
-            jobpost.Technologies = selectedTech;
+            var jobpost = new JobPost
+            {
+                Id = Guid.NewGuid(),
+                Title = jobPostRequest.Title,
+                Price = jobPostRequest.Price,
+                Description = jobPostRequest.Description,
+                ModifiedDate = DateTime.UtcNow,
+                CreatedDate = DateTime.UtcNow,
+                ClientId = client.ClientId,
+            };
+
             await jobPostRepository.AddAsync(jobpost);
-            return RedirectToAction("Add");
+            jobpost.Technologies = selectedTech;
+            await jobPostRepository.Update(jobpost);
+
+            return RedirectToAction("List");
 
         }
 
