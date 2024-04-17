@@ -2,7 +2,7 @@
 {
     public interface IMailService
     {
-        bool SendEmail(string userEmail, string confirmationLink);
+        bool SendEmail(string userEmail, string confirmationLink, string mailTitle);
     }
 
 }

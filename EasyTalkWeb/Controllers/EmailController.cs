@@ -28,5 +28,6 @@ namespace EasyTalkWeb.Controllers
         {
             return View();
         }
+
     }
 }

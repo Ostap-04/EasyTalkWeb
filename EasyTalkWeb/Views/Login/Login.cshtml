@@ -27,6 +27,7 @@
                 </div>
                 <div class="mb-3">
                     <button type="submit" class="btn btn-dark" asp-controller="Login" asp-action="Login">Login</button>
+                    <a href="@Url.Action("ForgotPassword", "Login")" class="btn btn-link">Forgot Password?</a>
                 </div>
                 <p>Or login with:</p>
                 @foreach(var provider in await SignInManager.GetExternalAuthenticationSchemesAsync())

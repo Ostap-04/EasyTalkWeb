@@ -74,7 +74,7 @@ namespace EasyTalkWeb.Controllers
                     }
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var confirmationLink = Url.Action("EmailConfirmed", "Email", new { token, email = user.Email }, Request.Scheme);
-                    bool emailResponse = _mailService.SendEmail(user.Email, confirmationLink);
+                    bool emailResponse = _mailService.SendEmail(user.Email, confirmationLink, "Confirm your email");
 
                     if (emailResponse)
                         return RedirectToAction("ConfirmEmail", "Email");
