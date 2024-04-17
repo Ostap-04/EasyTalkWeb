@@ -28,6 +28,7 @@ namespace EasyTalkWeb
                 googleOptions.ClientSecret = Environment.GetEnvironmentVariable("client_secret");
                 googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
             });
+
             var app = builder.Build();
             RoleSeeder.SeedRolesAsync(app).Wait();
 

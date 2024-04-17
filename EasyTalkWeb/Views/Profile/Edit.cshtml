@@ -1,0 +1,61 @@
+﻿@model EasyTalkWeb.Models.ViewModels.ProfileViewModel
+@using Microsoft.AspNetCore.Identity
+<div>
+    <div>
+        <div>
+
+            <h1>
+                Edit Profile
+            </h1>
+
+            <form method="post">
+                <div class="text-danger" asp-validation-summary="All"></div>
+                <div>
+                    <label>First Name</label>
+                    <input type="text" placeholder="@Model.FirstName" class="form-control" asp-for="FirstName" required />
+                    <span class="text-danger" asp-validation-for="FirstName"></span>
+                </div>
+                <div>
+                    <label>Last Name</label>
+                    <input type="text" placeholder="@Model.LastName" class="form-control" asp-for="LastName" required />
+                    <span class="text-danger" asp-validation-for="LastName"></span>
+                </div>
+                <div>
+                    <label>Email</label>
+                    <input type="email" placeholder="@Model.Email" class="form-control" asp-for="Email" required readonly/>
+                    <span class="text-danger" asp-validation-for="Email"></span>
+                </div>
+                <div>
+                    <label>Location</label>
+                    <input type="text" placeholder="@Model.Location" class="form-control" asp-for="Location" required />
+                    <span class="text-danger" asp-validation-for="Location"></span>
+                </div>
+                <div>
+                    <label>Date of Birth</label>
+                    <input type="date" placeholder="@Model.DateOfBirth" class="form-control" asp-for="DateOfBirth" required />
+                    <span class="text-danger" asp-validation-for="DateOfBirth"></span>
+                </div>
+                <div>
+                    <label>Technologies</label>
+                    @if (Model.Technologies != null)
+                    {
+                        @foreach (var technology in Model.Technologies)
+                        {
+                            <input type="date" placeholder="@technology" class="form-control" asp-for="Technologies" required />
+                            <span class="text-danger" asp-validation-for="Technologies"></span>
+                        }
+                    }
+                </div>
+                <div style="display: flex; margin-top : 15px; gap : 20px;">
+                    <div>
+                        <button type="submit" class="btn btn-dark" asp-controller="Profile" asp-action="Edit">Save</button>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-dark" asp-controller="Home" asp-action="Index">Delete account</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

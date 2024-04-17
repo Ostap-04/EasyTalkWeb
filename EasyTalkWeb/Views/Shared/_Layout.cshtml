@@ -66,6 +66,10 @@
                             </li>
                         }
                     </ul>
+                    @if(SignInManager.IsSignedIn(User))
+                    {
+                        <a asp-controller="Profile" asp-action="Index">Profile</a>
+                    }
                 </div>
             </div>
         </nav>
