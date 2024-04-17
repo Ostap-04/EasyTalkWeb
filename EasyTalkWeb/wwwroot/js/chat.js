@@ -9,6 +9,9 @@ const messageBlock = (sender, msg, incoming = '') => `<div class="message ${inco
 const sendMsgButton = document.getElementById("sendMessageBtn");
 const msgList = document.querySelector(".message-list");
 sendMsgButton.disabled = true;
+const messageInput = document.getElementById("messageInput");
+const msgPlaceholder = "write your message...";
+messageInput.placeholder = msgPlaceholder;
 const username = document.getElementById("user-name")?.innerText;
 
 connection.on(chatEvents.receiveMessage, function (user, message) {
@@ -28,13 +31,14 @@ sendMsgButton.addEventListener("click", function (event) {
         .querySelectorAll("input[name=selectedUser]")]
         .find(input => input.checked)?.value;
 
-    const message = document.getElementById("messageInput").value;
     if (receiver) {
-        connection.invoke(chatEvents.sendMessage, username, receiver, message).catch(function (err) {
+        connection.invoke(chatEvents.sendMessage, username, receiver, messageInput.value).catch(function (err) {
             return console.error(err.toString());
         });
-        const msg = messageBlock(username, message);
+        const msg = messageBlock(username, messageInput.value);
         msgList.insertAdjacentHTML("beforeend", msg);
+        messageInput.value = '';
+        messageInput.placeholder = msgPlaceholder;
     }
     event.preventDefault();
 });
