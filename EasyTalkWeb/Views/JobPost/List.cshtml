@@ -1,0 +1,48 @@
+﻿@model List<EasyTalkWeb.Models.JobPost>
+@{
+}
+<div class="container py-5">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Heading</td>
+                    <td>Tags</td>
+                    <td> </td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var jobpost in Model)
+                {
+                    <tr>
+                        <td>@jobpost.Title</td>
+                        <td>@jobpost.Description</td>
+                        <td>
+                            <div class="d-flex">
+                                @foreach (var tech in jobpost.Technologies)
+                                {
+                                    <span class="badge bg-secondary me-1">@tech.Name</span>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <a asp-area=""
+                               asp-controller="JobPost"
+                               asp-action="Edit"
+                               asp-route-id="@jobpost.Id">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No job Posts Found!</p>
+    }
+
+</div>
