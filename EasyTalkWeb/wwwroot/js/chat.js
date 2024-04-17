@@ -5,24 +5,25 @@ const chatEvents = {
     receiveMessage: "ReceiveMessage",
     sendMessage: "SendMessage",
 }
-
-document.getElementById("sendButton").disabled = true;
+const messageBlock = (sender, msg, incoming = '') => `<div class="message ${incoming}"><div class="message-sender">${sender}</div><div class="message-content">${msg}</div></div>`
+const sendMsgButton = document.getElementById("sendMessageBtn");
+const msgList = document.querySelector(".message-list");
+sendMsgButton.disabled = true;
 const username = document.getElementById("user-name")?.innerText;
-console.log(username)
+
 connection.on(chatEvents.receiveMessage, function (user, message) {
     console.log('received message ', message, 'from ', user);
-    const li = document.createElement("li");
-    document.getElementById("messagesList").appendChild(li);
-    li.textContent = `${user} says ${message}`;
+    const msg = messageBlock(user, message, "incoming");
+    msgList.insertAdjacentHTML("beforeend", msg);
 });
 
 connection.start().then(function () {
-    document.getElementById("sendButton").disabled = false;
+    sendMsgButton.disabled = false;
 }).catch(function (err) {
     return console.error(err.toString());
 });
 
-document.getElementById("sendButton").addEventListener("click", function (event) {
+sendMsgButton.addEventListener("click", function (event) {
     const receiver = [...document
         .querySelectorAll("input[name=selectedUser]")]
         .find(input => input.checked)?.value;
@@ -32,6 +33,8 @@ document.getElementById("sendButton").addEventListener("click", function (event)
         connection.invoke(chatEvents.sendMessage, username, receiver, message).catch(function (err) {
             return console.error(err.toString());
         });
+        const msg = messageBlock(username, message);
+        msgList.insertAdjacentHTML("beforeend", msg);
     }
     event.preventDefault();
 });
