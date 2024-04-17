@@ -37,6 +37,24 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Chat"
                                    asp-action="Index">Chat</a>
                             </li>
+                            @if (User.IsInRole("Client"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="JobPost"
+                                    asp-action="Add">Add jobpost</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="JobPost"
+                                       asp-action="List">List of jobposts</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Freelancer"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="JobPost"
+                                       asp-action="Add">Add proposal</a>
+                                </li>
+                            }
                         }
                         else
                         {

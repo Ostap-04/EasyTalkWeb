@@ -14,14 +14,20 @@ namespace EasyTalkWeb.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        public async Task<IActionResult> EmailConfirmed(string token, string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
                 return View("Error");
 
             var result = await _userManager.ConfirmEmailAsync(user, token);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            return View(result.Succeeded ? "EmailConfirmed" : "Error");
         }
+
+        public IActionResult ConfirmEmail()
+        {
+            return View();
+        }
+
     }
 }

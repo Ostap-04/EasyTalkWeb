@@ -19,6 +19,12 @@ namespace Persistance.EntityConfiguration
             builder
                 .HasMany(t => t.Freelancers)
                 .WithMany(f => f.Technologies);
+            builder
+                .HasMany(t => t.Jobposts)
+                .WithMany(f => f.Technologies);
+            builder
+                .HasMany(t => t.Proposals)
+                .WithMany(f => f.Technologies);
         }
     }
 }

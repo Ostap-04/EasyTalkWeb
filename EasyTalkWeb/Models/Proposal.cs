@@ -10,5 +10,6 @@ namespace EasyTalkWeb.Models
 		public string Text { get; set; }
 		public Guid FreelancerId { get; set; }
 		public Freelancer Freelancer { get; set; }
-	}
+        public ICollection<Technology>? Technologies { get; set; }
+    }
 }
