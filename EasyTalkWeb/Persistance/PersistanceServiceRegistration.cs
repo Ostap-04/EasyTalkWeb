@@ -21,6 +21,8 @@ namespace EasyTalkWeb.Persistance
             services.AddTransient<ITechRepository, TechRepository>();
             services.AddTransient<PersonRepository>();
             services.AddTransient<MailService>();
+            services.AddTransient<ProposalRepository>();
+
 
             return services;
         }

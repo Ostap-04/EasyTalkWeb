@@ -13,12 +13,15 @@ namespace EasyTalkWeb.Controllers
         private readonly ITechRepository _techRepository;
         private readonly UserManager<Person> _userManager;
         private readonly PersonRepository _personRepo;
+        private readonly SignInManager<Person> _signInManager;
 
-        public ProfileController(UserManager<Person> userManager, ITechRepository techRepository, PersonRepository personRepo)
+
+        public ProfileController(UserManager<Person> userManager, ITechRepository techRepository, PersonRepository personRepo, SignInManager<Person> signInManager)
         {
-            this._userManager = userManager;
-            this._techRepository = techRepository;
-            this._personRepo = personRepo;
+            _userManager = userManager;
+            _techRepository = techRepository;
+            _personRepo = personRepo;
+            _signInManager = signInManager;
         }
 
         [Authorize (Roles = "Client, Freelancer")]
@@ -61,17 +64,18 @@ namespace EasyTalkWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteUser(string userId)
+        public async Task<IActionResult> DeleteUser()
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return NotFound();
             }
+            await _signInManager.SignOutAsync();
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Deleted", "Profile");
             }
             else
             {
@@ -121,6 +125,11 @@ namespace EasyTalkWeb.Controllers
                 await _userManager.UpdateAsync(user);
             }
             return RedirectToAction("Index", "Profile");
+        }
+
+        public async Task<IActionResult> Deleted()
+        {
+            return View();
         }
     }
 }
