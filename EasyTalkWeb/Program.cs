@@ -3,6 +3,7 @@ using EasyTalkWeb.Identity.EmailHost;
 using EasyTalkWeb.Models;
 using EasyTalkWeb.Models.Repositories;
 using EasyTalkWeb.Persistance;
+using EasyTalkWeb.Persistance.Seeders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +32,7 @@ namespace EasyTalkWeb
 
             var app = builder.Build();
             RoleSeeder.SeedRolesAsync(app).Wait();
+            TechnologySeeder.SeedTechnologiesAsync(app).Wait();
 
             if (!app.Environment.IsDevelopment())
             {

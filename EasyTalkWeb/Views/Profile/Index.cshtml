@@ -31,7 +31,9 @@
         {
             @foreach (Technology technology in Model.Technologies)
             {
-                <ol>@technology.Name</ol>
+                <ul>
+                    <li>@technology.Name</li>
+                </ul>
             }
         }
         else
@@ -39,13 +41,11 @@
             <p>No technologies found</p>
         }
     </div>
-    <div>
-        <a asp-controller="Profile" asp-action="Edit">Edit</a>
-    </div>
 }
-@* else if (User.IsInRole("Client"))
-{
+<div style="display: flex; margin-top : 15px;">
     <div>
-        This content is only visible to users in the CLIENT role.
+        <button type="submit" class="btn btn-dark" asp-controller="Profile" asp-action="Edit">
+            <a style="color : #FFFF; text-decoration-line : none;" asp-controller="Profile" asp-action="Edit">Edit</a>
+        </button>
     </div>
-} *@
+</div>

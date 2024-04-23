@@ -13,13 +13,23 @@ namespace EasyTalkWeb.Models.Repositories
             _appDbContext = appDbContext;
         }
 
-        public async Task<Freelancer> GetPersonWithTechnologies(Guid userId)
+        public async Task<Freelancer> GetFreelancer(Guid userId)
         {
             var freelancer = await _appDbContext.Freelancers
                 .Include(c => c.Technologies)
                 .FirstOrDefaultAsync(c => c.PersonId == userId);
 
             return freelancer!;
+        }
+
+        public async Task<Person> GetPersonWithTechnologiesById(Guid userId)
+        {
+            var person = await _appDbContext.People
+            .Include(p => p.Freelancer)
+            .ThenInclude(f => f.Technologies)
+            .FirstOrDefaultAsync(p => p.Id == userId);
+
+            return person;
         }
 
         public Freelancer GetFreelancerByPersonId(Guid personId)
@@ -32,5 +42,6 @@ namespace EasyTalkWeb.Models.Repositories
 
             return freelancer;
         }
+
     }
 }
