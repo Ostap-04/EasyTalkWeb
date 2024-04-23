@@ -1,18 +1,51 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-@if (User.IsInRole("Client"))
+﻿@model EasyTalkWeb.Models.ViewModels.ProfileViewModel
+@using Microsoft.AspNetCore.Identity
+<div>
+    <h1>Profile</h1>
+    <div>
+        <label>First Name</label>
+        @Model.FirstName
+    </div>
+    <div>
+        <label>Last Name</label>
+        @Model.LastName
+    </div>
+    <div>
+        <label>Date of Birth</label>
+        @Model.DateOfBirth
+    </div>
+    <div>
+        <label>Location</label>
+        @Model.Location
+    </div>
+    <div>
+        <label>Email</label>
+        @Model.Email
+    </div>
+</div>
+@if (User.IsInRole("Freelancer"))
 {
     <div>
-        This content is only visible to users in the CLIENT role.
+        <label>Technologies</label>
+        @if (Model.Technologies != null)
+        {
+            @foreach (Technology technology in Model.Technologies)
+            {
+                <ul>
+                    <li>@technology.Name</li>
+                </ul>
+            }
+        }
+        else
+        {
+            <p>No technologies found</p>
+        }
     </div>
 }
-else if (User.IsInRole("Freelancer"))
-{
+<div style="display: flex; margin-top : 15px;">
     <div>
-        This content is only visible to users in the FREELANCER role.
+        <button type="submit" class="btn btn-dark" asp-controller="Profile" asp-action="Edit">
+            <a style="color : #FFFF; text-decoration-line : none;" asp-controller="Profile" asp-action="Edit">Edit</a>
+        </button>
     </div>
-}
+</div>

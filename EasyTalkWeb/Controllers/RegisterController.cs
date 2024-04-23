@@ -54,7 +54,7 @@ namespace EasyTalkWeb.Controllers
                     {
                         Client client = new()
                         {
-                            ClientId = new Guid(),
+                            ClientId = Guid.NewGuid(),
                             PersonId = user.Id,
                             CreatedDate = DateTime.UtcNow,
                             ModifiedDate = DateTime.UtcNow
@@ -65,7 +65,7 @@ namespace EasyTalkWeb.Controllers
                     {
                         Freelancer freelaner = new()
                         {
-                            FreelancerId = new Guid(),
+                            FreelancerId = Guid.NewGuid(),
                             PersonId = user.Id,
                             CreatedDate = DateTime.UtcNow,
                             ModifiedDate = DateTime.UtcNow
