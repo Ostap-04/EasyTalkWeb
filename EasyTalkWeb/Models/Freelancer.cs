@@ -7,7 +7,7 @@ namespace EasyTalkWeb.Models
     [EntityTypeConfiguration(typeof(FreelancerConfiguration))]
     public class Freelancer
     {
-        public Guid? FreelancerId { get; set; }
+        public Guid FreelancerId { get; set; }
 
         public Guid? PersonId { get; set; }
 

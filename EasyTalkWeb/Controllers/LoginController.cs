@@ -1,4 +1,5 @@
-﻿using EasyTalkWeb.Models;
+﻿using EasyTalkWeb.Identity.EmailHost;
+using EasyTalkWeb.Models;
 using EasyTalkWeb.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -10,13 +11,15 @@ namespace EasyTalkWeb.Controllers
     {
         private readonly UserManager<Person> _userManager;
         private readonly SignInManager<Person> _signInManager;
+        private readonly MailService _mailService;
         [BindProperty]
         public IEnumerable<AuthenticationScheme> _authenticationSchemes { get; set; }
 
-        public LoginController(SignInManager<Person> signInManager, UserManager<Person> userManager)
+        public LoginController(SignInManager<Person> signInManager, UserManager<Person> userManager, MailService mailService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _mailService = mailService;
         }
 
         public IActionResult Login()
@@ -73,6 +76,74 @@ namespace EasyTalkWeb.Controllers
             properties.RedirectUri = Url.Action("ExternalLoginCallback", "Account");
 
             return Challenge(properties, provider);
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                return RedirectToAction("ForgotPasswordConfirmation");
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var callbackUrl = Url.Action("ResetPassword", "Login", new { token, email = user.Email }, Request.Scheme);
+
+            _mailService.SendEmail(user.Email, callbackUrl, "Password Reset");
+
+            return RedirectToAction("ForgotPasswordConfirmation");
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string token, string email)
+        {
+            var model = new ResetPasswordViewModel { Token = token, Email = email };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+                return RedirectToAction("ResetPasswordConfirmation");
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                return RedirectToAction("Index", "Profile");
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
         }
     }
 }

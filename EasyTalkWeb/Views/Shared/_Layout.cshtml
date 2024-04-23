@@ -14,7 +14,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EasyTalkWeb</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -33,6 +33,10 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Login"
                                    asp-action="SignOut">Sign Out</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Chat"
+                                   asp-action="Index">Chat</a>
+                            </li>
                             @if (User.IsInRole("Client"))
                             {
                                 <li class="nav-item">
@@ -47,8 +51,16 @@
                             else if (User.IsInRole("Freelancer"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="JobPost"
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Proposal"
                                        asp-action="Add">Add proposal</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Proposal"
+                                       asp-action="List">List of proposals</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="FindJob"
+                                       asp-action="Index">Find a job</a>
                                 </li>
                             }
                         }
@@ -76,11 +88,11 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+  @*   <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - EasyTalkWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+    </footer> *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

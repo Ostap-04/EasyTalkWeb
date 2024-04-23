@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<Person> userMnager
+@{
+    var users = userMnager.Users.ToList();
+}
+<link rel="stylesheet" href="~/css/chat.css" />
+<div class="chat-container">
+    <div id="user-name">@TempData["CurrentUsername"]</div>
+    <ul class="row">
+        @foreach(var user in users)
+        {
+            if (user.ToString() != TempData["CurrentUsername"].ToString())
+            {
+                <label>
+                    <input type="radio" name="selectedUser" value="@user" />
+                    <span class="receiver">@user</span>
+                </label>
+            }
+        }
+    </ul>
+    <div class="chat-body">
+        <div class="message-list">
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="text" id="messageInput" name="message" placeholder="message" autocomplete="off">
+            <input type="file" id="fileInput" name="file">
+            <button id="sendMessageBtn" type="button" value="Send">Send</button>
+        </form>
+    </div>
+</div>
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script defer src="~/js/chat.js"></script>

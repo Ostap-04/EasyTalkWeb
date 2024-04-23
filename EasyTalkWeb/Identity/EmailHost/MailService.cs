@@ -16,13 +16,13 @@ namespace EasyTalkWeb.Identity.EmailHost
             _mailSettings = mailSettingsOptions.Value;
         }
 
-        public bool SendEmail(string userEmail, string confirmationLink)
+        public bool SendEmail(string userEmail, string confirmationLink, string mailTitle)
         {
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress(_mailSettings.SenderEmail);
             mailMessage.To.Add(new MailAddress(userEmail));
 
-            mailMessage.Subject = "Confirm your email";
+            mailMessage.Subject = mailTitle;
             mailMessage.IsBodyHtml = true;
             mailMessage.Body = confirmationLink;
 

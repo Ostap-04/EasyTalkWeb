@@ -1,3 +1,4 @@
+using EasyTalkWeb.Hubs;
 using EasyTalkWeb.Identity;
 using EasyTalkWeb.Identity.EmailHost;
 using EasyTalkWeb.Models;
@@ -20,6 +21,7 @@ namespace EasyTalkWeb
             builder.Services.AddAuthorization();
             builder.Services.AddIdentityApiEndpoints<Person>();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSignalR();
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
             builder.Services.AddTransient<IMailService, MailService>();
            
@@ -47,11 +49,14 @@ namespace EasyTalkWeb
             app.UseRouting();
 
             app.UseAuthorization();
-
+            
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapHub<ChatHub>("/chatHub");
+
             app.MapControllers();
+            
             app.Run();
         }
     }

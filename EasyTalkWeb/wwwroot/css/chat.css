@@ -1,0 +1,61 @@
+﻿.chat-container {
+  width: 100%;
+  height: 100%;
+  padding-bottom: 5%;
+}
+.chat-body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px #45a049 solid;
+  border-radius: 10px;
+  padding: 5px;
+}
+.message-list {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+.message {
+  padding: 5px 10px;
+  border-radius: 8px;
+  background-color: #3f96c8;
+}
+.message.incoming {
+  align-self: flex-end;
+}
+form {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+input[type='text'],
+input[type='file'],
+input[type='submit'] {
+  width: 100%;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  height: 40px;
+  border-radius: 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
