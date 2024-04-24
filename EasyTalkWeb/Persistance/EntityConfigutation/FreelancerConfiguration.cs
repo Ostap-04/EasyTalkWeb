@@ -32,7 +32,7 @@ namespace Persistance.EntityConfiguration
                 .IsRequired();
             builder
                 .HasMany(f => f.Projects)
-                .WithMany(p => p.Freelancers);
+                .WithOne(p => p.Freelancer);
             builder
                 .HasMany(f => f.Technologies)
                 .WithMany(t => t.Freelancers);

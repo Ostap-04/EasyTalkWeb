@@ -41,8 +41,10 @@ namespace Persistance.EntityConfiguration
                 .WithOne(t => t.Project)
                 .HasForeignKey(t => t.ProjectId);
             builder
-                .HasMany(p => p.Freelancers)
-                .WithMany(f => f.Projects);
+                .HasOne(p => p.Freelancer)
+                .WithMany(f => f.Projects)
+                .HasForeignKey(p => p.FreelancerId)
+                .IsRequired();
         }
     }
 }

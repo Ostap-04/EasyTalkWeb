@@ -19,7 +19,7 @@ namespace EasyTalkWeb.Models
 
         public int Rate { get; set; }
 
-        public Person? Person { get; set; } = null!;
+        public Person? Person { get; set; }
 
         public ICollection<Project>? Projects { get; set; }
 

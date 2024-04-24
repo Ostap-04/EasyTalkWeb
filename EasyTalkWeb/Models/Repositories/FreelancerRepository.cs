@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EasyTalkWeb.Models.Repositories
 {
-    public class FreelancerRepository: GenericRepository<Freelancer>
+    public class FreelancerRepository : GenericRepository<Freelancer>
     {
         public FreelancerRepository(AppDbContext _context) : base(_context) { }
 
@@ -16,6 +16,13 @@ namespace EasyTalkWeb.Models.Repositories
             var freelancer = personWithFreelancer?.Freelancer;
 
             return freelancer;
+        }
+        public async Task<IEnumerable<Freelancer>> GetAllAsyncWithPerson()
+        {
+            return await _context.Freelancers
+                .Include(j => j.Person)
+                .Include(p => p.Proposals)
+                .ToListAsync();
         }
     }
 }

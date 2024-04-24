@@ -17,9 +17,11 @@ namespace EasyTalkWeb.Models
 
         public Guid ClientId { get; set; }
 
+        public Guid FreelancerId { get; set; }
+
         public Client? Client { get; set; }
 
-        public ICollection<Freelancer>? Freelancers { get; set; }
+        public Freelancer Freelancer { get; set; }
 
         public ICollection<Topic>? Topics { get; set; }
     }

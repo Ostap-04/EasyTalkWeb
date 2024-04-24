@@ -1,0 +1,67 @@
+﻿@model List<EasyTalkWeb.Models.Freelancer>
+@{
+}
+<div class="container py-5">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Firstname</td>
+                    <td>LastName</td>
+                    <td>Technologies</td>
+                    <td>Proposal</td>
+                    <td> </td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var freelancer in Model)
+                {
+                    <tr>
+                        <td>@freelancer.Person.Email</td>
+                        @*    <td>@freelancer.Person.LastName.ToString()</td> *@
+                        @*
+                <td>
+                <div class="d-flex">
+                @foreach (var tech in freelancer.Technologies)
+                {
+                <span class="badge bg-secondary me-1">@tech.Name</span>
+                }
+                </div>
+                </td> *@
+                        <td>
+                            <div class="d-flex">
+                                @foreach (var proposal in freelancer.Proposals)
+                                {
+                                    <span class="badge bg-secondary me-1">@proposal.Title</span>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <a asp-area=""
+                               asp-controller="FindFreelancer"
+                               asp-action="SignContract"
+                               asp-route-id="@freelancer.FreelancerId">
+                                Sign contract
+                            </a>
+                        </td>
+                        @*  <td>
+                <a asp-area=""
+                asp-controller="JobPost"
+                asp-action="Edit"
+                asp-route-id="@jobpost.Id">
+                Edit
+                </a>
+                </td> *@
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No freelancer Found!</p>
+    }
+
+</div>
