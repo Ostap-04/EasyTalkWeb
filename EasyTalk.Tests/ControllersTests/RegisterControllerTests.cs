@@ -18,6 +18,7 @@ namespace EasyTalk.Tests.Controllers
         private readonly Mock<IMailService> _mailServiceMock;
         private readonly Mock<FreelancerRepository> _freelancerRepositoryMock;
         private readonly Mock<ClientRepository> _clientRepositoryMock;
+        private readonly Mock<JobPostRepository> _jobPostRepositoryMock;
 
         public RegisterControllerTests()
         {
@@ -27,6 +28,8 @@ namespace EasyTalk.Tests.Controllers
             _mailServiceMock = new Mock<IMailService>();
             _freelancerRepositoryMock = new Mock<FreelancerRepository>(_dbContextMock);
             _clientRepositoryMock = new Mock<ClientRepository>(_dbContextMock);
+            _jobPostRepositoryMock = new Mock<JobPostRepository>(_dbContextMock);
+
         }
 
         [Fact]
