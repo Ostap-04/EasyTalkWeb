@@ -37,6 +37,11 @@
                 @if(User.IsInRole("Freelancer"))
                 {
                     <div>
+                        <label>Specialization</label>
+                        <input type="text" placeholder="@Model.Specialization" class="form-control" asp-for="Specialization" />
+                        <span class="text-danger" asp-validation-for="Specialization"></span>
+                    </div>
+                    <div>
                         <label>Technologies</label>
                         <div>
                             <select class="technologies" multiple size="3" asp-for="SelectedTechnologies">

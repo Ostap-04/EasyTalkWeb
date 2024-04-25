@@ -41,6 +41,7 @@ namespace EasyTalkWeb.Controllers
                 var p = await _personRepo.GetFreelancer(user.Id);
                 if (p != null)
                 {
+                    model.Specialization = p.Specialization;
                     model.Technologies = p.Technologies;
                 }
             }
@@ -51,15 +52,22 @@ namespace EasyTalkWeb.Controllers
         {
             var allTechnologies = await _techRepository.GetAllAsync();
             Person user = await _userManager.GetUserAsync(User);
+           
             ProfileViewModel model = new ProfileViewModel
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 DateOfBirth = user.DateOfBirth,
                 Location = user.Location,
-                Email = user.Email,
-                Technologies = (ICollection<Technology>)allTechnologies
+                Email = user.Email
             };
+            if (user != null && User.IsInRole("Freelancer"))
+            {
+                var freelancer = await _personRepo.GetFreelancer(user.Id);
+                user.Freelancer = freelancer;
+                model.Specialization = user.Freelancer.Specialization;
+                model.Technologies = (ICollection<Technology>)allTechnologies;
+            }
             return View(model);
         }
 
@@ -100,6 +108,7 @@ namespace EasyTalkWeb.Controllers
                 curuser.Email = editProfile.Email;
                 curuser.Location = editProfile.Location;
                 curuser.DateOfBirth = editProfile.DateOfBirth;
+                curuser.Freelancer.Specialization = editProfile.Specialization;
                 var selectedTech = new List<Technology>();
                 foreach (var selectedTId in editProfile.SelectedTechnologies)
                 {
