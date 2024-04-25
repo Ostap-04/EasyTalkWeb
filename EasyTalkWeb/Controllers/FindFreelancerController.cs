@@ -1,5 +1,6 @@
 ﻿using EasyTalkWeb.Models;
 using EasyTalkWeb.Models.Repositories;
+using EasyTalkWeb.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,20 +21,27 @@ namespace EasyTalkWeb.Controllers
         public async Task<IActionResult> List()
         {
             var freelancers = await freelancerrepository.GetAllAsyncWithPerson();
-            return View(freelancers);
+            return View(freelancers as List<Freelancer>);
         }
-        public async Task<IActionResult> SignContract(Guid id)
-        {
-            var chosen = await freelancerrepository.GetByIdAsync(id);
+        //public async Task<IActionResult> SignContract(Guid id)
+        //{
+        //    var chosen = await freelancerrepository.GetByIdAsync(id);
+        //    ProjectRequest project = new ProjectRequest() { FreelancerId = chosen.FreelancerId };
 
-            return View(chosen);
-        }
-        public async Task<IActionResult> SignContact(Freelancer freelancer)
-        {
-            var curuser = await userManager.GetUserAsync(User);
-            var client = clientRepository.GetClientByPersonId(curuser.Id);
-            Project project = new Project { FreelancerId = freelancer.FreelancerId, ClientId = client.ClientId, };
-            return View();
-        }
+        //    return View(project);
+        //}
+        //public async Task<IActionResult> SignContact(ProjectRequest  request )
+        //{
+        //    var curuser = await userManager.GetUserAsync(User);
+        //    var client = clientRepository.GetClientByPersonId(curuser.Id);
+        //    Project project = new Project()
+        //    {
+        //        Client = client, ClientId = client.ClientId, CreatedDate = DateTime.UtcNow,
+        //        FreelancerId = request.FreelancerId, Description = request.Description, Name = request.Name,
+        //        Price = request.Price, ModifiedDate = DateTime.UtcNow, Id = Guid.NewGuid()
+        //    };
+
+        //    return RedirectToAction("", "Project");
+        //}
     }
 }

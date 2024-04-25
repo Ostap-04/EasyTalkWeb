@@ -22,6 +22,7 @@ namespace EasyTalkWeb.Models.Repositories
             return await _context.Freelancers
                 .Include(j => j.Person)
                 .Include(p => p.Proposals)
+                .Include(t=>t.Technologies)
                 .ToListAsync();
         }
     }
