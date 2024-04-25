@@ -53,6 +53,10 @@
                                         <a asp-controller="FindFreelancer" asp-action="FindFreelancer">Find</a>
                                     </div>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Project"
+                                       asp-action="List">List of projects</a>
+                                </li>
                             }
                             else if (User.IsInRole("Freelancer"))
                             {
@@ -68,7 +72,10 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="FindJob"
                                        asp-action="Index">Find a job</a>
                                 </li>
-                                
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Project"
+                                       asp-action="List">List of projects</a>
+                                </li>
                             }
                         }
                         else
