@@ -35,5 +35,21 @@ namespace EasyTalkWeb.Controllers
             Project project = new Project { FreelancerId = freelancer.FreelancerId, ClientId = client.ClientId, };
             return View();
         }
+        public async Task<IActionResult> FindFreelancer(string inputData)
+        {
+            IEnumerable<Freelancer> freelancers;
+            if (inputData == null)
+            {
+                freelancers = await freelancerrepository.GetAllAsyncWithPerson();
+                return View("List", freelancers);
+            }
+
+            TempData["searchTerm"] = inputData;
+            freelancers = await freelancerrepository.GetFreelancersBySearch(inputData);
+            return View("List", freelancers);
+
+            //var freelancers = freelancerrepository.GetFreelancersBySearch(inputData);
+            //return View(freelancers);
+        }
     }
 }
