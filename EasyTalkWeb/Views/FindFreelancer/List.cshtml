@@ -2,6 +2,13 @@
 @{
 }
 <div class="container py-5">
+    <form method="post">
+        <div style="display:flex; gap:20px;">
+            <input type="text" name="inputData", value="@TempData["searchTerm"]">
+            <button type="submit" asp-controller="FindFreelancer" asp-action="FindFreelancer">Find</button>
+        </div>
+    </form>
+    
     @if (Model != null && Model.Any())
     {
         <table class="table">

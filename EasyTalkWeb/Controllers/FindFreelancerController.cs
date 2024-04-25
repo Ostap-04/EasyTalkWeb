@@ -23,25 +23,22 @@ namespace EasyTalkWeb.Controllers
             var freelancers = await freelancerrepository.GetAllAsyncWithPerson();
             return View(freelancers as List<Freelancer>);
         }
-        //public async Task<IActionResult> SignContract(Guid id)
-        //{
-        //    var chosen = await freelancerrepository.GetByIdAsync(id);
-        //    ProjectRequest project = new ProjectRequest() { FreelancerId = chosen.FreelancerId };
+        
+        public async Task<IActionResult> FindFreelancer(string inputData)
+        {
+            IEnumerable<Freelancer> freelancers;
+            if (inputData == null)
+            {
+                freelancers = await freelancerrepository.GetAllAsyncWithPerson();
+                return View("List", freelancers);
+            }
 
-        //    return View(project);
-        //}
-        //public async Task<IActionResult> SignContact(ProjectRequest  request )
-        //{
-        //    var curuser = await userManager.GetUserAsync(User);
-        //    var client = clientRepository.GetClientByPersonId(curuser.Id);
-        //    Project project = new Project()
-        //    {
-        //        Client = client, ClientId = client.ClientId, CreatedDate = DateTime.UtcNow,
-        //        FreelancerId = request.FreelancerId, Description = request.Description, Name = request.Name,
-        //        Price = request.Price, ModifiedDate = DateTime.UtcNow, Id = Guid.NewGuid()
-        //    };
+            TempData["searchTerm"] = inputData;
+            freelancers = await freelancerrepository.GetFreelancersBySearch(inputData);
+            return View("List", freelancers);
 
-        //    return RedirectToAction("", "Project");
-        //}
+            //var freelancers = freelancerrepository.GetFreelancersBySearch(inputData);
+            //return View(freelancers);
+        }
     }
 }
