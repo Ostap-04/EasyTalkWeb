@@ -27,8 +27,9 @@ namespace EasyTalkWeb
            
             builder.Services.AddAuthentication().AddGoogle(googleOptions =>
             {
-                googleOptions.ClientId = Environment.GetEnvironmentVariable("client_id");
-                googleOptions.ClientSecret = Environment.GetEnvironmentVariable("client_secret");
+                var secrets = builder.Configuration.GetSection("google_auth");
+                googleOptions.ClientId = secrets.GetValue<string>("client_id");
+                googleOptions.ClientSecret = secrets.GetValue<string>("client_secret");
                 googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
             });
 

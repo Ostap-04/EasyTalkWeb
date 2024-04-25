@@ -98,7 +98,6 @@ html {
 body {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 .container {
     flex: 1 1 auto;
