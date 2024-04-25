@@ -1,10 +1,10 @@
-﻿@* @model EasyTalkWeb.Models.ViewModels.ProjectRequest
+﻿@model EasyTalkWeb.Models.ViewModels.ProjectRequest
 @{
 }
 <div class="container py-5">
-<form method="post">
-    @if (Model != null)
-    {
+    <form method="post">
+        @if (Model != null)
+        {
             <input type="hidden" asp-for="FreelancerId" />
             <div class="mb-3">
                 <label class="form-label">Name</label>
@@ -19,11 +19,11 @@
                 <input type="number" class="form-control" id="content" asp-for="Price"></input>
             </div>
             <div class="mb-3">
-                <button type="submit" asp-route-id ="@Model.FreelancerId" asp-action="SignContact" class="btn btn-dark">
+                <button type="submit" asp-route-id="@Model.FreelancerId" asp-controller="Project" asp-action="SaveProject" class="btn btn-dark">
                     Save
                 </button>
             </div>
             
-    }
+        }
     </form>
-</div> *@
+</div>

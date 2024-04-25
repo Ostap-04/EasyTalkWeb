@@ -16,10 +16,10 @@ namespace EasyTalkWeb.Controllers
 
         public JobPostController(JobPostRepository jobPostRepository,ITechRepository techRepository, UserManager<Person> userManager , ClientRepository clientRepository )
         {
-            this.jobPostRepository = jobPostRepository;
-            this.techRepository = techRepository;
-            this.userManager = userManager;
-            this.clientRepository = clientRepository;
+            jobPostRepository = jobPostRepository;
+            techRepository = techRepository;
+            userManager = userManager;
+            clientRepository = clientRepository;
         }
 
         [HttpGet]
