@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using System.Linq;
 
 namespace EasyTalkWeb.Controllers
 {
@@ -14,14 +15,16 @@ namespace EasyTalkWeb.Controllers
         private readonly UserManager<Person> _userManager;
         private readonly PersonRepository _personRepo;
         private readonly SignInManager<Person> _signInManager;
+        private readonly FreelancerRepository _freelancerRepository;
 
 
-        public ProfileController(UserManager<Person> userManager, TechRepository techRepository, PersonRepository personRepo, SignInManager<Person> signInManager)
+        public ProfileController(UserManager<Person> userManager, TechRepository techRepository, PersonRepository personRepo, SignInManager<Person> signInManager, FreelancerRepository freelancerRepository)
         {
             _userManager = userManager;
             _techRepository = techRepository;
             _personRepo = personRepo;
             _signInManager = signInManager;
+            _freelancerRepository = freelancerRepository;
         }
 
         [Authorize (Roles = "Client, Freelancer")]
@@ -107,64 +110,33 @@ namespace EasyTalkWeb.Controllers
             await _userManager.UpdateAsync(user);
             if (User.IsInRole("Freelancer"))
             {
-                //var curuser = await _personRepo.GetPersonWithTechnologiesById(user.Id);
-                //curuser.FirstName = editProfile.FirstName;
-                //curuser.LastName = editProfile.LastName;
-                //curuser.Email = editProfile.Email;
-                //curuser.Location = editProfile.Location;
-                //curuser.DateOfBirth = editProfile.DateOfBirth;
-                //curuser.Freelancer.Specialization = editProfile.Specialization;
-                //var selectedTech = new List<Technology>();
-                //foreach (var technology in curuser.Freelancer.Technologies)
-                //{
-                //    _techRepository.Detach(technology);
-                //}
-                //foreach (var selectedTechId in editProfile.SelectedTechnologiesData)
-                //{
-                //    var technology = await _techRepository.GetTechnologyWithFreelancerByIdAsync(Guid.Parse(selectedTechId));
-                //    if (technology != null)
-                //    {
-                //        selectedTech.Add(technology);
-                //    }
-                //}
 
-                //curuser.ModifiedDate = DateTime.UtcNow;
-                //curuser.Freelancer.Technologies = selectedTech;
-                //await _personRepo.Update(curuser);
+                var curuser = await _personRepo.GetFreelancerWithTechnologiesByPersonId(user.Id);
+                var formData = HttpContext.Request.Form;
+                curuser.Person.FirstName = formData["firstName"];
+                curuser.Person.LastName = formData["lastName"];
+                curuser.Person.Email = formData["email"];
+                curuser.Person.Location = formData["location"];
+                curuser.Person.DateOfBirth = DateOnly.Parse(formData["dateOfBirth"]);
+                curuser.Specialization = formData["specialization"];
 
-                var curuser = await _personRepo.GetPersonWithTechnologiesById(user.Id);
-                curuser.FirstName = editProfile.FirstName;
-                curuser.LastName = editProfile.LastName;
-                curuser.Email = editProfile.Email;
-                curuser.Location = editProfile.Location;
-                curuser.DateOfBirth = editProfile.DateOfBirth;
-                curuser.Freelancer.Specialization = editProfile.Specialization;
+                //var selectedTechIds = editProfile.SelectedTechnologiesData.Select(Guid.Parse).ToList();
+                string selectedTechnologies = formData["selectedTechnologies"];
+                string[] selectedTechsNames = selectedTechnologies.Split(",");
 
-                var selectedTechIds = editProfile.SelectedTechnologiesData.Select(Guid.Parse).ToList();
-
-                foreach (var technology in curuser.Freelancer.Technologies.ToList())
+                curuser.Technologies.Clear();
+                foreach (var techName in selectedTechsNames)
                 {
-                    if (selectedTechIds.Contains(technology.Id))
-                    {
-                        selectedTechIds.Remove(technology.Id);
-                    }
-                    else
-                    {
-                        curuser.Freelancer.Technologies.Remove(technology);
-                    }
-                }
-
-                foreach (var selectedTechId in selectedTechIds)
-                {
-                    var technology = await _techRepository.GetTechnologyWithFreelancerByIdAsync(selectedTechId);
+                    var technology = await _techRepository.GetTechnologyWithFreelancerByNameAsync(techName);
                     if (technology != null)
                     {
-                        curuser.Freelancer.Technologies.Add(technology);
+                        curuser.Technologies.Add(technology);
                     }
                 }
 
                 curuser.ModifiedDate = DateTime.UtcNow;
-                await _personRepo.Update(curuser);
+                //await _personRepo.Update(curuser);
+                await _freelancerRepository.Update(curuser);
             }
             else if(User.IsInRole("Client"))
             {

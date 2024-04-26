@@ -8,45 +8,45 @@
             <h1>
                 Edit Profile
             </h1>
-            <form method="post">
+            <form method="post" name="editProfileForm">
                 <div class="text-danger" asp-validation-summary="All"></div>
                 <div>
                     <label>First Name</label>
-                    <input type="text" placeholder="@Model.FirstName" class="form-control" asp-for="FirstName"  />
+                    <input type="text" name="firstName" placeholder="@Model.FirstName" class="form-control" asp-for="FirstName"  />
                     <span class="text-danger" asp-validation-for="FirstName"></span>
                 </div>
                 <div>
                     <label>Last Name</label>
-                    <input type="text" placeholder="@Model.LastName" class="form-control" asp-for="LastName"  />
+                    <input type="text" name="lastName" placeholder="@Model.LastName" class="form-control" asp-for="LastName" />
                     <span class="text-danger" asp-validation-for="LastName"></span>
                 </div>
                 <div>
                     <label>Email</label>
-                    <input type="email" placeholder="@Model.Email" class="form-control" asp-for="Email"  readonly/>
+                    <input type="email" name="email" placeholder="@Model.Email" class="form-control" asp-for="Email" readonly />
                     <span class="text-danger" asp-validation-for="Email"></span>
                 </div>
                 <div>
                     <label>Location</label>
-                    <input type="text" placeholder="@Model.Location" class="form-control" asp-for="Location"  />
+                    <input type="text" name="location" placeholder="@Model.Location" class="form-control" asp-for="Location" />
                     <span class="text-danger" asp-validation-for="Location"></span>
                 </div>
                 <div>
                     <label>Date of Birth</label>
-                    <input type="date" placeholder="@Model.DateOfBirth" class="form-control" asp-for="DateOfBirth" >
+                    <input type="date" name="dateOfBirth" placeholder="@Model.DateOfBirth" class="form-control" asp-for="DateOfBirth">
                     <span class="text-danger" asp-validation-for="DateOfBirth"></span>
                 </div>
                 @if(User.IsInRole("Freelancer"))
                 {
                     <div>
                         <label>Specialization</label>
-                        <textarea style="height: 120px; resize: none" type="text" placeholder="@Model.Specialization" class="form-control" asp-for="Specialization"></textarea>
+                        <textarea name="specialization" style="height: 120px; resize: none" type="text" placeholder="@Model.Specialization" class="form-control" asp-for="Specialization"></textarea>
                         <span class="text-danger" asp-validation-for="Specialization"></span>
                     </div>
                     <div>
                         <label>Technologies</label>
                         <div>
-                            <select class="technologies" multiple size="3" asp-for="SelectedTechnologiesData">
-                                
+                            <input placeholder="Search Technology" id="searchTechnology" />
+                           @*  <select id="technologies" class="technologies" multiple size="3" asp-for="SelectedTechnologiesData">
                                 @foreach (var technology in Model.Technologies)
                                 {
                                     if (Model.SelectedTechnologiesData.Contains(technology.Name))
@@ -58,7 +58,26 @@
                                         <option value="@technology.Id"> @technology.Name </option>
                                     }
                                 }
-                            </select>
+                            </select> *@
+                            <div id="technologies">
+                                @foreach (var technology in Model.Technologies)
+                                {
+                                    if (Model.SelectedTechnologiesData.Contains(technology.Name))
+                                    {
+                                        <div style ="display: flex; gap: 20px;">
+                                            <input type="checkbox" checked id="@technology.Name" />
+                                            <label for="@technology.Name">@technology.Name</label>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div style="display: flex; gap: 20px;">
+                                            <input type="checkbox" id="@technology.Name" />
+                                            <label for="@technology.Name">@technology.Name</label>
+                                        </div>
+                                    }
+                                }
+                            </div>
                         </div>
                     </div>
                 }
@@ -67,7 +86,7 @@
                         <button type="submit" class="btn btn-dark" >Save</button>
                     </div>
                     <div>
-                        <button type="submit" class="btn btn-dark" asp-controller="Profile" asp-action="Index">Close</button>
+                        <a asp-controller="Profile" asp-action="Index">Close</a>
                     </div>
                     <div>
                         <button type="submit" class="btn btn-dark" asp-controller="Profile" asp-action="DeleteUser">Delete account</button>
@@ -77,3 +96,51 @@
         </div>
     </div>
 </div>
+<script>
+    function debounce(callback, delay) {
+        let timeoutId;
+        return async (...args) => {
+            if (timeoutId !== undefined) clearTimeout(timeoutId);
+            setTimeout(async () => {
+                await callback(...args);
+            }, delay);
+        };
+    }
+
+    const checkboxesContainer = document.getElementById('technologies');
+    const checkboxes = Array.from(checkboxesContainer.querySelectorAll('input[type="checkbox"]'));
+    let checkedTechnologies = checkboxes.filter(tech => tech.checked);
+    function sortOptions() {
+        const searchInput = document.getElementById('searchTechnology').value.toLowerCase().trim();
+        checkboxes.sort((a, b) => {
+            const aText = a.nextElementSibling.textContent.toLowerCase();
+
+            const bText = b.nextElementSibling.textContent.toLowerCase();
+            const aRelevance = aText.includes(searchInput) ? 0 : 1;
+            const bRelevance = bText.includes(searchInput) ? 0 : 1;
+            if (aRelevance < bRelevance) return -1;
+            if (aRelevance > bRelevance) return 1;
+            return aText.localeCompare(bText);
+        });
+        checkboxes.forEach(checkbox => checkboxesContainer.appendChild(checkbox.parentElement));
+    }
+    const debouncedSortOptions = debounce(sortOptions, 300);
+    document.getElementById('searchTechnology').addEventListener('input', debouncedSortOptions);
+    sortOptions();
+
+    const form = document.forms.editProfileForm;
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        checkedTechnologies = checkboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.getAttribute("id"));
+        console.log(checkedTechnologies.join());
+        const formData = new FormData(form);
+        formData.set("selectedTechnologies", checkedTechnologies.join());
+        console.log([...Object.values(Object.fromEntries(formData))]);
+
+        let response = await fetch('/Profile/Edit', {
+            method: 'POST',
+            body: formData
+        });
+    })
+
+</script>

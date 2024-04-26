@@ -21,5 +21,14 @@ namespace EasyTalkWeb.Models.Repositories
 
             return technology;
         }
+
+        public async Task<Technology> GetTechnologyWithFreelancerByNameAsync(string name)
+        {
+            var technology = await _appDbContext.Technologies
+                .Include(c => c.Freelancers)
+                .FirstOrDefaultAsync(c => c.Name == name);
+
+            return technology;
+        }
     }
 }
