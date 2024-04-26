@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyTalkWeb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240425144235_AddIndexToFreelancer")]
-    partial class AddIndexToFreelancer
+    [Migration("20240426095308_AddFullTextsearch")]
+    partial class AddFullTextsearch
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

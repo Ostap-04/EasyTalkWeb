@@ -21,7 +21,7 @@ namespace EasyTalkWeb.Models
 
         public Client? Client { get; set; }
 
-        public Freelancer Freelancer { get; set; }
+        public Freelancer? Freelancer { get; set; }
 
         public ICollection<Topic>? Topics { get; set; }
     }
