@@ -12,7 +12,7 @@ namespace EasyTalkWeb.Persistance
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseNpgsql(configuration.GetConnectionString("EasyTalkConnectionString"));
+                options.UseNpgsql(configuration.GetConnectionString("EasyTalkRemote"));
             });
             services.AddTransient<AppDbContext>();
             services.AddTransient<FreelancerRepository>();
