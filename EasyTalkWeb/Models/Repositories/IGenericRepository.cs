@@ -25,5 +25,7 @@ namespace EasyTalkWeb.Models.Repositories
         Task Delete(T entity);
 
         Task SaveAsync();
+
+        void Detach(T entity);
     }
 }

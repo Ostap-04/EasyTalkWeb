@@ -1,5 +1,6 @@
 ﻿@model EasyTalkWeb.Models.ViewModels.ProfileViewModel
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Diagnostics
 <div>
     <div>
         <div>
@@ -31,24 +32,31 @@
                 </div>
                 <div>
                     <label>Date of Birth</label>
-                    <input type="date" placeholder="@Model.DateOfBirth" class="form-control" asp-for="DateOfBirth"  />
+                    <input type="date" placeholder="@Model.DateOfBirth" class="form-control" asp-for="DateOfBirth" >
                     <span class="text-danger" asp-validation-for="DateOfBirth"></span>
                 </div>
                 @if(User.IsInRole("Freelancer"))
                 {
                     <div>
                         <label>Specialization</label>
-                        <input type="text" placeholder="@Model.Specialization" class="form-control" asp-for="Specialization" />
+                        <textarea style="height: 120px; resize: none" type="text" placeholder="@Model.Specialization" class="form-control" asp-for="Specialization"></textarea>
                         <span class="text-danger" asp-validation-for="Specialization"></span>
                     </div>
                     <div>
                         <label>Technologies</label>
                         <div>
-                            <select class="technologies" multiple size="3" asp-for="SelectedTechnologies">
+                            <select class="technologies" multiple size="3" asp-for="SelectedTechnologiesData">
                                 
                                 @foreach (var technology in Model.Technologies)
                                 {
-                                    <option value="@technology.Id"> @technology.Name </option>
+                                    if (Model.SelectedTechnologiesData.Contains(technology.Name))
+                                    {
+                                        <option value="@technology.Id" selected="selected"> @technology.Name </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@technology.Id"> @technology.Name </option>
+                                    }
                                 }
                             </select>
                         </div>

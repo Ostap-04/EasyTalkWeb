@@ -27,7 +27,8 @@
 {
     <div>
         <label>Specialization</label>
-        <input type="text" placeholder="@Model.Specialization" class="form-control" asp-for="Specialization" readonly />
+        <textarea style="height: 120px; resize: none" type="text" placeholder="@Model.Specialization" class="form-control" asp-for="Specialization" readonly></textarea>
+        <span class="text-danger" asp-validation-for="Specialization"></span>
     </div>
     <div>
         <label>Technologies</label>

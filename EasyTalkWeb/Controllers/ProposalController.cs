@@ -9,11 +9,11 @@ namespace EasyTalkWeb.Controllers
     public class ProposalController : Controller
     {
         private readonly ProposalRepository proposalRepository;
-        private readonly ITechRepository techRepository;
+        private readonly TechRepository techRepository;
         private readonly UserManager<Person> userManager;
         private readonly FreelancerRepository freelancerRepository;
 
-        public ProposalController(ProposalRepository proposalRepository, ITechRepository techRepository, UserManager<Person> userManager, FreelancerRepository freelancerRepository)
+        public ProposalController(ProposalRepository proposalRepository, TechRepository techRepository, UserManager<Person> userManager, FreelancerRepository freelancerRepository)
         {
             this.proposalRepository = proposalRepository;
             this.techRepository = techRepository;
@@ -38,8 +38,7 @@ namespace EasyTalkWeb.Controllers
             var selectedTech = new List<Technology>();
             foreach (var selectedTId in proposalRequest.SelectedTech)
             {
-                var selectedTagIdAsGuid = Guid.Parse(selectedTId);
-                var existingTag = await techRepository.GetAsync(selectedTagIdAsGuid);
+                var existingTag = await techRepository.GetByIdAsync(Guid.Parse(selectedTId));
                 if (existingTag != null)
                 {
                     selectedTech.Add(existingTag);

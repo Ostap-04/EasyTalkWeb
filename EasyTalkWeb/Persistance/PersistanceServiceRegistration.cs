@@ -13,12 +13,13 @@ namespace EasyTalkWeb.Persistance
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("EasyTalkConnectionString"));
+                options.EnableSensitiveDataLogging();
             });
             services.AddTransient<AppDbContext>();
             services.AddTransient<FreelancerRepository>();
             services.AddTransient<ClientRepository>();
             services.AddTransient<JobPostRepository>();
-            services.AddTransient<ITechRepository, TechRepository>();
+            services.AddTransient<TechRepository>();
             services.AddTransient<PersonRepository>();
             services.AddTransient<MailService>();
             services.AddTransient<ProposalRepository>();
