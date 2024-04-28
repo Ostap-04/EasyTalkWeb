@@ -8,6 +8,13 @@ using Moq;
 using EasyTalkWeb.Persistance;
 using EasyTalkWeb.Models.ViewModels;
 using EasyTalkWeb.Enum;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Builder;
+using EasyTalkWeb.Hubs;
+using Microsoft.AspNetCore.Routing;
 
 namespace EasyTalk.Tests.Controllers
 {
@@ -45,28 +52,178 @@ namespace EasyTalk.Tests.Controllers
         [Fact]
         public async Task Register_ValidModel_Returns_RedirectToAction()
         {
-            // Arrange
-            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object);
+            var services = new ServiceCollection();
+            services.AddMvc();
+            services.AddHttpContextAccessor();
+            var serviceProvider = services.BuildServiceProvider();
+
+            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext
+                    {
+                        RequestServices = serviceProvider
+                    }
+                }
+            };
+
             var model = new RegisterViewModel
             {
-                Gender = Gender.Male, // Set gender
-                FirstName = "John", // Set first name
-                LastName = "Doe", // Set last name
-                DateOfBirth = new DateOnly(1990, 1, 1), // Set date of birth
-                Location = "New York", // Set location
-                Email = "john@example.com", // Set email
-                Password = "Password123", // Set password
-                Role = "Client" // Set role
+                Gender = Gender.Male,
+                FirstName = "John",
+                LastName = "Doe",
+                DateOfBirth = new DateOnly(1990, 1, 1),
+                Location = "New York",
+                Email = "john@example.com",
+                Password = "Password123",
+                Role = "Client"
             };
+
             _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<Person>(), It.IsAny<string>()))
-                            .ReturnsAsync(IdentityResult.Success);
-            // Act
+               .ReturnsAsync(IdentityResult.Success);
+
+            _userManagerMock.Setup(x => x.AddToRoleAsync(It.IsAny<Person>(), It.IsAny<string>()))
+                           .ReturnsAsync(IdentityResult.Success);
+
+            _userManagerMock.Setup(x => x.GenerateEmailConfirmationTokenAsync(It.IsAny<Person>()))
+                           .ReturnsAsync("fakeToken");
+
+            _mailServiceMock.Setup(x => x.SendEmail(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+               .Returns(true);
+            var urlHelper = new Mock<IUrlHelper>();
+            urlHelper.Setup(x => x.Action(It.IsAny<UrlActionContext>()))
+                .Returns("http://example.com");
+
+            controller.Url = urlHelper.Object;
+
+            var httpContext = new DefaultHttpContext();
+            httpContext.RequestServices = new ServiceCollection().BuildServiceProvider();
+            httpContext.Request.Host = new HostString("https://localhost:7049/");
+            httpContext.Request.Scheme = "http";
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+
             var result = await controller.Register(model);
 
-            // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("ConfirmEmail", redirectResult.ActionName);
             Assert.Equal("Email", redirectResult.ControllerName);
         }
+
+        [Fact]
+        public async Task Register_InvalidModel_Returns_ViewResult_With_ErrorMessages()
+        {
+            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object);
+            controller.ModelState.AddModelError("Email", "Email is required");
+
+            var model = new RegisterViewModel();
+
+            var result = await controller.Register(model);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Equal("Register", viewResult.ViewName);
+
+            Assert.True(controller.ModelState.TryGetValue("Email", out var modelStateEntry));
+            var errorMessage = Assert.Single(modelStateEntry.Errors)?.ErrorMessage;
+            Assert.Equal("Email is required", errorMessage);
+        }
+
+        [Fact]
+        public async Task Register_CreateAsyncFails_Returns_ViewResult_With_ErrorMessages()
+        {
+            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object);
+            var model = new RegisterViewModel();
+            _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<Person>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Error creating user" }));
+
+            var result = await controller.Register(model);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Equal("Register", viewResult.ViewName);
+
+            var modelStateErrors = controller.ModelState[string.Empty].Errors;
+            Assert.Single(modelStateErrors);
+            Assert.Equal("Error creating user", modelStateErrors[0].ErrorMessage);
+        }
+
+        [Fact]
+        public async Task Register_EmailResponseFalse_Returns_ViewResult_With_ErrorMessages()
+        {
+            var builder = WebApplication.CreateBuilder();
+            builder.Services.AddAuthorization();
+            builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages(); // Add Razor Pages services
+            builder.Services.AddHttpContextAccessor();
+            var app = builder.Build();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.MapControllers();
+
+            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext
+                    {
+                        RequestServices = app.Services
+                    }
+                }
+            };
+
+            var model = new RegisterViewModel
+            {
+                Gender = Gender.Male,
+                FirstName = "John",
+                LastName = "Doe",
+                DateOfBirth = new DateOnly(1990, 1, 1),
+                Location = "New York",
+                Email = "john@example.com",
+                Password = "Password123",
+                Role = "Client"
+            };
+
+            _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<Person>(), It.IsAny<string>()))
+               .ReturnsAsync(IdentityResult.Success);
+
+            _userManagerMock.Setup(x => x.AddToRoleAsync(It.IsAny<Person>(), It.IsAny<string>()))
+                           .ReturnsAsync(IdentityResult.Success);
+
+            _userManagerMock.Setup(x => x.GenerateEmailConfirmationTokenAsync(It.IsAny<Person>()))
+                           .ReturnsAsync("fakeToken");
+
+            _mailServiceMock.Setup(x => x.SendEmail(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+               .Returns(false);
+            var urlHelper = new Mock<IUrlHelper>();
+            urlHelper.Setup(x => x.Action(It.IsAny<UrlActionContext>()))
+                .Returns("http://example.com");
+
+            controller.Url = urlHelper.Object;
+
+            var httpContext = new DefaultHttpContext();
+            httpContext.RequestServices = new ServiceCollection().BuildServiceProvider();
+            httpContext.Request.Host = new HostString("https://localhost:7049/");
+            httpContext.Request.Scheme = "http";
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+            var result = await controller.Register(model);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Equal("Register", viewResult.ViewName); // Assert that the action returns the Register view
+
+            var modelStateErrors = controller.ModelState[string.Empty].Errors;
+            Assert.Single(modelStateErrors);
+            Assert.Equal("Problem with email confirmation", modelStateErrors[0].ErrorMessage);
+        }
+
     }
 }
