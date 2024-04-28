@@ -7,7 +7,7 @@ namespace EasyTalkWeb.Models.Repositories
     public class TechRepository : GenericRepository<Technology>
     {
         private readonly AppDbContext _appDbContext;
-
+       
         public TechRepository(AppDbContext appDbContext) : base(appDbContext)
         {
             _appDbContext = appDbContext;

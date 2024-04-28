@@ -6,7 +6,6 @@ using EasyTalkWeb.Models.Repositories;
 using EasyTalkWeb.Persistance;
 using EasyTalkWeb.Persistance.Seeders;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace EasyTalkWeb
 {
@@ -18,6 +17,7 @@ namespace EasyTalkWeb
           
             builder.Services.AddPersistanceServices(builder.Configuration);
             builder.Services.AddIdentityServices();
+            builder.Services.AddHubServices();
             builder.Services.AddAuthorization();
             builder.Services.AddIdentityApiEndpoints<Person>();
             builder.Services.AddControllersWithViews();

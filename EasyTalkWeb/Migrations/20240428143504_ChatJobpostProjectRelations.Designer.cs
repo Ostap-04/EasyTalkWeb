@@ -3,6 +3,7 @@ using System;
 using EasyTalkWeb.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyTalkWeb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240428143504_ChatJobpostProjectRelations")]
+    partial class ChatJobpostProjectRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,11 +167,6 @@ namespace EasyTalkWeb.Migrations
 
                     b.HasIndex("PersonId")
                         .IsUnique();
-
-                    b.HasIndex("Specialization")
-                        .HasAnnotation("Npgsql:TsVectorConfig", "english");
-
-                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Specialization"), "GIN");
 
                     b.ToTable("Freelancers");
                 });
@@ -358,7 +356,7 @@ namespace EasyTalkWeb.Migrations
 
                     b.Property<Guid>("JobPostId")
                         .HasColumnType("uuid");
-                    
+
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("timestamp with time zone");
 

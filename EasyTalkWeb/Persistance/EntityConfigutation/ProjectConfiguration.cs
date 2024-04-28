@@ -45,6 +45,14 @@ namespace Persistance.EntityConfiguration
                 .WithMany(f => f.Projects)
                 .HasForeignKey(p => p.FreelancerId)
                 .IsRequired();
+            builder
+                .HasOne(p => p.Chat)
+                .WithOne(c => c.Project)
+                .HasForeignKey<Project>(p => p.ChatId);
+            builder
+                .HasOne(p => p.JobPost)
+                .WithOne(j => j.Project)
+                .HasForeignKey<Project>(p => p.JobPostId);
         }
     }
 }

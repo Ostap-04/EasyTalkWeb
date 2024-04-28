@@ -31,17 +31,7 @@ namespace EasyTalk.Tests.Controllers
             _clientRepositoryMock = new Mock<ClientRepository>(_dbContextMock);
             _techRepositoryMock = new Mock<TechRepository>(_dbContextMock);
             _jobPostRepositoryMock = new Mock<JobPostRepository>(_dbContextMock);
-
         }
-        //[Fact]
-        //public void Add_Returns_ViewResult()
-        //{
-        //    var controller = new JobPostController(_jobPostRepositoryMock.Object,_techRepositoryMock.Object,_userManagerMock.Object ,_clientRepositoryMock.Object);
-
-        //    var result = controller.Add();
-
-        //    Assert.IsType<>(result);
-        //}
     }
     
 }

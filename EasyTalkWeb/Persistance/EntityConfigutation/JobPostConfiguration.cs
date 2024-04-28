@@ -34,6 +34,9 @@ namespace EasyTalkWeb.Persistance.EntityConfigutation
             builder
               .HasMany(f => f.Technologies)
               .WithMany(t => t.Jobposts);
+            builder
+                .HasOne(j => j.Project)
+                .WithOne(p => p.JobPost);
         }
 	}
 }

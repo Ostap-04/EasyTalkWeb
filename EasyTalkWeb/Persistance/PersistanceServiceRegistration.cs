@@ -1,7 +1,6 @@
 ﻿using EasyTalkWeb.Identity.EmailHost;
 using EasyTalkWeb.Models.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace EasyTalkWeb.Persistance
 {
@@ -21,10 +20,11 @@ namespace EasyTalkWeb.Persistance
             services.AddTransient<JobPostRepository>();
             services.AddTransient<TechRepository>();
             services.AddTransient<PersonRepository>();
+            services.AddTransient<ChatRepository>();
             services.AddTransient<MailService>();
             services.AddTransient<ProposalRepository>();
+            services.AddTransient<MessageRepository>();
             services.AddTransient<ProjectRepository>();
-
 
             return services;
         }

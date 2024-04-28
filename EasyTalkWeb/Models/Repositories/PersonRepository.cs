@@ -6,10 +6,7 @@ namespace EasyTalkWeb.Models.Repositories
 {
     public class PersonRepository : GenericRepository<Person>
     {
-
-        public PersonRepository(AppDbContext _context) : base(_context) 
-        {
-        }
+        public PersonRepository(AppDbContext _context) : base(_context) {}
 
         public async Task<Freelancer> GetFreelancer(Guid userId)
         {
@@ -41,6 +38,5 @@ namespace EasyTalkWeb.Models.Repositories
 
             return freelancer;
         }
-
     }
 }

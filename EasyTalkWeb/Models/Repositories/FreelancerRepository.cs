@@ -9,16 +9,28 @@ namespace EasyTalkWeb.Models.Repositories
     {
         public FreelancerRepository(AppDbContext _context) : base(_context) { }
 
-        public Freelancer GetFreelancerByPersonId(Guid personId)
+        public async Task<Freelancer> GetFreelancerByPersonId(Guid personId)
         {
-            var personWithFreelancer = _context.People
+            var personWithFreelancer = await _context.People
                 .Include(p => p.Freelancer)
-                .FirstOrDefault(p => p.Id == personId);
+                .FirstOrDefaultAsync(p => p.Id == personId);
 
             var freelancer = personWithFreelancer?.Freelancer;
 
             return freelancer;
         }
+
+        public async Task<Person> GetPersonByFreelancerId(Guid freelancerId)
+        {
+            var freelancer = await _context.Freelancers
+                .Include(f => f.Person)
+                .FirstOrDefaultAsync(f => f.FreelancerId == freelancerId);
+
+            var person = freelancer?.Person;
+
+            return person;
+        }
+
         public async Task<IEnumerable<Freelancer>> GetAllAsyncWithPerson()
         {
             return await _context.Freelancers
