@@ -15,16 +15,13 @@ namespace EasyTalkWeb.Controllers
         private readonly UserManager<Person> _userManager;
         private readonly PersonRepository _personRepo;
         private readonly SignInManager<Person> _signInManager;
-        private readonly FreelancerRepository _freelancerRepository;
 
-
-        public ProfileController(UserManager<Person> userManager, TechRepository techRepository, PersonRepository personRepo, SignInManager<Person> signInManager, FreelancerRepository freelancerRepository)
+        public ProfileController(UserManager<Person> userManager, TechRepository techRepository, PersonRepository personRepo, SignInManager<Person> signInManager)
         {
             _userManager = userManager;
             _techRepository = techRepository;
             _personRepo = personRepo;
             _signInManager = signInManager;
-            _freelancerRepository = freelancerRepository;
         }
 
         [Authorize (Roles = "Client, Freelancer")]
@@ -108,6 +105,7 @@ namespace EasyTalkWeb.Controllers
         {
             Person user = await _userManager.GetUserAsync(User);
 
+
             if (User.IsInRole("Freelancer"))
             {
 
@@ -156,7 +154,6 @@ namespace EasyTalkWeb.Controllers
                 user.ModifiedDate = DateTime.UtcNow;
                 await _userManager.UpdateAsync(user);
             }
-
 
             return RedirectToAction("Index", "Profile");
         }
