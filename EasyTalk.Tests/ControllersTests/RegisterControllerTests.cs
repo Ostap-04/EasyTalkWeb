@@ -31,7 +31,7 @@ namespace EasyTalk.Tests.Controllers
         {
             _dbContextMock = Mock.Of<AppDbContext>();
             var store = new Mock<IUserStore<Person>>();
-            _userManagerMock = new Mock<UserManager<Person>>(store.Object, null, null, null, null, null, null, null, null);
+            _userManagerMock = new Mock<UserManager<Person>>(Mock.Of<IUserStore<Person>>(), null, null, null, null, null, null, null, null);
             _mailServiceMock = new Mock<IMailService>();
             _freelancerRepositoryMock = new Mock<FreelancerRepository>(_dbContextMock);
             _clientRepositoryMock = new Mock<ClientRepository>(_dbContextMock);
@@ -157,6 +157,7 @@ namespace EasyTalk.Tests.Controllers
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages(); // Add Razor Pages services
             builder.Services.AddHttpContextAccessor();
+            builder.Services.AddMvc(); // Register MVC services including ITempDataDictionaryFactory
             var app = builder.Build();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -187,7 +188,7 @@ namespace EasyTalk.Tests.Controllers
                 Location = "New York",
                 Email = "john@example.com",
                 Password = "Password123",
-                Role = "Client"
+                Role = "Freelancer"
             };
 
             _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<Person>(), It.IsAny<string>()))
