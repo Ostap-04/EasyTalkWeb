@@ -3,6 +3,7 @@ using System;
 using EasyTalkWeb.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyTalkWeb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240426095308_AddFullTextsearch")]
+    partial class AddFullTextsearch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,9 +342,6 @@ namespace EasyTalkWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ChatId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uuid");
 
@@ -356,9 +356,6 @@ namespace EasyTalkWeb.Migrations
                     b.Property<Guid>("FreelancerId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("JobPostId")
-                        .HasColumnType("uuid");
-                    
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -375,15 +372,9 @@ namespace EasyTalkWeb.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatId")
-                        .IsUnique();
-
                     b.HasIndex("ClientId");
 
                     b.HasIndex("FreelancerId");
-
-                    b.HasIndex("JobPostId")
-                        .IsUnique();
 
                     b.ToTable("Projects");
                 });
@@ -725,12 +716,6 @@ namespace EasyTalkWeb.Migrations
 
             modelBuilder.Entity("EasyTalkWeb.Models.Project", b =>
                 {
-                    b.HasOne("EasyTalkWeb.Models.Chat", "Chat")
-                        .WithOne("Project")
-                        .HasForeignKey("EasyTalkWeb.Models.Project", "ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("EasyTalkWeb.Models.Client", "Client")
                         .WithMany("Projects")
                         .HasForeignKey("ClientId")
@@ -743,19 +728,9 @@ namespace EasyTalkWeb.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EasyTalkWeb.Models.JobPost", "JobPost")
-                        .WithOne("Project")
-                        .HasForeignKey("EasyTalkWeb.Models.Project", "JobPostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chat");
-
                     b.Navigation("Client");
 
                     b.Navigation("Freelancer");
-
-                    b.Navigation("JobPost");
                 });
 
             modelBuilder.Entity("EasyTalkWeb.Models.Proposal", b =>
@@ -879,8 +854,6 @@ namespace EasyTalkWeb.Migrations
             modelBuilder.Entity("EasyTalkWeb.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("EasyTalkWeb.Models.Client", b =>
@@ -895,11 +868,6 @@ namespace EasyTalkWeb.Migrations
                     b.Navigation("Projects");
 
                     b.Navigation("Proposals");
-                });
-
-            modelBuilder.Entity("EasyTalkWeb.Models.JobPost", b =>
-                {
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("EasyTalkWeb.Models.Message", b =>

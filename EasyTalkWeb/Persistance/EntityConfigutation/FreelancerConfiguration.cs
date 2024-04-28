@@ -1,6 +1,8 @@
 ﻿using EasyTalkWeb.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
+using System.Reflection.Metadata;
 
 namespace Persistance.EntityConfiguration
 {
@@ -40,6 +42,10 @@ namespace Persistance.EntityConfiguration
                 .HasMany(f => f.Proposals)
                 .WithOne(p => p.Freelancer)
                 .HasForeignKey(p => p.FreelancerId);
+            builder
+                .HasIndex(b => new { b.Specialization})
+                .HasMethod("GIN")
+                .IsTsVectorExpressionIndex("english");
         }
     }
 }

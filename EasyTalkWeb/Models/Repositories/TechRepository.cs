@@ -6,17 +6,29 @@ namespace EasyTalkWeb.Models.Repositories
 {
     public class TechRepository : GenericRepository<Technology>
     {
-        private readonly AppDbContext appDbContext;
-
-        public TechRepository(AppDbContext appDbContext) : base(appDbContext) {}
-        public async Task<IEnumerable<Technology>> GetAllAsync()
+        private readonly AppDbContext _appDbContext;
+       
+        public TechRepository(AppDbContext appDbContext) : base(appDbContext)
         {
-            return await appDbContext.Technologies.ToListAsync();
+            _appDbContext = appDbContext;
         }
 
-        public async Task<Technology?> GetAsync(Guid id)
+        public async Task<Technology> GetTechnologyWithFreelancerByIdAsync(Guid techId)
         {
-            return await appDbContext.Technologies.FirstOrDefaultAsync(x => x.Id == id);
+            var technology = await _appDbContext.Technologies
+                .Include(c => c.Freelancers)
+                .FirstOrDefaultAsync(c => c.Id == techId);
+
+            return technology;
+        }
+
+        public async Task<Technology> GetTechnologyWithFreelancerByNameAsync(string name)
+        {
+            var technology = await _appDbContext.Technologies
+                .Include(c => c.Freelancers)
+                .FirstOrDefaultAsync(c => c.Name == name);
+
+            return technology;
         }
     }
 }

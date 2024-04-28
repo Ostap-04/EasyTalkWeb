@@ -18,8 +18,10 @@ namespace EasyTalkWeb.Models.ViewModels
 
         public string? Password { get; set; }
 
+        public string? Specialization {  get; set; }
+
         public ICollection<Technology>? Technologies {  get; set; }
 
-        public string[] SelectedTechnologies { get; set; } = Array.Empty<string>();
+        public ICollection<string> SelectedTechnologiesData { get; set; } = new List<string>();
     }
 }

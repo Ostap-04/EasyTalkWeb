@@ -1,5 +1,7 @@
 ﻿using EasyTalkWeb.Persistance;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
 
 namespace EasyTalkWeb.Models.Repositories
 {
@@ -34,7 +36,28 @@ namespace EasyTalkWeb.Models.Repositories
             return await _context.Freelancers
                 .Include(j => j.Person)
                 .Include(p => p.Proposals)
+                .Include(t=>t.Technologies)
                 .ToListAsync();
+        }
+        public async Task<IEnumerable<Freelancer>> GetFreelancersBySearch(string searchTerm)
+        {
+            // Construct the tsquery string
+            //var tsQuery = $"to_tsquery('english', '{searchTerm}')";
+
+            // Perform the search using raw SQL query
+            //var freelancers = _context.Freelancers
+            //    .FromSqlInterpolated($"SELECT * FROM public.\"Freelancers\" WHERE ts @@ to_tsquery('english', {searchTerm})")
+            //    .ToList();
+
+            var freelancers = _context.Freelancers
+                .Include(f => f.Person)
+                .Include (f => f.Proposals)
+                .Where(p => EF.Functions.ToTsVector("english", p.Specialization)
+                    .Matches(EF.Functions.ToTsQuery("english", searchTerm)))
+                .ToList();
+
+
+            return freelancers;
         }
     }
 }

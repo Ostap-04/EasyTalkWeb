@@ -98,5 +98,14 @@ namespace EasyTalkWeb.Models.Repositories
         {
             await _context.SaveChangesAsync();
         }
+
+        public virtual void Detach(T entity)
+        {
+            var entry = _context.Entry(entity);
+            if (entry.State != EntityState.Detached)
+            {
+                entry.State = EntityState.Detached;
+            }
+        }
     }
 }

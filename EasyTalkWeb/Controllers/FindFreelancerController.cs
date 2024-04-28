@@ -1,5 +1,6 @@
 ﻿using EasyTalkWeb.Models;
 using EasyTalkWeb.Models.Repositories;
+using EasyTalkWeb.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,20 +21,24 @@ namespace EasyTalkWeb.Controllers
         public async Task<IActionResult> List()
         {
             var freelancers = await freelancerrepository.GetAllAsyncWithPerson();
-            return View(freelancers);
+            return View(freelancers as List<Freelancer>);
         }
-        public async Task<IActionResult> SignContract(Guid id)
+        
+        public async Task<IActionResult> FindFreelancer(string inputData)
         {
-            var chosen = await freelancerrepository.GetByIdAsync(id);
+            IEnumerable<Freelancer> freelancers;
+            if (inputData == null)
+            {
+                freelancers = await freelancerrepository.GetAllAsyncWithPerson();
+                return View("List", freelancers);
+            }
 
-            return View(chosen);
-        }
-        public async Task<IActionResult> SignContact(Freelancer freelancer)
-        {
-            var curuser = await userManager.GetUserAsync(User);
-            var client = clientRepository.GetClientByPersonId(curuser.Id);
-            Project project = new Project { FreelancerId = freelancer.FreelancerId, ClientId = client.ClientId, };
-            return View();
+            TempData["searchTerm"] = inputData;
+            freelancers = await freelancerrepository.GetFreelancersBySearch(inputData);
+            return View("List", freelancers);
+
+            //var freelancers = freelancerrepository.GetFreelancersBySearch(inputData);
+            //return View(freelancers);
         }
     }
 }

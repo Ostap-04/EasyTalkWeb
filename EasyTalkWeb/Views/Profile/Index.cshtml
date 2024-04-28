@@ -4,27 +4,32 @@
     <h1>Profile</h1>
     <div>
         <label>First Name</label>
-        @Model.FirstName
+        <input type="text" placeholder="@Model.FirstName" class="form-control" asp-for="FirstName" readonly/>
     </div>
     <div>
         <label>Last Name</label>
-        @Model.LastName
+        <input type="text" placeholder="@Model.LastName" class="form-control" asp-for="LastName" readonly/>
     </div>
     <div>
         <label>Date of Birth</label>
-        @Model.DateOfBirth
+        <input type="date" placeholder=" @Model.DateOfBirth" class="form-control" asp-for="DateOfBirth" readonly />
     </div>
     <div>
         <label>Location</label>
-        @Model.Location
+        <input type="text" placeholder="@Model.Location" class="form-control" asp-for="Location" readonly />
     </div>
     <div>
         <label>Email</label>
-        @Model.Email
+        <input type="email" placeholder="@Model.Email" class="form-control" asp-for="Email" readonly />
     </div>
 </div>
 @if (User.IsInRole("Freelancer"))
 {
+    <div>
+        <label>Specialization</label>
+        <textarea style="height: 120px; resize: none" type="text" placeholder="@Model.Specialization" class="form-control" asp-for="Specialization" readonly></textarea>
+        <span class="text-danger" asp-validation-for="Specialization"></span>
+    </div>
     <div>
         <label>Technologies</label>
         @if (Model.Technologies != null)

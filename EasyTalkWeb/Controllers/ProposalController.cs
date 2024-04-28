@@ -38,8 +38,7 @@ namespace EasyTalkWeb.Controllers
             var selectedTech = new List<Technology>();
             foreach (var selectedTId in proposalRequest.SelectedTech)
             {
-                var selectedTagIdAsGuid = Guid.Parse(selectedTId);
-                var existingTag = await techRepository.GetAsync(selectedTagIdAsGuid);
+                var existingTag = await techRepository.GetByIdAsync(Guid.Parse(selectedTId));
                 if (existingTag != null)
                 {
                     selectedTech.Add(existingTag);

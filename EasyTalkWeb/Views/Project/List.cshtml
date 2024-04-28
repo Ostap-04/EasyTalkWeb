@@ -1,0 +1,49 @@
+﻿@model List<EasyTalkWeb.Models.Project>
+@{
+}
+<div class="container py-5">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+            <tr>
+                <td>Name</td>
+                <td>Description</td>
+                <td>Members</td>
+                
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var project in Model)
+            {
+                <tr>
+                    <td>@project.Name</td>
+                    <td>@project.Description</td>
+                    <td>
+                        <div class="d-flex">
+                            <td>@project.Freelancer.Person.Email</td>
+                            <td>@project.Client.Person.Email</td>
+                        </div>
+                    </td>
+                    @if (User.IsInRole("Client"))
+                    {
+                        <td>
+                            <a asp-area=""
+                               asp-controller="Project"
+                               asp-action="Edit"
+                               asp-route-id="@project.Id">
+                                Edit
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No job Posts Found!</p>
+    }
+
+</div>
