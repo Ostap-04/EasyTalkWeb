@@ -33,5 +33,9 @@ namespace EasyTalkWeb.Models.Repositories
 
             return null!;
         }
+        public virtual async Task<JobPost> GetByIdAsyncWthProposals(Guid id)
+        {
+            return await _appDbContext.JobPosts.Include(p => p.Proposals).FirstOrDefaultAsync(p => p.Id == id);
+        }
     }
 }
