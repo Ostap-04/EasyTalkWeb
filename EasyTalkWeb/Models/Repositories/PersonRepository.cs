@@ -6,16 +6,12 @@ namespace EasyTalkWeb.Models.Repositories
 {
     public class PersonRepository : GenericRepository<Person>
     {
-        private readonly AppDbContext _appDbContext;
 
-        public PersonRepository(AppDbContext appDbContext) : base(appDbContext) 
-        { 
-            _appDbContext = appDbContext;
-        }
+        public PersonRepository(AppDbContext _context) : base(_context) {}
 
         public async Task<Freelancer> GetFreelancer(Guid userId)
         {
-            var freelancer = await _appDbContext.Freelancers
+            var freelancer = await _context.Freelancers
                 .Include(c => c.Technologies)
                 .FirstOrDefaultAsync(c => c.PersonId == userId);
 
@@ -24,24 +20,12 @@ namespace EasyTalkWeb.Models.Repositories
 
         public async Task<Person> GetPersonWithTechnologiesById(Guid userId)
         {
-            var person = await _appDbContext.People
+            var person = await _context.People
             .Include(p => p.Freelancer)
             .ThenInclude(f => f.Technologies)
             .FirstOrDefaultAsync(p => p.Id == userId);
 
             return person;
         }
-
-        public Freelancer GetFreelancerByPersonId(Guid personId)
-        {
-            var personWithFreelancer = _context.People
-                .Include(p => p.Freelancer)
-                .FirstOrDefault(p => p.Id == personId);
-
-            var freelancer = personWithFreelancer?.Freelancer;
-
-            return freelancer;
-        }
-
     }
 }

@@ -10,11 +10,11 @@ namespace EasyTalkWeb.Controllers
     public class JobPostController : Controller
     {
         private readonly JobPostRepository jobPostRepository;
-        private readonly ITechRepository techRepository;
+        private readonly TechRepository techRepository;
         private readonly UserManager<Person> userManager;
         private readonly ClientRepository clientRepository;
 
-        public JobPostController(JobPostRepository jobPostRepository,ITechRepository techRepository, UserManager<Person> userManager , ClientRepository clientRepository )
+        public JobPostController(JobPostRepository jobPostRepository, TechRepository techRepository, UserManager<Person> userManager , ClientRepository clientRepository )
         {
             this.jobPostRepository = jobPostRepository;
             this.techRepository = techRepository;

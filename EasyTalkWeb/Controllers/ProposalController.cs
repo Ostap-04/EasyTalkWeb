@@ -9,11 +9,11 @@ namespace EasyTalkWeb.Controllers
     public class ProposalController : Controller
     {
         private readonly ProposalRepository proposalRepository;
-        private readonly ITechRepository techRepository;
+        private readonly TechRepository techRepository;
         private readonly UserManager<Person> userManager;
         private readonly FreelancerRepository freelancerRepository;
 
-        public ProposalController(ProposalRepository proposalRepository, ITechRepository techRepository, UserManager<Person> userManager, FreelancerRepository freelancerRepository)
+        public ProposalController(ProposalRepository proposalRepository, TechRepository techRepository, UserManager<Person> userManager, FreelancerRepository freelancerRepository)
         {
             this.proposalRepository = proposalRepository;
             this.techRepository = techRepository;
@@ -34,7 +34,7 @@ namespace EasyTalkWeb.Controllers
         public async Task<IActionResult> Add(ProposalRequest proposalRequest)
         {
             var curuser = await userManager.GetUserAsync(User);
-            var freelancer = freelancerRepository.GetFreelancerByPersonId(curuser.Id);
+            var freelancer = await freelancerRepository.GetFreelancerByPersonId(curuser.Id);
             var selectedTech = new List<Technology>();
             foreach (var selectedTId in proposalRequest.SelectedTech)
             {
@@ -93,7 +93,7 @@ namespace EasyTalkWeb.Controllers
         public async Task<IActionResult> Edit(EditProposalRequest proposalrequest)
         {
             var curuser = await userManager.GetUserAsync(User);
-            var freelancer = freelancerRepository.GetFreelancerByPersonId(curuser.Id);
+            var freelancer = await freelancerRepository.GetFreelancerByPersonId(curuser.Id);
             Proposal proposal = await proposalRepository.GetProposaltByIdForFreelancer(freelancer.FreelancerId, proposalrequest.Id);
             proposal.Title = proposalrequest.Title;
             proposal.Text = proposalrequest.Text;

@@ -4,19 +4,17 @@ using EasyTalkWeb.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 namespace EasyTalkWeb.Controllers
 {
     public class ProfileController : Controller
     {
-        private readonly ITechRepository _techRepository;
+        private readonly TechRepository _techRepository;
         private readonly UserManager<Person> _userManager;
         private readonly PersonRepository _personRepo;
         private readonly SignInManager<Person> _signInManager;
 
-
-        public ProfileController(UserManager<Person> userManager, ITechRepository techRepository, PersonRepository personRepo, SignInManager<Person> signInManager)
+        public ProfileController(UserManager<Person> userManager, TechRepository techRepository, PersonRepository personRepo, SignInManager<Person> signInManager)
         {
             _userManager = userManager;
             _techRepository = techRepository;
