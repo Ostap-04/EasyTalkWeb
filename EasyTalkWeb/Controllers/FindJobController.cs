@@ -22,5 +22,10 @@ namespace EasyTalkWeb.Controllers
             }
             return View(jobPosts);
         }
+        public IActionResult WriteProposal(Guid id)
+        {
+
+            return View();
+        }
     }
 }
