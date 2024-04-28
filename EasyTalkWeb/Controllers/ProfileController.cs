@@ -107,36 +107,44 @@ namespace EasyTalkWeb.Controllers
         public async Task<IActionResult> Edit(ProfileViewModel editProfile)
         {
             Person user = await _userManager.GetUserAsync(User);
-            await _userManager.UpdateAsync(user);
+
             if (User.IsInRole("Freelancer"))
             {
 
-                var curuser = await _personRepo.GetFreelancerWithTechnologiesByPersonId(user.Id);
+                var curuser = await _personRepo.GetPersonWithTechnologiesById(user.Id);
                 var formData = HttpContext.Request.Form;
-                curuser.Person.FirstName = formData["firstName"];
-                curuser.Person.LastName = formData["lastName"];
-                curuser.Person.Email = formData["email"];
-                curuser.Person.Location = formData["location"];
-                curuser.Person.DateOfBirth = DateOnly.Parse(formData["dateOfBirth"]);
-                curuser.Specialization = formData["specialization"];
-
-                //var selectedTechIds = editProfile.SelectedTechnologiesData.Select(Guid.Parse).ToList();
+                curuser.FirstName = formData["firstName"];
+                curuser.LastName = formData["lastName"];
+                curuser.Email = formData["email"];
+                curuser.Location = formData["location"];
+                curuser.DateOfBirth = string.IsNullOrEmpty(formData["dateOfBirth"]) ? null : DateOnly.Parse(formData["dateOfBirth"]);
+                curuser.Freelancer.Specialization = formData["specialization"];
                 string selectedTechnologies = formData["selectedTechnologies"];
-                string[] selectedTechsNames = selectedTechnologies.Split(",");
+                List<string> selectedTechsNames = selectedTechnologies.Split(",").ToList();
 
-                curuser.Technologies.Clear();
+                foreach (var technology in curuser.Freelancer.Technologies.ToList())
+                {
+                    if (selectedTechsNames.Contains(technology.Name))
+                    {
+                        selectedTechsNames.Remove(technology.Name);
+                    }
+                    else
+                    {
+                        curuser.Freelancer.Technologies.Remove(technology);
+                    }
+                }
+
                 foreach (var techName in selectedTechsNames)
                 {
                     var technology = await _techRepository.GetTechnologyWithFreelancerByNameAsync(techName);
                     if (technology != null)
                     {
-                        curuser.Technologies.Add(technology);
+                        curuser.Freelancer.Technologies.Add(technology);
                     }
                 }
 
                 curuser.ModifiedDate = DateTime.UtcNow;
-                //await _personRepo.Update(curuser);
-                await _freelancerRepository.Update(curuser);
+                await _personRepo.Update(curuser);
             }
             else if(User.IsInRole("Client"))
             {
@@ -148,6 +156,8 @@ namespace EasyTalkWeb.Controllers
                 user.ModifiedDate = DateTime.UtcNow;
                 await _userManager.UpdateAsync(user);
             }
+
+
             return RedirectToAction("Index", "Profile");
         }
 
