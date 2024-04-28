@@ -115,10 +115,10 @@ textarea {
     font-weight: 700;
 }
 
-    #button-blue:hover {
-        background-color: rgba(0,0,0,0);
-        color: #0493bd;
-    }
+#button-blue:hover {
+    background-color: rgba(0,0,0,0);
+    color: #0493bd;
+}
 
 .submit:hover {
     color: #3498db;

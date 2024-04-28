@@ -20,7 +20,12 @@ const chatTitleEl = chatBody.querySelector('.chat-head__title');
 const chatActivityEl = chatBody.querySelector('.chat-head__activity');
 const chatActivityMemberEl = chatBody.querySelector('.chat-activity__name');
 const noMessaggesLabel = chatBody.querySelector('.no-messages');
-
+const chatPreviews = [...chatContainer.querySelector('.aside').children];
+const lastMessagesInChats = chatPreviews.map((preview) => {
+  const lastMessageEl = preview.querySelector('.chat-last-msg');
+  const chatId = preview.getAttribute('data-chat-id');
+  return { chatId, lastMessageEl };
+});
 let currentRoomIdx;
 let isConnected = false;
 sendMsgButton.disabled = true;
@@ -54,13 +59,16 @@ connection.on(
     );
 
     msgList.insertAdjacentHTML('beforeend', msg);
+    const chatPreview = lastMessagesInChats.find(
+      (chat) => chat.chatId === currentChatData.currentRoomId
+    );
+    chatPreview.lastMessageEl.innerHTML = 'last message: ' + message;
   }
 );
 
 let activityTimer;
 const typingUsers = new Set();
 connection.on(chatEvents.typingActivity, function (name) {
-  console.log('typing', name);
   chatActivityEl.classList.add('show');
   typingUsers.add(name);
   chatActivityMemberEl.innerHTML = [...typingUsers.values()].toString();
@@ -113,26 +121,24 @@ chatButtons.forEach((chatBtn, idx) => {
             Description: descr,
             Members: members,
             Messages: messages,
-            } = JSON.parse(chatData);
+          } = JSON.parse(chatData);
           currentChatData.title = chatName;
           currentChatData.description = descr;
           currentChatData.members.length = 0;
           currentChatData.members = members;
           currentChatData.messages = messages;
-          console.log(currentChatData);
           if (messages.length === 0) noMessaggesLabel.hidden = false;
           currentChatData.user = members.find((member) => member.Id == userId);
           renderChatBody();
         })
         .catch((e) => {
-          console.log('error when connecing to the room', e.message);
+          console.error('error when connecing to the room', e.message);
         });
     }
   });
 });
 
-//! TODO
-chatHead.addEventListener('click', (e) => {});
+chatHead.addEventListener('click', showChatDetails());
 
 sendMsgButton.addEventListener('click', function (event) {
   event.preventDefault();
@@ -195,4 +201,60 @@ function makeMessageBlock(sender, msg, isOwnMessage) {
     return `<div class="message"><div class="message-sender">${sender}:</div><div class="message-content">${msg}</div></div>`;
 }
 
-function showChatDetails() {}
+function showChatDetails(e) {
+  let buttonAdded = false;
+  return function render() {
+    const getBtn = () => {
+      const btn = document.createElement('button');
+      btn.setAttribute('type', 'button');
+      btn.classList.add('start-project');
+      btn.innerHTML = 'Start project';
+      btn.addEventListener('click', (e) => {
+        const finalPrice = modal.querySelector('.final-price');
+        fetch('/Project/StartProject', {
+          method: 'POST',
+          body: JSON.stringify({
+            ChatId: currentChatData.currentRoomId,
+            FreelancerId: currentChatData.members.find(
+              (member) => member.Role === 'Freelancer'
+            ).Id,
+            Name: currentChatData.title,
+            Description: currentChatData.description,
+            //! to add price
+            Status: 'InProgress',
+            Price: finalPrice.value.match(/\d+/)?.at(0) || null,
+          }),
+        });
+      });
+
+      return btn;
+    };
+    const modal = document.querySelector('.modal');
+    const modalContent = modal.querySelector('.modal-content');
+    const modalTitle = modal.querySelector('.modal-title');
+    const membersList = modal.querySelector('.list');
+    const description = modal.querySelector('.description');
+    modalTitle.innerHTML = currentChatData.title;
+    description.innerHTML = currentChatData.description;
+    membersList.innerHTML = currentChatData.members.map(
+      (member) => `${member.FirstName} ${member.LastName}`
+    );
+
+    if (currentChatData.user.Role === 'Client' && !buttonAdded) {
+      modalContent.append(getBtn());
+      buttonAdded = true;
+    }
+
+    modal.classList.add('active');
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.includes('active')) {
+        modal.classList.remove('active');
+      }
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (!e.target.closest('.modal-content')) modal.classList.remove('active');
+    });
+  };
+}

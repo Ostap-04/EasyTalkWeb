@@ -4,12 +4,18 @@
     data-chat-id="@Model.ChatId">
     <div class="chat-preview">
         <div class="chat-title">@Model.Name</div>
-        @if (Model?.LastMessage?.Length < 6)
+        @if (Model?.LastMessage != null)
         {
-            <div class="chat-last-msg">last message: @Model.LastMessage</div>
+            if (Model?.LastMessage?.Length < 6)
+            {
+                <div class="chat-last-msg">last message: @Model.LastMessage</div>
+            } else
+            {
+                <div class="chat-last-msg">last message: @Model?.LastMessage?.Substring(0, 5)...</div>
+            }
         } else
         {
-            <div class="chat-last-msg">last message: @Model?.LastMessage?.Substring(0, 5)...</div>
+            <div class="chat-last-msg">no messages</div>
         }
     </div>
 </a>
