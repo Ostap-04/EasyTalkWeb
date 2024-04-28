@@ -40,7 +40,14 @@
                             </div>
                         </td>
                         <td>@jobpost.ClientId.ToString()  </td>
-                      
+                        <td>
+                            <a asp-area=""
+                               asp-controller="FindJob"
+                               asp-action="WriteProposal"
+                               asp-route-id="@jobpost.Id">
+                                Write a proposal
+                            </a>
+                        </td>
                     </tr>
                 }
             </tbody>

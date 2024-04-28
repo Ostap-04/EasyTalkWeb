@@ -22,5 +22,12 @@ namespace EasyTalkWeb.Controllers
             }
             return View(jobPosts);
         }
+
+        public async Task<IActionResult> WriteProposal(Guid id)
+        { 
+            var jobpost = await jobPostRepository.GetByIdAsync(id);
+
+            return View(); 
+        }
     }
 }
