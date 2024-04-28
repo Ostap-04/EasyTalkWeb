@@ -22,6 +22,6 @@ namespace EasyTalkWeb.Models.ViewModels
 
         public ICollection<Technology>? Technologies {  get; set; }
 
-        public string[] SelectedTechnologies { get; set; } = Array.Empty<string>();
+        public ICollection<string> SelectedTechnologiesData { get; set; } = new List<string>();
     }
 }

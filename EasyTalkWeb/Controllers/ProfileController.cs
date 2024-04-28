@@ -5,18 +5,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using System.Linq;
 
 namespace EasyTalkWeb.Controllers
 {
     public class ProfileController : Controller
     {
-        private readonly ITechRepository _techRepository;
+        private readonly TechRepository _techRepository;
         private readonly UserManager<Person> _userManager;
         private readonly PersonRepository _personRepo;
         private readonly SignInManager<Person> _signInManager;
 
-
-        public ProfileController(UserManager<Person> userManager, ITechRepository techRepository, PersonRepository personRepo, SignInManager<Person> signInManager)
+        public ProfileController(UserManager<Person> userManager, TechRepository techRepository, PersonRepository personRepo, SignInManager<Person> signInManager)
         {
             _userManager = userManager;
             _techRepository = techRepository;
@@ -52,7 +52,7 @@ namespace EasyTalkWeb.Controllers
         {
             var allTechnologies = await _techRepository.GetAllAsync();
             Person user = await _userManager.GetUserAsync(User);
-           
+            Person curPerson = await _personRepo.GetPersonWithTechnologiesById(user.Id);
             ProfileViewModel model = new ProfileViewModel
             {
                 FirstName = user.FirstName,
@@ -67,6 +67,11 @@ namespace EasyTalkWeb.Controllers
                 user.Freelancer = freelancer;
                 model.Specialization = user.Freelancer.Specialization;
                 model.Technologies = (ICollection<Technology>)allTechnologies;
+                foreach (var technology in curPerson.Freelancer.Technologies)
+                {
+                    model.SelectedTechnologiesData.Add(technology.Name);
+                }
+                
             }
             return View(model);
         }
@@ -99,27 +104,43 @@ namespace EasyTalkWeb.Controllers
         public async Task<IActionResult> Edit(ProfileViewModel editProfile)
         {
             Person user = await _userManager.GetUserAsync(User);
-            await _userManager.UpdateAsync(user);
+
+
             if (User.IsInRole("Freelancer"))
             {
+
                 var curuser = await _personRepo.GetPersonWithTechnologiesById(user.Id);
-                curuser.FirstName = editProfile.FirstName;
-                curuser.LastName = editProfile.LastName;
-                curuser.Email = editProfile.Email;
-                curuser.Location = editProfile.Location;
-                curuser.DateOfBirth = editProfile.DateOfBirth;
-                curuser.Freelancer.Specialization = editProfile.Specialization;
-                var selectedTech = new List<Technology>();
-                foreach (var selectedTId in editProfile.SelectedTechnologies)
+                var formData = HttpContext.Request.Form;
+                curuser.FirstName = formData["firstName"];
+                curuser.LastName = formData["lastName"];
+                curuser.Email = formData["email"];
+                curuser.Location = formData["location"];
+                curuser.DateOfBirth = string.IsNullOrEmpty(formData["dateOfBirth"]) ? null : DateOnly.Parse(formData["dateOfBirth"]);
+                curuser.Freelancer.Specialization = formData["specialization"];
+                string selectedTechnologies = formData["selectedTechnologies"];
+                List<string> selectedTechsNames = selectedTechnologies.Split(",").ToList();
+
+                foreach (var technology in curuser.Freelancer.Technologies.ToList())
                 {
-                    var selectedTagIdAsGuid = Guid.Parse(selectedTId);
-                    var existingTag = await _techRepository.GetAsync(selectedTagIdAsGuid);
-                    if (existingTag != null)
+                    if (selectedTechsNames.Contains(technology.Name))
                     {
-                        selectedTech.Add(existingTag);
+                        selectedTechsNames.Remove(technology.Name);
+                    }
+                    else
+                    {
+                        curuser.Freelancer.Technologies.Remove(technology);
                     }
                 }
-                curuser.Freelancer.Technologies = selectedTech;
+
+                foreach (var techName in selectedTechsNames)
+                {
+                    var technology = await _techRepository.GetTechnologyWithFreelancerByNameAsync(techName);
+                    if (technology != null)
+                    {
+                        curuser.Freelancer.Technologies.Add(technology);
+                    }
+                }
+
                 curuser.ModifiedDate = DateTime.UtcNow;
                 await _personRepo.Update(curuser);
             }
@@ -133,6 +154,7 @@ namespace EasyTalkWeb.Controllers
                 user.ModifiedDate = DateTime.UtcNow;
                 await _userManager.UpdateAsync(user);
             }
+
             return RedirectToAction("Index", "Profile");
         }
 

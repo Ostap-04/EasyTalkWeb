@@ -10,11 +10,11 @@ namespace EasyTalkWeb.Controllers
     public class JobPostController : Controller
     {
         private readonly JobPostRepository _jobPostRepository;
-        private readonly ITechRepository _techRepository;
+        private readonly TechRepository _techRepository;
         private readonly UserManager<Person> _userManager;
         private readonly ClientRepository _clientRepository;
 
-        public JobPostController(JobPostRepository jobPostRepository,ITechRepository techRepository, UserManager<Person> userManager , ClientRepository clientRepository )
+        public JobPostController(JobPostRepository jobPostRepository, TechRepository techRepository, UserManager<Person> userManager , ClientRepository clientRepository )
         {
             _jobPostRepository = jobPostRepository;
             _techRepository = techRepository;
@@ -40,8 +40,7 @@ namespace EasyTalkWeb.Controllers
             var selectedTech = new List<Technology>();
             foreach (var selectedTId in jobPostRequest.SelectedTech)
             {
-                var selectedTagIdAsGuid = Guid.Parse(selectedTId);
-                var existingTag = await _techRepository.GetAsync(selectedTagIdAsGuid);
+                var existingTag = await _techRepository.GetByIdAsync(Guid.Parse(selectedTId));
                 if (existingTag != null)
                 {
                     selectedTech.Add(existingTag);
