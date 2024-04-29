@@ -1,4 +1,6 @@
-﻿namespace EasyTalkWeb.Models.ViewModels
+﻿using Microsoft.Build.Framework;
+
+namespace EasyTalkWeb.Models.ViewModels
 {
     public class LoginViewModel
     {

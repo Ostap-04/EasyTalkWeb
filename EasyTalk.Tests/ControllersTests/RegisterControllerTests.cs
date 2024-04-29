@@ -30,7 +30,6 @@ namespace EasyTalk.Tests.Controllers
         public RegisterControllerTests()
         {
             _dbContextMock = Mock.Of<AppDbContext>();
-            var store = new Mock<IUserStore<Person>>();
             _userManagerMock = new Mock<UserManager<Person>>(Mock.Of<IUserStore<Person>>(), null, null, null, null, null, null, null, null);
             _mailServiceMock = new Mock<IMailService>();
             _freelancerRepositoryMock = new Mock<FreelancerRepository>(_dbContextMock);
