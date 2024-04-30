@@ -226,42 +226,66 @@
     visibility: visible;
 }
 .modal-content {
-    padding: 10px;
-    text-align: center;
-    color: #000;
     background-color: #fff;
+    padding: 10px;
+    color: #000;
     border-radius: 12px;
 }
 .modal-title {
+    text-align: center;
     margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 600;
 }
 .members {
+    margin-bottom: 10px;
+}
+.member {
+    background-color: #b5e0f9;
+    color: #04044e;
+    border: 2px solid #04044e;
+    border-radius: 6px;
+    padding: 5px;
 }
 .label {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 500;
 }
 .list {
+    display: flex;
+    gap: 15px;
 }
 .about {
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 500;
 }
 .description {
+    margin-bottom: 10px;
+    color: #04044e;
+    font-size: 16px;
 }
 .final-price {
+    border-radius: 8px;
+    padding: 5px 10px;
+    border: 2px solid #04044e;
+    margin-bottom: 10px;
+    background-color: transparent;
 }
 .start-project {
-    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+    display: inline-block;
     float: left;
     width: 100%;
     border: #fbfbfb solid 4px;
     cursor: pointer;
     background-color: #3498db;
     color: white;
-    font-size: 24px;
-    padding-top: 22px;
-    padding-bottom: 22px;
+    font-size: 16px;
+    padding: 10px 0;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s;
-    margin-top: -4px;
     font-weight: 700;
 }
 .start-project:hover {
