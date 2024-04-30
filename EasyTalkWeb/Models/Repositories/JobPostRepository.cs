@@ -19,7 +19,7 @@ namespace EasyTalkWeb.Models.Repositories
                 .ToListAsync();
         }
 
-        public async Task<JobPost> GetJobPostByIdForClient(Guid clientId, Guid jobPostId)
+        public virtual async Task<JobPost> GetJobPostByIdForClient(Guid clientId, Guid jobPostId)
         {
             var client = await _appDbContext.Clients
                 .Include(c => c.JobPosts)
