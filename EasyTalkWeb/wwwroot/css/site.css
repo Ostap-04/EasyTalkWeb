@@ -32,7 +32,7 @@ header {
 
 .navbar {
     background-color: transparent;
-    
+    z-index: 50;
 }
 
 .navbar-brand {
