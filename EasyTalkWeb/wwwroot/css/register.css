@@ -85,3 +85,47 @@
     color: #eaeaea;
 
 }
+
+.form-check-label {
+    display: flex;
+    justify-content: left;
+    margin: 0;
+    color: #eaeaea;
+}
+
+.form-check-input {
+    margin: 0;
+}
+
+.btn-link, .btn-link:hover {
+    color: #eaeaea;
+}
+
+.profile-items {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+}
+
+.input-form {
+    margin-top: 15px;
+
+}
+
+.input-form >*:not(:last-child) {
+    margin-bottom: 15px;
+    
+}
+
+.technologies {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    color: #eaeaea;
+}
+
+.edit-button {
+    margin-top: 50px;
+}
