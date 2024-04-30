@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System.Security.Claims;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using EasyTalkWeb.Models.ViewModels;
 
 namespace EasyTalk.Tests.ControllersTests
 {
@@ -161,10 +163,7 @@ namespace EasyTalk.Tests.ControllersTests
             Assert.Equal("Home", redirectToActionResult.ControllerName);
             
         }
-        // ====================================================================
-
-
-
+        
         [Fact]
         public async Task ExternalAuthCallback_NewUserCreatedAndSignedIn_ReturnsChooseRoleView()
         {
@@ -174,31 +173,34 @@ namespace EasyTalk.Tests.ControllersTests
                 _signInManagerMock.Object,
                 _freelancerRepositoryMock.Object,
                 _clientRepositoryMock.Object);
-            var info = new ExternalLoginInfo(new ClaimsPrincipal(), "Google", "provider", "key");
+            var email = "test@example.com";
+            var info = new ExternalLoginInfo(new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Email, email)
+            }, "TestAuthentication")), "Google", "provider", "key");
             _signInManagerMock.Setup(m => m.GetExternalLoginInfoAsync(It.IsAny<string>()))
                 .ReturnsAsync(info);
 
             _signInManagerMock.Setup(m => m.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, false))
                 .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Failed); // Simulate new user scenario
 
-            var user = new Person { Email = "test@example.com" };
+            var user = new Person { Email = email, UserName = email, CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow, EmailConfirmed = true };
             _userManagerMock.Setup(m => m.CreateAsync(It.IsAny<Person>()))
                 .ReturnsAsync(IdentityResult.Success);
-            _userManagerMock.Setup(m => m.AddLoginAsync(user, info))
+            _userManagerMock.Setup(m => m.AddLoginAsync(It.IsAny<Person>(), It.IsAny<UserLoginInfo>()))
                 .ReturnsAsync(IdentityResult.Success);
             _signInManagerMock.Setup(m => m.SignInAsync(It.IsAny<Person>(), It.IsAny<bool>(), It.IsAny<string>()))
                 .Returns(Task.CompletedTask);
 
-            // Act
             var result = await controller.ExternalAuthCallback();
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal("ChooseRole", viewResult.ViewName);
         }
 
+
         [Fact]
-        public async Task ExternalAuthCallback_UserCreationFails_RedirectsToErrorAction()
+        public async Task ExternalAuthCallback_NewUserCreatingFailed_ReturnsRedirectToAction()
         {
             // Arrange
             var controller = new ExternalAuthController(
@@ -206,73 +208,288 @@ namespace EasyTalk.Tests.ControllersTests
                 _signInManagerMock.Object,
                 _freelancerRepositoryMock.Object,
                 _clientRepositoryMock.Object);
-            var info = new ExternalLoginInfo(new ClaimsPrincipal(), "Google", "provider", "key");
-            //_signInManagerMock.Setup(m => m.GetExternalLoginInfoAsync())
-            //    .ReturnsAsync(info);
+            var email = "test@example.com";
+            var info = new ExternalLoginInfo(new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Email, email)
+            }, "TestAuthentication")), "Google", "provider", "key");
+            _signInManagerMock.Setup(m => m.GetExternalLoginInfoAsync(It.IsAny<string>()))
+                .ReturnsAsync(info);
 
             _signInManagerMock.Setup(m => m.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, false))
                 .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Failed); // Simulate new user scenario
 
+            var user = new Person { Email = email, UserName = email, CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow, EmailConfirmed = true };
             _userManagerMock.Setup(m => m.CreateAsync(It.IsAny<Person>()))
-                .ReturnsAsync(IdentityResult.Failed()); // Simulate user creation failure
+                .ReturnsAsync(IdentityResult.Failed());
+            _userManagerMock.Setup(m => m.AddLoginAsync(It.IsAny<Person>(), It.IsAny<UserLoginInfo>()))
+                .ReturnsAsync(IdentityResult.Success);
+            _signInManagerMock.Setup(m => m.SignInAsync(It.IsAny<Person>(), It.IsAny<bool>(), It.IsAny<string>()))
+                .Returns(Task.CompletedTask);
 
-            // Act
             var result = await controller.ExternalAuthCallback();
 
-            // Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Error", redirectToActionResult.ActionName);
             Assert.Equal("ExternalAuth", redirectToActionResult.ControllerName);
         }
 
-        //[Fact]
-        //public async Task ExternalAuthCallback_UserIsLockedOut_RedirectsToLockout()
-        //{
-        //    // Arrange
-        //    var controller = new ExternalAuthController(
-        //        _userManagerMock.Object,
-        //        _signInManagerMock.Object,
-        //        _freelancerRepositoryMock.Object,
-        //        _clientRepositoryMock.Object);
-        //    var info = new ExternalLoginInfo(new ClaimsPrincipal(), "Google", "provider", "key");
-        //    _signInManagerMock.Setup(m => m.GetExternalLoginInfoAsync())
-        //        .ReturnsAsync(info);
+        [Fact]
+        public async Task ExternalAuthCallback_UserIsLockedOut_ReturnsLockoutView()
+        {
+            var controller = new ExternalAuthController(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _freelancerRepositoryMock.Object,
+                _clientRepositoryMock.Object);
+            var email = "test@example.com";
+            var info = new ExternalLoginInfo(new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Email, email)
+            }, "TestAuthentication")), "Google", "provider", "key");
+            _signInManagerMock.Setup(m => m.GetExternalLoginInfoAsync(It.IsAny<string>()))
+                .ReturnsAsync(info);
 
-        //    var signInResult = Microsoft.AspNetCore.Identity.SignInResult.Failed; // Simulate locked out scenario
-        //    signInResult.IsLockedOut = true;
-        //    _signInManagerMock.Setup(m => m.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, false))
-        //        .ReturnsAsync(signInResult.IsLockedOut);
+            _signInManagerMock.Setup(m => m.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, false))
+                .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.LockedOut); // Simulate new user scenario
 
-        //    // Act
-        //    var result = await controller.ExternalAuthCallback();
+            var user = new Person { Email = email, UserName = email, CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow, EmailConfirmed = true };
+            _userManagerMock.Setup(m => m.CreateAsync(It.IsAny<Person>()))
+                .ReturnsAsync(IdentityResult.Success);
+            _userManagerMock.Setup(m => m.AddLoginAsync(It.IsAny<Person>(), It.IsAny<UserLoginInfo>()))
+                .ReturnsAsync(IdentityResult.Failed());
+            
+            var result = await controller.ExternalAuthCallback();
 
-        //    // Assert
-        //    var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
-        //    Assert.Equal("Lockout", redirectToActionResult.ActionName);
-        //}
+            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal(nameof(Lockout), redirectToActionResult.ActionName);
+        }
 
-        //[Fact]
-        //public async Task ExternalAuthCallback_NoConditionsMet_ReturnsExternalAuthViewWithViewData()
-        //{
-        //    // Arrange
-        //    var controller = CreateExternalAuthController();
-        //    var info = new ExternalLoginInfo(new ClaimsPrincipal(), "Google", "provider", "key");
-        //    _signInManagerMock.Setup(m => m.GetExternalLoginInfoAsync())
-        //        .ReturnsAsync(info);
+        [Fact]
+        public async Task ExternalAuthCallback_NotLockedOut_ReturnsExternalAuthViewWithViewData()
+        {
+            var controller = new ExternalAuthController(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _freelancerRepositoryMock.Object,
+                _clientRepositoryMock.Object);
+            var email = "test@example.com";
+            var returnUrl = "/some-return-url";
+            var info = new ExternalLoginInfo(new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Email, email)
+            }, "TestAuthentication")), "Google", "provider", "key");
+            _signInManagerMock.Setup(m => m.GetExternalLoginInfoAsync(It.IsAny<string>()))
+                .ReturnsAsync(info);
 
-        //    var signInResult = SignInResult.Failed; // Simulate scenario where neither sign in succeeds nor user is created
-        //    _signInManagerMock.Setup(m => m.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, false))
-        //        .ReturnsAsync(signInResult);
+            _signInManagerMock.Setup(m => m.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, false))
+                .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Failed); // Simulate new user scenario
 
-        //    // Act
-        //    var result = await controller.ExternalAuthCallback();
+            var user = new Person { Email = email, UserName = email, CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow, EmailConfirmed = true };
+            _userManagerMock.Setup(m => m.CreateAsync(It.IsAny<Person>()))
+                .ReturnsAsync(IdentityResult.Success);
+            _userManagerMock.Setup(m => m.AddLoginAsync(It.IsAny<Person>(), It.IsAny<UserLoginInfo>()))
+                .ReturnsAsync(IdentityResult.Failed());
 
-        //    // Assert
-        //    var viewResult = Assert.IsType<ViewResult>(result);
-        //    Assert.Equal("ExternalAuth", viewResult.ViewName);
-        //    Assert.Equal(info.LoginProvider, viewResult.ViewData["LoginProvider"]);
-        //    Assert.Equal(info.Principal.FindFirstValue(ClaimTypes.Email), viewResult.ViewData["Email"]);
-        //    Assert.Null(viewResult.ViewData["ReturnUrl"]);
-        //}
+            var result = await controller.ExternalAuthCallback(returnUrl);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Equal("ExternalAuth", viewResult.ViewName);
+            Assert.Equal(returnUrl, viewResult.ViewData["ReturnUrl"]);
+            Assert.Equal(info.LoginProvider, viewResult.ViewData["LoginProvider"]);
+            Assert.Equal(info.Principal.FindFirstValue(ClaimTypes.Email), viewResult.ViewData["Email"]);
+        }
+
+        [Fact]
+        public void Error_ReturnsErrorView()
+        {
+            // Arrange
+            var controller = new ExternalAuthController(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _freelancerRepositoryMock.Object,
+                _clientRepositoryMock.Object);
+
+            // Act
+            var result = controller.Error();
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.ViewName);
+        }
+
+        [Fact]
+        public async Task ChooseRole_ReturnsChooseRoleView()
+        {
+            // Arrange
+            var controller = new ExternalAuthController(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _freelancerRepositoryMock.Object,
+                _clientRepositoryMock.Object);
+
+            // Act
+            var result = await controller.ChooseRole();
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.ViewName);
+        }
+
+        [Fact]
+        public async Task GetRole_UserRoleAssignedAsClient_AddsToClientRepositoryAndRedirectsToProfileIndex()
+        {
+            var controller = new ExternalAuthController(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _freelancerRepositoryMock.Object,
+                _clientRepositoryMock.Object);
+            controller.Url = _urlHelperMock.Object;
+            _urlHelperMock.Setup(x => x.IsLocalUrl(It.IsAny<string>())).Returns(true);
+
+            // Arrange
+            var model = new RegisterViewModel { Role = "Client" };
+            var user = new Person { Id = Guid.NewGuid() };
+            _userManagerMock.Setup(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
+            _userManagerMock.Setup(m => m.AddToRoleAsync(user, model.Role)).ReturnsAsync(IdentityResult.Success);
+            var info = new ExternalLoginInfo(new ClaimsPrincipal(), "Google", "provider", "key");
+            _signInManagerMock.Setup(m => m.GetExternalLoginInfoAsync(It.IsAny<string>())).ReturnsAsync(info);
+            _signInManagerMock.Setup(m => m.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, false))
+                .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
+
+            // Act
+            var result = await controller.GetRole(model);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectResult>(result);
+            Assert.Equal("/Profile/Index", redirectResult.Url);
+
+        }
+
+        [Fact]
+        public async Task GetRole_UserRoleAssignedAsFreelancer_AddsToFreelancerRepositoryAndRedirectsToProfileIndex()
+        {
+            var controller = new ExternalAuthController(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _freelancerRepositoryMock.Object,
+                _clientRepositoryMock.Object);
+            controller.Url = _urlHelperMock.Object;
+            _urlHelperMock.Setup(x => x.IsLocalUrl(It.IsAny<string>())).Returns(true);
+
+            // Arrange
+            var model = new RegisterViewModel { Role = "Freelancer" };
+            var user = new Person { Id = Guid.NewGuid() };
+            _userManagerMock.Setup(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
+            _userManagerMock.Setup(m => m.AddToRoleAsync(user, model.Role)).ReturnsAsync(IdentityResult.Success);
+            var info = new ExternalLoginInfo(new ClaimsPrincipal(), "Google", "provider", "key");
+            _signInManagerMock.Setup(m => m.GetExternalLoginInfoAsync(It.IsAny<string>())).ReturnsAsync(info);
+            _signInManagerMock.Setup(m => m.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, false))
+                .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
+
+            // Act
+            var result = await controller.GetRole(model);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectResult>(result);
+            Assert.Equal("/Profile/Index", redirectResult.Url);
+        }
+
+        [Fact]
+        public async Task GetRole_ExternalLoginInfoIsNull_RedirectsToLogin()
+        {
+            var controller = new ExternalAuthController(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _freelancerRepositoryMock.Object,
+                _clientRepositoryMock.Object);
+
+            var model = new RegisterViewModel { Role = "Freelancer" };
+            var user = new Person { Id = Guid.NewGuid() };
+            _userManagerMock.Setup(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
+            _userManagerMock.Setup(m => m.AddToRoleAsync(user, model.Role)).ReturnsAsync(IdentityResult.Success);
+            var info = new ExternalLoginInfo(new ClaimsPrincipal(), "Google", "provider", "key");
+            _signInManagerMock.Setup(m => m.GetExternalLoginInfoAsync(It.IsAny<string>())).ReturnsAsync((ExternalLoginInfo)null);
+            // Act
+            var result = await controller.GetRole(model);
+
+            // Assert
+            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectToActionResult.ActionName);
+        }
+
+        [Fact]
+        public async Task GetRole_UserIsLockedOut_RedirectsToLockout()
+        {
+            var controller = new ExternalAuthController(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _freelancerRepositoryMock.Object,
+                _clientRepositoryMock.Object);
+            controller.Url = _urlHelperMock.Object;
+            _urlHelperMock.Setup(x => x.IsLocalUrl(It.IsAny<string>())).Returns(true);
+
+            // Arrange
+            var model = new RegisterViewModel { Role = "Freelancer" };
+            var user = new Person { Id = Guid.NewGuid() };
+            _userManagerMock.Setup(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
+            _userManagerMock.Setup(m => m.AddToRoleAsync(user, model.Role)).ReturnsAsync(IdentityResult.Success);
+            var info = new ExternalLoginInfo(new ClaimsPrincipal(), "Google", "provider", "key");
+            _signInManagerMock.Setup(m => m.GetExternalLoginInfoAsync(It.IsAny<string>())).ReturnsAsync(info);
+            _signInManagerMock.Setup(m => m.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, false))
+                .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.LockedOut);
+
+            // Act
+            var result = await controller.GetRole(model);
+
+            // Assert
+            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Lockout", redirectToActionResult.ActionName);
+        }
+
+        [Fact]
+        public async Task GetRole_DefaultCase_ReturnsExternalAuthViewWithViewData()
+        {
+            // Arrange
+            var controller = new ExternalAuthController(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _freelancerRepositoryMock.Object,
+                _clientRepositoryMock.Object);
+            controller.Url = _urlHelperMock.Object;
+            _urlHelperMock.Setup(x => x.IsLocalUrl(It.IsAny<string>())).Returns(true);
+
+            var model = new RegisterViewModel { Role = "Freelancer" };
+            var user = new Person { Id = Guid.NewGuid() };
+            _userManagerMock.Setup(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
+            _userManagerMock.Setup(m => m.AddToRoleAsync(user, model.Role)).ReturnsAsync(IdentityResult.Success);
+            var expectedEmail = "test@example.com";
+
+            var principal = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Email, expectedEmail)
+            }));
+            var info = new ExternalLoginInfo(principal, "Google", "provider", "key");
+            _signInManagerMock.Setup(m => m.GetExternalLoginInfoAsync(It.IsAny<string>())).ReturnsAsync(info); // Corrected setup
+            _signInManagerMock.Setup(m => m.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, false))
+                .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Failed);
+
+            
+            controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext { User = principal } };
+
+            // Act
+            var result = await controller.GetRole(model);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Equal("ExternalAuth", viewResult.ViewName);
+            Assert.Equal(info.LoginProvider, viewResult.ViewData["LoginProvider"]);
+            Assert.Equal(expectedEmail, viewResult.ViewData["Email"]);
+        }
+
+
+
+
+
     }
 }
