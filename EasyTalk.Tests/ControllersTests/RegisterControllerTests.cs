@@ -11,10 +11,7 @@ using EasyTalkWeb.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Builder;
-using EasyTalkWeb.Hubs;
-using Microsoft.AspNetCore.Routing;
 
 namespace EasyTalk.Tests.Controllers
 {
@@ -30,7 +27,7 @@ namespace EasyTalk.Tests.Controllers
         public RegisterControllerTests()
         {
             _dbContextMock = Mock.Of<AppDbContext>();
-            _userManagerMock = new Mock<UserManager<Person>>(Mock.Of<IUserStore<Person>>(), null, null, null, null, null, null, null, null);
+            _userManagerMock = new Mock<UserManager<Person>>(Mock.Of<IUserStore<Person>>(), null!, null!, null!, null!, null!, null!, null!, null!);
             _mailServiceMock = new Mock<IMailService>();
             _freelancerRepositoryMock = new Mock<FreelancerRepository>(_dbContextMock);
             _clientRepositoryMock = new Mock<ClientRepository>(_dbContextMock);
@@ -143,9 +140,9 @@ namespace EasyTalk.Tests.Controllers
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal("Register", viewResult.ViewName);
 
-            var modelStateErrors = controller.ModelState[string.Empty].Errors;
-            Assert.Single(modelStateErrors);
-            Assert.Equal("Error creating user", modelStateErrors[0].ErrorMessage);
+            var modelStateErrors = controller.ModelState[string.Empty]?.Errors;
+            Assert.Single(modelStateErrors!);
+            Assert.Equal("Error creating user", modelStateErrors?[0].ErrorMessage);
         }
 
         [Fact]
@@ -154,9 +151,9 @@ namespace EasyTalk.Tests.Controllers
             var builder = WebApplication.CreateBuilder();
             builder.Services.AddAuthorization();
             builder.Services.AddControllersWithViews();
-            builder.Services.AddRazorPages(); // Add Razor Pages services
+            builder.Services.AddRazorPages();
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddMvc(); // Register MVC services including ITempDataDictionaryFactory
+            builder.Services.AddMvc();
             var app = builder.Build();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -220,10 +217,9 @@ namespace EasyTalk.Tests.Controllers
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal("Register", viewResult.ViewName); // Assert that the action returns the Register view
 
-            var modelStateErrors = controller.ModelState[string.Empty].Errors;
-            Assert.Single(modelStateErrors);
-            Assert.Equal("Problem with email confirmation", modelStateErrors[0].ErrorMessage);
+            var modelStateErrors = controller.ModelState[string.Empty]?.Errors;
+            Assert.Single(modelStateErrors!);
+            Assert.Equal("Problem with email confirmation", modelStateErrors?[0].ErrorMessage);
         }
-
     }
 }

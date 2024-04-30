@@ -12,8 +12,8 @@ namespace EasyTalkWeb.Controllers
         private readonly UserManager<Person> _userManager;
         private readonly SignInManager<Person> _signInManager;
         private readonly IMailService _mailService;
-        [BindProperty]
-        public IEnumerable<AuthenticationScheme> _authenticationSchemes { get; set; }
+        //[BindProperty]
+        //public IEnumerable<AuthenticationScheme> _authenticationSchemes { get; set; }
 
         public LoginController(SignInManager<Person> signInManager, UserManager<Person> userManager, IMailService mailService)
         {
