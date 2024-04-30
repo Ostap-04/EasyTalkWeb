@@ -114,5 +114,12 @@ namespace EasyTalkWeb.Controllers
           
             return RedirectToAction("List");
         }
+
+        public async Task<IActionResult> ViewProposals(Guid id)
+        {
+
+            var jobpost = await _jobPostRepository.GetByIdAsyncWthProposals(id);
+            return View(jobpost);
+        }
     }
 }

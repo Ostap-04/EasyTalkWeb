@@ -35,21 +35,19 @@
                                 Edit
                             </a>
                         </td>
-                       <td>
-                            @foreach (var prop in jobpost.Proposals)
-                            {
-                                <span class="badge bg-secondary me-1">@prop.Title</span>
-                            }
-                        <td>
-                            <a asp-area=""
-                               asp-controller="Chat"
-                               asp-action="Index"
-                               asp-route-id="@jobpost.Id">
-                                Start chat
-                            </a>
-                        </td>
-                       </td>
+                    <td>
+                        <a asp-area=""
+                           asp-controller="JobPost"
+                           asp-action="ViewProposals"
+                           asp-route-id="@jobpost.Id">
+                           View Proposals
+                        </a>
+                    </td>
                     </tr>
+                            
+                        
+                       
+                    
                 }
             </tbody>
         </table>

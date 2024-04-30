@@ -37,7 +37,7 @@ namespace EasyTalkWeb.Controllers
             var jobpost = await jobPostRepository.GetByIdAsyncWthProposals(id);
             ProposalRequest proposalrequest = new ProposalRequest() {JobPost = jobpost, JobPostId = id};
 
-            return View(proposalrequest); 
+            return View(proposalrequest);
         }
         public async Task<IActionResult> SaveProposal(ProposalRequest proposalRequest)
         {
@@ -67,7 +67,7 @@ namespace EasyTalkWeb.Controllers
             await proposalRepository.AddAsync(proposal);
             //proposal.Technologies = selectedTech;
             await proposalRepository.Update(proposal);
-            return View("Index");
+            return View("WriteProposal");
         }
     }
 }

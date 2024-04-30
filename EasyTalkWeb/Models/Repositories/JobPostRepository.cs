@@ -38,7 +38,13 @@ namespace EasyTalkWeb.Models.Repositories
         }
         public virtual async Task<JobPost> GetByIdAsyncWthProposals(Guid id)
         {
-            return await _appDbContext.JobPosts.Include(p => p.Proposals).Include(c=>c.Client).ThenInclude(p=>p.Person).FirstOrDefaultAsync(p => p.Id == id);
+            return await _appDbContext.JobPosts
+                .Include(p => p.Proposals)
+                .ThenInclude(p => p.Freelancer)
+                .ThenInclude(f => f.Person)
+                .Include(c=>c.Client)
+                .ThenInclude(p=>p.Person)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }
