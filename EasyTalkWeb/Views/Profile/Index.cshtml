@@ -1,5 +1,7 @@
 ﻿@model EasyTalkWeb.Models.ViewModels.ProfileViewModel
 @using Microsoft.AspNetCore.Identity
+<link rel="stylesheet" href="~/css/profile.css"/>
+
 <div>
     <h1>Profile</h1>
     <div>
@@ -32,19 +34,19 @@
     </div>
     <div>
         <label>Technologies</label>
-        @if (Model.Technologies != null)
-        {
-            @foreach (Technology technology in Model.Technologies)
+        <div class="technologies">
+            @if (Model.Technologies != null)
             {
-                <ul>
-                    <li>@technology.Name</li>
-                </ul>
+                @foreach (Technology technology in Model.Technologies)
+                {
+                    <div class="technology">@technology.Name</div>
+                }
             }
-        }
-        else
-        {
-            <p>No technologies found</p>
-        }
+            else
+            {
+                <p>No technologies found</p>
+            }
+        </div>
     </div>
 }
 <div style="display: flex; margin-top : 15px;">
