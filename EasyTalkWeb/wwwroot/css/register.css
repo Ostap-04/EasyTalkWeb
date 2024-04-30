@@ -1,0 +1,87 @@
+﻿.container-register {
+    padding-top: 50px;
+    position: relative;
+    font-size: 100%;
+    line-height: 1;
+    -ms-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    background-image: linear-gradient(45deg, rgb(92, 73, 227), rgb(68, 135, 227), rgb(34, 177, 196));
+    min-height: 1000px;
+}
+
+.page-items {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0px auto;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.title {
+    margin-top: 25px;
+    font-size: 50px;
+    color: #eaeaea;
+    font-weight: 600;
+}
+
+.form-label {
+    color: #eaeaea;
+    display: flex;
+    justify-content:left;
+    font-size: 20px;
+
+}
+
+.input-box input {
+    background-color: #dadada;
+}
+
+.input-box {
+    margin-top: 15px;
+    
+}
+
+.choices input, .choice-label{
+    display:flex;
+    justify-content:left;
+}
+
+.radio-choice {
+    gap: 10px;
+    display: flex;
+}
+
+.choices {
+    margin-top: 15px;
+}
+
+.radio-choice label {
+    color: #eaeaea;
+}
+
+.register-button {
+    background-color: #eaeaea;
+    padding: 10px 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    color: #001b48;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.buttons {
+    display:flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 30px;
+    align-items:center;
+}
+
+.buttons p {
+    margin: 0;
+    color: #eaeaea;
+
+}
