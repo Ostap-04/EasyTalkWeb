@@ -78,10 +78,7 @@ namespace EasyTalkWeb.Controllers
 
                     if (emailResponse)
                         return RedirectToAction("ConfirmEmail", "Email");
-                    else
-                    {
-                        ModelState.AddModelError(nameof(model.Email), "Problem with email confirmation");
-                    }
+                    ModelState.AddModelError(nameof(model.Email), "Problem with email confirmation");
                 }
 
                 foreach (var error in result.Errors)
