@@ -8,6 +8,8 @@ using Moq;
 using EasyTalkWeb.Persistance;
 using EasyTalkWeb.Models.ViewModels;
 using EasyTalkWeb.Enum;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace EasyTalk.Tests.Controllers
 {
@@ -32,6 +34,18 @@ namespace EasyTalk.Tests.Controllers
             _techRepositoryMock = new Mock<TechRepository>(_dbContextMock);
             _jobPostRepositoryMock = new Mock<JobPostRepository>(_dbContextMock);
         }
+        [Fact]
+        public void AddJobPost_Returns_ViewResult()
+        {
+            var controller = new JobPostController(_jobPostRepositoryMock.Object,_techRepositoryMock.Object,_userManagerMock.Object, _clientRepositoryMock.Object);
+
+            var result = controller.Add();
+
+            Assert.IsType<ViewResult>(result);
+        }
+       
+     
+        
     }
     
 }

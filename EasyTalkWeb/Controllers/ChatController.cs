@@ -56,6 +56,7 @@ namespace EasyTalkWeb.Controllers
             }
             var personFreelancer = await _freelancerRepo.GetPersonByFreelancerId(freelancerId);
             var personClient = await _personRepo.GetByIdAsync(clientIdentity.Id);
+           
             var chat = new Chat()
             {
                 Id = Guid.NewGuid(),

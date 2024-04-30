@@ -2,12 +2,17 @@
 @{
 }
 <div>
-    <p>@Model.JobPostId</p>
+    <h1><b>@Model.JobPost.Title by @Model.JobPost.Client.Person.FirstName  @Model.JobPost.Client.Person.LastName</b></h1>
+
+    <h2>@Model.JobPost.Description  </h2>
+    <hr />
     <p>
        
         @foreach (var prop in Model.JobPost.Proposals)
         {
             <p>@prop.Title</p>
+            <p>@prop.Text</p>
+            <hr />
         }
     </p>
 </div>

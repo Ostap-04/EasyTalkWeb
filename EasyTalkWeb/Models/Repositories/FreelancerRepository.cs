@@ -24,6 +24,7 @@ namespace EasyTalkWeb.Models.Repositories
         {
             var freelancer = await _context.Freelancers
                 .Include(f => f.Person)
+                
                 .FirstOrDefaultAsync(f => f.FreelancerId == freelancerId);
 
             var person = freelancer?.Person;

@@ -7,10 +7,10 @@
         <table class="table">
             <thead>
                 <tr>
-                    <td>Id</td>
-                    <td>Heading</td>
+                    <td>Title</td>
+                    <td>Description</td>
                     <td>Tags</td>
-                    <td> </td>
+                    <td>Proposals </td>
                 </tr>
             </thead>
             <tbody>
@@ -35,6 +35,20 @@
                                 Edit
                             </a>
                         </td>
+                       <td>
+                            @foreach (var prop in jobpost.Proposals)
+                            {
+                                <span class="badge bg-secondary me-1">@prop.Title</span>
+                            }
+                        <td>
+                            <a asp-area=""
+                               asp-controller="Chat"
+                               asp-action="Index"
+                               asp-route-id="@jobpost.Id">
+                                Start chat
+                            </a>
+                        </td>
+                       </td>
                     </tr>
                 }
             </tbody>

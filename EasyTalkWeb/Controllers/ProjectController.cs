@@ -33,20 +33,22 @@ namespace EasyTalkWeb.Controllers
         }
 
         [Authorize(Roles = "Client")]
-        public async Task<IActionResult> SaveProject(ProjectRequest request)
+        public async Task<IActionResult> SaveProject([FromBody]ProjectRequest request)
         {
-            var curuser = await _userManager.GetUserAsync(User);
-            var client = _clientRepository.GetClientByPersonId(curuser.Id);
+            var freelancer = await _freelancerRepository.GetFreelancerByPersonId(request.FreelancerId);
+            var client =  _clientRepository.GetClientByPersonId(request.ClientId);
             Project project = new Project()
             {
                 ClientId = client.ClientId,
                 CreatedDate = DateTime.UtcNow,
-                FreelancerId = request.FreelancerId,
+                FreelancerId = freelancer.FreelancerId,
                 Description = request.Description,
                 Name = request.Name,
                 Price = request.Price,
                 ModifiedDate = DateTime.UtcNow,
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                ChatId = request.ChatId
+
             };
             await _projectRepository.AddAsync(project);
 
