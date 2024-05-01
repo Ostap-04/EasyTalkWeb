@@ -11,15 +11,15 @@ namespace EasyTalkWeb.Models.Repositories
         {
             _appDbContext = appDbContext;
         }
-
-        public override async Task<IEnumerable<JobPost>> GetAllAsync()
+       
+        public  override async Task<IEnumerable<JobPost>> GetAllAsync()
         {
             return await _appDbContext.JobPosts
                 .Include(j => j.Technologies)
                 .ToListAsync();
         }
 
-        public async Task<JobPost> GetJobPostByIdForClient(Guid clientId, Guid jobPostId)
+        public virtual async Task<JobPost> GetJobPostByIdForClient(Guid clientId, Guid jobPostId)
         {
             var client = await _appDbContext.Clients
                 .Include(c => c.JobPosts)
