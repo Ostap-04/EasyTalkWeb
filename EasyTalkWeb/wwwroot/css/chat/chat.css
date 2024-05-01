@@ -1,12 +1,14 @@
 ﻿.chat-container {
-    width: 100%;
+    width: 90%;
+    margin-top: 52px;
+    margin-left: auto;
+    margin-right: auto;
     overflow: hidden;
-    height: 90vh;
+    height: calc(90vh - 50px);
     border: 1px #45a049 solid;
     border-radius: 10px;
     display: flex;
     background-color: #143370;
-    margin-top: 20px;
 }
 .chat-body {
     height: 100%;
@@ -291,4 +293,16 @@
 .start-project:hover {
     background-color: #04044e;
     color: #0493bd;
+}
+
+.container-template {
+    padding-top: 70px;
+    position: relative;
+    font-size: 100%;
+    line-height: 1;
+    -ms-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    background-image: linear-gradient(45deg, rgb(92, 73, 227), rgb(68, 135, 227), rgb(34, 177, 196));
+    min-height: 1000px;
 }

@@ -4,52 +4,55 @@
 @model EasyTalkWeb.Models.ViewModels.ChatViewModels.ChatsListViewModel
 
 <link rel="stylesheet" href="~/css/chat/chat.css" />
-<div class="chat-container">
-    <div class="aside">
-        @if(@Model.Chats.Count > 0)
-        {
-            @foreach(var chat in @Model.Chats)
+<div class="container-template">
+    <div class="chat-container">
+        <div class="aside">
+            @if (@Model.Chats.Count > 0)
             {
-                @await Component.InvokeAsync("ChatPreviewComponent", chat);
+                @foreach (var chat in @Model.Chats)
+                {
+                    @await Component.InvokeAsync("ChatPreviewComponent", chat)
+                    ;
+                }
             }
-        }
-        else
-        {
-            <div style="color: white; font-weight:400; margin:auto auto;">No chats, <a style="color:azure; font-weight:600; padding: 3px; border-bottom: 1px solid #fff; border-radius:10px;" asp-action="List" asp-controller="FindFreelancer">create one</a></div>
-        }
-    </div>
-    <div class="chat-body">
-        <div class="chat-head">
-            <div class="chat-head__title"></div>
-            <div class="chat-head__activity">
-                <div class="chat-activity__name"></div>
-                <div class="chat-activity__dots">
-                    <div class="chat-activity__dot"></div>
-                    <div class="chat-activity__dot"></div>
-                    <div class="chat-activity__dot"></div>
+            else
+            {
+                <div style="color: white; font-weight:400; margin:auto auto;">No chats, <a style="color:azure; font-weight:600; padding: 3px; border-bottom: 1px solid #fff; border-radius:10px;" asp-action="List" asp-controller="FindFreelancer">create one</a></div>
+            }
+        </div>
+        <div class="chat-body">
+            <div class="chat-head">
+                <div class="chat-head__title"></div>
+                <div class="chat-head__activity">
+                    <div class="chat-activity__name"></div>
+                    <div class="chat-activity__dots">
+                        <div class="chat-activity__dot"></div>
+                        <div class="chat-activity__dot"></div>
+                        <div class="chat-activity__dot"></div>
+                    </div>
                 </div>
             </div>
+            <div class="message-list">
+                <div class="no-messages" hidden>No messages yet</div>
+            </div>
+            <form method="POST" class="actions" enctype="multipart/form-data">
+                <input type="text" class="messageInput" name="message" placeholder="write a message" autocomplete="off">
+                <input type="file" class="fileInput" name="file">
+                <button class="sendMessageBtn" type="button" value="Send">Send</button>
+            </form>
         </div>
-        <div class="message-list">
-            <div class="no-messages" hidden>No messages yet</div>
-        </div>
-        <form method="POST" class="actions" enctype="multipart/form-data">
-            <input type="text" class="messageInput" name="message" placeholder="write a message" autocomplete="off">
-            <input type="file" class="fileInput" name="file">
-            <button class="sendMessageBtn" type="button" value="Send">Send</button>
-        </form>
     </div>
-</div>
-<div class="modal">
-    <div class="modal-content">
-        <div class="modal-title">Modal Title</div>
-        <div class="members">
-            <div class="label">Chat members:</div>
-            <div class="list"></div>
+    <div class="modal">
+        <div class="modal-content">
+            <div class="modal-title">Modal Title</div>
+            <div class="members">
+                <div class="label">Chat members:</div>
+                <div class="list"></div>
+            </div>
+            <p class="about">About:</p>
+            <div class="description"></div>
+            <input type="text" pattern="\d+" class="final-price" placeholder="enter the final price of the project" />
         </div>
-        <p class="about">About:</p>
-        <div class="description"></div>
-        <input type="text" pattern="\d+" class="final-price" placeholder="enter the final price of the project"/>
     </div>
 </div>
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
