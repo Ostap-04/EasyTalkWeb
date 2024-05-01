@@ -83,7 +83,7 @@ namespace EasyTalkWeb.Controllers
             return Json(new { chatData,  userId = _userManager.GetUserId(User) });
         }
 
-        private ICollection<ChatPreviewViewModel> GetChatPreviews(ICollection<Chat> chats)
+        public ICollection<ChatPreviewViewModel> GetChatPreviews(ICollection<Chat> chats)
         {
             var previews = new List<ChatPreviewViewModel>();
             foreach (var chat in chats)

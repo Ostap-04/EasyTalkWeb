@@ -8,7 +8,7 @@ namespace EasyTalkWeb.Models.Repositories
     {
         public PersonRepository(AppDbContext _context) : base(_context) {}
 
-        public async Task<Freelancer> GetFreelancer(Guid userId)
+        public virtual async Task<Freelancer> GetFreelancer(Guid userId)
         {
             var freelancer = await _context.Freelancers
                 .Include(c => c.Technologies)
@@ -17,7 +17,7 @@ namespace EasyTalkWeb.Models.Repositories
             return freelancer!;
         }
 
-        public async Task<Person> GetPersonWithTechnologiesById(Guid userId)
+        public virtual async Task<Person> GetPersonWithTechnologiesById(Guid userId)
         {
             var person = await _context.People
             .Include(p => p.Freelancer)
