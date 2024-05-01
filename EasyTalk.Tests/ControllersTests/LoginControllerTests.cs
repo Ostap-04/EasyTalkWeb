@@ -1,5 +1,4 @@
 ﻿using EasyTalkWeb.Identity.EmailHost;
-using EasyTalkWeb.Models.Repositories;
 using EasyTalkWeb.Models;
 using EasyTalkWeb.Persistance;
 using Microsoft.AspNetCore.Identity;
@@ -16,7 +15,6 @@ namespace EasyTalk.Tests.ControllersTests
 {
     public class LoginControllerTests
     {
-        private readonly AppDbContext _dbContextMock;
         private readonly Mock<UserManager<Person>> _userManagerMock;
         private readonly Mock<IMailService> _mailServiceMock;
         private readonly Mock<SignInManager<Person>> _signInManagerMock;
@@ -24,7 +22,6 @@ namespace EasyTalk.Tests.ControllersTests
 
         public LoginControllerTests()
         {
-            _dbContextMock = Mock.Of<AppDbContext>();
             _mailServiceMock = new Mock<IMailService>();
             _userManagerMock = new Mock<UserManager<Person>>(
                 /* IUserStore<TUser> store */Mock.Of<IUserStore<Person>>(),
@@ -87,7 +84,7 @@ namespace EasyTalk.Tests.ControllersTests
                 RememberMe = false
             };
 
-            _userManagerMock.Setup(m => m.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new Person()); // Mock finding user by email
+            _userManagerMock.Setup(m => m.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new Person());
             _signInManagerMock.Setup(m => m.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), false))
                 .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
 
@@ -192,7 +189,7 @@ namespace EasyTalk.Tests.ControllersTests
 
             var challengeResult = Assert.IsType<ChallengeResult>(result);
             Assert.Equal(provider, challengeResult.AuthenticationSchemes.FirstOrDefault());
-            Assert.Equal(fakeRedirectUri, properties.RedirectUri); // Asserting the expected redirect URI
+            Assert.Equal(fakeRedirectUri, properties.RedirectUri);
         }
 
         [Fact]
@@ -435,7 +432,5 @@ namespace EasyTalk.Tests.ControllersTests
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Null(viewResult.ViewName);
         }
-
-
     }
 }

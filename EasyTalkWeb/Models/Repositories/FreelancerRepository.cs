@@ -20,7 +20,7 @@ namespace EasyTalkWeb.Models.Repositories
             return freelancer;
         }
 
-        public async Task<Person> GetPersonByFreelancerId(Guid freelancerId)
+        public virtual async Task<Person> GetPersonByFreelancerId(Guid freelancerId)
         {
             var freelancer = await _context.Freelancers
                 .Include(f => f.Person)

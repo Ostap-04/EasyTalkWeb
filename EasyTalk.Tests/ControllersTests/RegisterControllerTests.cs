@@ -32,7 +32,6 @@ namespace EasyTalk.Tests.Controllers
             _freelancerRepositoryMock = new Mock<FreelancerRepository>(_dbContextMock);
             _clientRepositoryMock = new Mock<ClientRepository>(_dbContextMock);
             _jobPostRepositoryMock = new Mock<JobPostRepository>(_dbContextMock);
-
         }
 
         [Fact]
@@ -215,7 +214,7 @@ namespace EasyTalk.Tests.Controllers
             var result = await controller.Register(model);
 
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("Register", viewResult.ViewName); // Assert that the action returns the Register view
+            Assert.Equal("Register", viewResult.ViewName);
 
             var modelStateErrors = controller.ModelState[string.Empty]?.Errors;
             Assert.Single(modelStateErrors!);
