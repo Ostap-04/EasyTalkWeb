@@ -33,6 +33,9 @@ namespace Persistance.EntityConfiguration
                 .HasMany(c => c.Messages)
                 .WithOne(m => m.Chat)
                 .HasForeignKey(m => m.ChatId);
+            builder
+                .HasOne(c => c.Project)
+                .WithOne(p => p.Chat);
         }
     }
 }

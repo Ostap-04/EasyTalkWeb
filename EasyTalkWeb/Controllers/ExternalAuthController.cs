@@ -25,7 +25,7 @@ namespace EasyTalkWeb.Controllers
             _freelancerRepository = freelancerRepository;
         }
 
-        public async Task<IActionResult> ExternalAuth(string provider, string returnUrl = null)
+        public IActionResult ExternalAuth(string provider, string returnUrl = null)
         {
             var redirectUrl = Url.Action(nameof(ExternalAuthCallback), "ExternalAuth", new { returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);

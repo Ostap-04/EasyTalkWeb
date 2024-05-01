@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Linq;
 using EasyTalkWeb.Persistance;
 
 namespace EasyTalkWeb.Models.Repositories

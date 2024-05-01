@@ -7,7 +7,7 @@ namespace EasyTalkWeb.Models.Repositories
     public class TechRepository : GenericRepository<Technology>
     {
         private readonly AppDbContext _appDbContext;
-
+       
         public TechRepository(AppDbContext appDbContext) : base(appDbContext)
         {
             _appDbContext = appDbContext;
@@ -22,7 +22,7 @@ namespace EasyTalkWeb.Models.Repositories
             return technology;
         }
 
-        public async Task<Technology> GetTechnologyWithFreelancerByNameAsync(string name)
+        public virtual async Task<Technology> GetTechnologyWithFreelancerByNameAsync(string name)
         {
             var technology = await _appDbContext.Technologies
                 .Include(c => c.Freelancers)

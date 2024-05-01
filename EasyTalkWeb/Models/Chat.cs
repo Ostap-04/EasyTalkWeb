@@ -10,6 +10,8 @@ namespace EasyTalkWeb.Models
 
         public string? Description { get; set; }
 
+        public Project? Project { get; set; }
+
         public ICollection<Message>? Messages { get; set; }
 
         public ICollection<Person>? Persons { get; set; }

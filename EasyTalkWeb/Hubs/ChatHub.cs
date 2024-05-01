@@ -1,31 +1,47 @@
 ﻿using EasyTalkWeb.Hubs.Interfaces;
 using EasyTalkWeb.Models;
 using EasyTalkWeb.Models.Repositories;
-using EasyTalkWeb.Persistance;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 
 namespace EasyTalkWeb.Hubs
 {
     public class ChatHub : Hub<IChatClient>
     {
-        private readonly UserManager<Person> _userManager;
-        private readonly MessageRepository _repo;
-        public ChatHub(UserManager<Person> userManager, MessageRepository repo)
+        private readonly MessageRepository _messageRepository;
+        public ChatHub(MessageRepository messageRepository)
         {
-            _userManager = userManager;
-            _repo = repo;
+            _messageRepository = messageRepository;
         }
 
-        public async Task SendMessage(string sender, string receiver, string message)
+        public async Task SendMessage(Guid chatId, Guid senderId, string senderName, string message)
         {
-            Console.WriteLine(sender + "  " + receiver + "  " + message);
-            await Console.Out.WriteLineAsync(Context.UserIdentifier);
-            var userId = _userManager.Users.FirstOrDefault(u => u.Email.ToLower() == receiver.ToLower()).Id.ToString();
-            if (!string.IsNullOrEmpty(userId))
+            await Clients.Group(chatId.ToString()).ReceiveMessage(senderId, senderName, message);
+            var newMessage = new Message()
             {
-                await Clients.User(userId).ReceiveMessage(sender, message);
-            }
+                Id = Guid.NewGuid(),
+                ChatId=chatId,
+                PersonId = senderId,
+                Text = message.Trim(),
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow
+            };
+            await _messageRepository.AddAsync(newMessage);
+        }
+
+        public async Task TypingActivity(Guid chatId, string senderName)
+        {
+            await Clients.OthersInGroup(chatId.ToString()).TypingActivity(senderName);
+        }
+
+        public async Task JoinChatRoom(Guid chatId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, chatId.ToString());
+        }
+
+        public async Task LeaveChatRoom(Guid chatId)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatId.ToString());
+            await Console.Out.WriteLineAsync(Context.UserIdentifier + "disconnected");
         }
     }
 }

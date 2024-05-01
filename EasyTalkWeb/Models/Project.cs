@@ -16,6 +16,14 @@ namespace EasyTalkWeb.Models
         public string? Status { get; set; }
 
         public Guid ClientId { get; set; }
+        
+        public Guid ChatId { get; set; }
+
+        public Chat? Chat { get; set; }
+
+        public Guid JobPostId { get; set; }
+
+        public JobPost? JobPost { get; set; }
 
         public Guid FreelancerId { get; set; }
 

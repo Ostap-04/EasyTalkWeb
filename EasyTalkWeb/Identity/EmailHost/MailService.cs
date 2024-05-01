@@ -5,15 +5,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Net.Mail;
 using System.Net;
+using System.Configuration;
 
 namespace EasyTalkWeb.Identity.EmailHost
 {
     public class MailService: IMailService
     {
         private readonly MailSettings _mailSettings;
-        public MailService(IOptions<MailSettings> mailSettingsOptions)
+        private readonly IConfiguration _configuration;
+        public MailService(IOptions<MailSettings> mailSettingsOptions, IConfiguration configuration)
         {
             _mailSettings = mailSettingsOptions.Value;
+            _configuration = configuration;
         }
 
         public bool SendEmail(string userEmail, string confirmationLink, string mailTitle)
@@ -27,7 +30,7 @@ namespace EasyTalkWeb.Identity.EmailHost
             mailMessage.Body = confirmationLink;
 
             SmtpClient client = new SmtpClient(_mailSettings.Server);
-            string password = Environment.GetEnvironmentVariable(_mailSettings.UserName);
+            string password = _configuration.GetSection("google_auth").GetValue<string>("ostaphutsal04@gmail.com");
             client.Credentials = new NetworkCredential(_mailSettings.UserName, password);
             client.Port = _mailSettings.Port;
             client.EnableSsl = true;

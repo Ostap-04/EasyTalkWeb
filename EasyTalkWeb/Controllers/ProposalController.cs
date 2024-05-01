@@ -34,7 +34,7 @@ namespace EasyTalkWeb.Controllers
         public async Task<IActionResult> Add(ProposalRequest proposalRequest)
         {
             var curuser = await userManager.GetUserAsync(User);
-            var freelancer = freelancerRepository.GetFreelancerByPersonId(curuser.Id);
+            var freelancer =  freelancerRepository.GetFreelancerByPersonId(curuser.Id);
             var selectedTech = new List<Technology>();
             foreach (var selectedTId in proposalRequest.SelectedTech)
             {
@@ -65,9 +65,7 @@ namespace EasyTalkWeb.Controllers
         public async Task<IActionResult> List()
         {
             var proposals = await proposalRepository.GetAllAsync();
-
-
-            return View(proposals);
+            return View( proposals);
         }
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
@@ -92,7 +90,7 @@ namespace EasyTalkWeb.Controllers
         public async Task<IActionResult> Edit(EditProposalRequest proposalrequest)
         {
             var curuser = await userManager.GetUserAsync(User);
-            var freelancer = freelancerRepository.GetFreelancerByPersonId(curuser.Id);
+            var freelancer =  freelancerRepository.GetFreelancerByPersonId(curuser.Id);
             Proposal proposal = await proposalRepository.GetProposaltByIdForFreelancer(freelancer.FreelancerId, proposalrequest.Id);
             proposal.Title = proposalrequest.Title;
             proposal.Text = proposalrequest.Text;

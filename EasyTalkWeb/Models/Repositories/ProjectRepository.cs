@@ -7,7 +7,7 @@ namespace EasyTalkWeb.Models.Repositories
     {
         public ProjectRepository(AppDbContext _context) : base(_context) { }
 
-        public async Task<List<Project>> GetAllProjects()
+        public virtual async Task<List<Project>> GetAllProjects()
         {
             var projects = _context.Projects
                 .Include(p => p.Freelancer)
