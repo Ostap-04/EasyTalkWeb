@@ -1,48 +1,55 @@
 ﻿@model EasyTalkWeb.Models.ViewModels.LoginViewModel
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<Person> SignInManager
-<div class="container mx-auto">
-    <div class="row justify-content-center">
+<link rel="stylesheet" href="~/css/register.css" asp-append-version="true" />
+
+<div class="container-register">
+    <div class="page-items">
         <div class="col-12 col-lg-6">
-
-            <h1 class="mt-3 mb-3 h3">
-                Login
-            </h1>
-
-            <form method="post">
-                <div class="text-danger" asp-validation-summary="All"></div>
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" id="email" class="form-control" asp-for="Email" required />
-                    <span class="text-danger" asp-validation-for="Email"></span>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" id="password" class="form-control" asp-for="Password" required minlength="6" />
-                    <span class="text-danger" asp-validation-for="Password"></span>
-                </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" id="rememberMe" class="form-check-input" asp-for="RememberMe" />
-                    <label class="form-check-label" for="rememberMe">Remember Me</label>
-                </div>
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-dark" asp-controller="Login" asp-action="Login">Login</button>
-                    <a href="@Url.Action("ForgotPassword", "Login")" class="btn btn-link">Forgot Password?</a>
-                </div>
-                <p>Or login with:</p>
-                @foreach(var provider in await SignInManager.GetExternalAuthenticationSchemesAsync())
-                {
-                    <a
-                        class="btn btn-dark"
-                        id="externalLoginButton"
-                        name="provider" 
-                        asp-controller="ExternalAuth"
-                        asp-action="ExternalAuth"
-                        asp-route-provider="@provider.Name">
-                        @provider.Name
-                    </a>
-                }
-            </form>
+           <div class="title">
+                <h1>
+                    Login
+                </h1>
+           </div>
+           <div class="input-form">
+                <form method="post">
+                    <div class="text-danger" asp-validation-summary="All"></div>
+                    <div class="input-box">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="email" class="form-control" asp-for="Email" required />
+                        <span class="text-danger" asp-validation-for="Email"></span>
+                    </div>
+                    <div class="input-box">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="password" class="form-control" asp-for="Password" required minlength="6" />
+                        <span class="text-danger" asp-validation-for="Password"></span>
+                    </div>
+                    <div class="input-box form-check">
+                        <input type="checkbox" id="rememberMe" class="form-check-input" asp-for="RememberMe" />
+                        <label class="form-check-label" for="rememberMe">Remember Me</label>
+                    </div>
+                    <div class="buttons">
+                        <div class="input-box">
+                            <button type="submit" class="register-button" asp-controller="Login" asp-action="Login">Login</button>
+                            
+                        </div>
+                        <p>Or login with:</p>
+                        @foreach (var provider in await SignInManager.GetExternalAuthenticationSchemesAsync())
+                        {
+                            <a class="register-button"
+                               id="externalLoginButton"
+                               name="provider"
+                               asp-controller="ExternalAuth"
+                               asp-action="ExternalAuth"
+                               asp-route-provider="@provider.Name">
+                                @provider.Name
+                            </a>
+                        }
+                    </div>
+                    <a href="@Url.Action("ForgotPassword", "Login")" class="btn-link">Forgot Password?</a>
+                </form>
+           </div>
+           
         </div>
     </div>
 </div>

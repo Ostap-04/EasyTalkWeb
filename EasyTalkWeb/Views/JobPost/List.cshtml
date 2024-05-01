@@ -1,12 +1,12 @@
 ﻿@model List<EasyTalkWeb.Models.JobPost>
-@{
-}
-<div class="container py-5">
+<link rel="stylesheet" href="../css/job-post.css" />
+
+<div class="container-job-post">
     @if (Model != null && Model.Any())
     {
         <table class="table">
             <thead>
-                <tr>
+                <tr class="table-titles">
                     <td>Id</td>
                     <td>Heading</td>
                     <td>Tags</td>
@@ -17,8 +17,8 @@
                 @foreach (var jobpost in Model)
                 {
                     <tr>
-                        <td>@jobpost.Title</td>
-                        <td>@jobpost.Description</td>
+                        <td class="list-text-item">@jobpost.Title</td>
+                        <td class="list-text-item">@jobpost.Description</td>
                         <td>
                             <div class="d-flex">
                                 @foreach (var tech in jobpost.Technologies)
@@ -28,7 +28,7 @@
                             </div>
                         </td>
                         <td>
-                            <a asp-area=""
+                            <a class="button-job-post" asp-area =""
                                asp-controller="JobPost"
                                asp-action="Edit"
                                asp-route-id="@jobpost.Id">
