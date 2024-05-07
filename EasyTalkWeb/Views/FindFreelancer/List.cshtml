@@ -1,13 +1,17 @@
 ﻿@model List<EasyTalkWeb.Models.Freelancer>
 @{
 }
-<div class="container py-5">
-    <form method="post">
-        <div style="display:flex; gap:20px;">
-            <input type="text" name="inputData", value="@TempData["searchTerm"]">
-            <button type="submit" asp-controller="FindFreelancer" asp-action="FindFreelancer">Find</button>
-        </div>
-    </form>
+<link rel="stylesheet" href="../css/freelancers.css" />
+
+<div class="container-freelancers">
+    <div>
+        <form method="post">
+            <div>
+                <input type="text" name="inputData" , value="@TempData["searchTerm"]">
+                <button type="submit" asp-controller="FindFreelancer" asp-action="FindFreelancer">Find</button>
+            </div>
+        </form>
+    </div>
     
     @if (Model != null && Model.Any())
     {
