@@ -1,19 +1,21 @@
 ﻿@model List<EasyTalkWeb.Models.Freelancer>
-@{
-}
-<div class="container py-5">
-    <form method="post">
-        <div style="display:flex; gap:20px;">
-            <input type="text" name="inputData", value="@TempData["searchTerm"]">
-            <button type="submit" asp-controller="FindFreelancer" asp-action="FindFreelancer">Find</button>
-        </div>
-    </form>
+<link rel="stylesheet" href="../css/freelancers.css" />
+
+<div class="container-freelancers">
+    <div class="search-freelancer">
+        <form method="post">
+            <div class="search-items">
+                <input class="form-control" style="width: 40%;" type="text" name="inputData" , value="@TempData["searchTerm"]">
+                <button type="submit" asp-controller="FindFreelancer" asp-action="FindFreelancer">Find</button>
+            </div>
+        </form>
+    </div>
     
     @if (Model != null && Model.Any())
     {
         <table class="table">
             <thead>
-                <tr>
+                <tr class="table-titles">
                     <td>Firstname</td>
                     <td>LastName</td>
                     <td>Technologies</td>
@@ -25,8 +27,8 @@
                 @foreach (var freelancer in Model)
                 {
                     <tr>
-                        <td>@freelancer.Person.FirstName</td>
-                           <td>@freelancer.Person.LastName</td> 
+                        <td class="list-text-item">@freelancer.Person.FirstName</td>
+                           <td class="list-text-item">@freelancer.Person.LastName</td> 
                         
                 <td>
                 <div class="d-flex">
@@ -45,7 +47,7 @@
                             </div>
                         </td>
                         <td>
-                            <a asp-area=""
+                            <a class="chat-button" asp-area=""
                                asp-controller="Chat"
                                asp-action="StartChat"
                                asp-route-id="@freelancer.FreelancerId">

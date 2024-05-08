@@ -2,43 +2,45 @@
 @inject SignInManager<Person> SignInManager
 @inject UserManager<Person> UserManager
 @model EasyTalkWeb.Models.ViewModels.JobPostRequest
-@{
-}
-<div class="container py-5">
-    <form method="post">
+<link rel="stylesheet" href="../css/job-post.css" />
 
-        <div class="mb-3">
-            <label class="form-label">Title</label>
-            <input type="text" class="form-control" id="heading" asp-for="Title" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Price</label>
-            <input type="number" class="form-control" id="pageTitle" asp-for="Price" />
-        </div>
+<div class="container-job-post">
+   <div class="job-post-form">
+        <form method="post">
 
-        <div class="mb-3">
-            <label class="form-label">Description</label>
-            <textarea class="form-control" id="content" asp-for="Description"></textarea>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input type="text" class="form-control" id="heading" asp-for="Title" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Price</label>
+                <input type="number" class="form-control" id="pageTitle" asp-for="Price" />
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">Technologies</label>
-            <select class="form-select" asp-for="SelectedTech">
-                <option value="">Select Technologies </option>
-                @foreach (var tech in Model.Technologies)
-                {
-                    <option value="@tech.Id">@tech.Name</option>
-                }
-            </select>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" id="content" asp-for="Description"></textarea>
+            </div>
 
-
-        <div class="mb-3">
-            <button type="submit" class="btn btn-dark">
-                Save
-            </button>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Technologies</label>
+                <select class="form-select" asp-for="SelectedTech">
+                    <option value="">Select Technologies </option>
+                    @foreach (var tech in Model.Technologies)
+                    {
+                        <option value="@tech.Id">@tech.Name</option>
+                    }
+                </select>
+            </div>
 
 
-    </form>
+            <div class="mb-3">
+                <button type="submit" class="button-job-post">
+                    Save
+                </button>
+            </div>
+
+
+        </form>
+   </div>
 </div>
