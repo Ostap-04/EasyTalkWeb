@@ -42,7 +42,7 @@ namespace EasyTalkWeb.Controllers
         public async Task<IActionResult> SaveProposal(ProposalRequest proposalRequest)
         {
             var curuser = await userManager.GetUserAsync(User);
-            var freelancer = await freelancerRepository.GetFreelancerByPersonId(curuser.Id);
+            var freelancer = freelancerRepository.GetFreelancerByPersonId(curuser.Id);
             var jobpost = await jobPostRepository.GetByIdAsyncWthProposals(proposalRequest.JobPostId);
             //var selectedTech = new List<Technology>();
             //foreach (var selectedTId in proposalRequest.SelectedTech)

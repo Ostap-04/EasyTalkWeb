@@ -40,7 +40,7 @@ namespace EasyTalkWeb.Controllers
         public async Task<IActionResult> SaveProject([FromBody]ProjectRequest request)
         {
             var chat = await _chatRepository.GetChatWithJobPostAsync(request.ChatId);
-            var freelancer = await _freelancerRepository.GetFreelancerByPersonId(request.FreelancerId);
+            var freelancer = _freelancerRepository.GetFreelancerByPersonId(request.FreelancerId);
             var client =  _clientRepository.GetClientByPersonId(request.ClientId);
             Project project = new Project()
             {
