@@ -8,106 +8,127 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - EasyTalkWeb</title>
+    <link href="~/css/nullstyle.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/EasyTalkWeb.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EasyTalkWeb</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Profile"
-                                   asp-action="Index">Profile</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Login"
-                                   asp-action="SignOut">Sign Out</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Chat"
-                                   asp-action="Index">Chat</a>
-                            </li>
-                            @if (User.IsInRole("Client"))
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom">
+            
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EasyTalkWeb</a>
+                    <div class="menu-container" onclick="myFunction(this)" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <div class="bar1"></div>
+                        <div class="bar2"></div>
+                        <div class="bar3"></div>
+                    </div>
+                    @* <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button> *@
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            @if (SignInManager.IsSignedIn(User))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="JobPost"
-                                    asp-action="Add">Add jobpost</a>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Profile"
+                                       asp-action="Index">Profile</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="JobPost"
-                                       asp-action="List">List of jobposts</a>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Login"
+                                       asp-action="SignOut">Sign Out</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="FindFreelancer"
-                                       asp-action="List">List of Freelancers</a>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Chat"
+                                       asp-action="Index">Chat</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Project"
-                                       asp-action="List">List of projects</a>
-                                </li>
+                                @if (User.IsInRole("Client"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-light" asp-area="" asp-controller="JobPost"
+                                           asp-action="Add">Add jobpost</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-light" asp-area="" asp-controller="JobPost"
+                                           asp-action="List">List of jobposts</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-light" asp-area="" asp-controller="FindFreelancer"
+                                           asp-action="List">List of Freelancers</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-light" asp-area="" asp-controller="Project"
+                                           asp-action="List">List of projects</a>
+                                    </li>
+                                }
+                                else if (User.IsInRole("Freelancer"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-light" asp-area="" asp-controller="Proposal"
+                                           asp-action="Add">Add proposal</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-light" asp-area="" asp-controller="Proposal"
+                                           asp-action="List">List of proposals</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-light" asp-area="" asp-controller="FindJob"
+                                           asp-action="Index">Find a job</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-light" asp-area="" asp-controller="Project"
+                                           asp-action="List">List of projects</a>
+                                    </li>
+                                }
                             }
-                            else if (User.IsInRole("Freelancer"))
+                            else
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Proposal"
-                                       asp-action="Add">Add proposal</a>
+                                    <a class="nav-link text-light" asp-area=""
+                                       asp-controller="Register"
+                                       asp-action="Register">Register</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Proposal"
-                                       asp-action="List">List of proposals</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="FindJob"
-                                       asp-action="Index">Find a job</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Project"
-                                       asp-action="List">List of projects</a>
+                                    <a class="nav-link text-light" asp-area=""
+                                       asp-controller="Login"
+                                       asp-action="Login">Login</a>
                                 </li>
                             }
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area=""
-                                   asp-controller="Register"
-                                   asp-action="Register">Register</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area=""
-                                   asp-controller="Login"
-                                   asp-action="Login">Login</a>
-                            </li>
-                        }
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+            </nav>
+        </header>
+        <div class="wrapper">
+           @*  <div class="container">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                    <div>Charles DICKens</div>
+                    <div>Charles DICKens</div>
+                    <div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div><div>Charles DICKens</div>
+                </main>
+            </div> *@
+        @RenderBody()
 
-  @*   <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - EasyTalkWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer> *@
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+       
+
+        @*   <footer class="border-top footer text-muted">
+        <div class="container">
+        &copy; 2024 - EasyTalkWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+        </footer> *@
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
+<script>
+    function myFunction(x) {
+        x.classList.toggle("change");
+    }
+</script>

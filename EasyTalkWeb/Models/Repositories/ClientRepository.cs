@@ -7,7 +7,7 @@ namespace EasyTalkWeb.Models.Repositories
     {
         public ClientRepository(AppDbContext _context) : base(_context) { }
 
-        public Client GetClientByPersonId(Guid personId)
+        public virtual Client GetClientByPersonId(Guid personId)
         {
             var personWithClient = _context.People
                 .Include(p => p.Client)

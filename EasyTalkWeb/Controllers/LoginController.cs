@@ -11,11 +11,11 @@ namespace EasyTalkWeb.Controllers
     {
         private readonly UserManager<Person> _userManager;
         private readonly SignInManager<Person> _signInManager;
-        private readonly MailService _mailService;
-        [BindProperty]
-        public IEnumerable<AuthenticationScheme> _authenticationSchemes { get; set; }
+        private readonly IMailService _mailService;
+        //[BindProperty]
+        //public IEnumerable<AuthenticationScheme> _authenticationSchemes { get; set; }
 
-        public LoginController(SignInManager<Person> signInManager, UserManager<Person> userManager, MailService mailService)
+        public LoginController(SignInManager<Person> signInManager, UserManager<Person> userManager, IMailService mailService)
         {
             _signInManager = signInManager;
             _userManager = userManager;

@@ -1,0 +1,13 @@
+﻿.technologies {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.technology {
+    padding: 5px;
+    border: 2px solid #0c2d69;
+    border-radius: 10px;
+    background-color: #86acefff;
+    color: white;
+}

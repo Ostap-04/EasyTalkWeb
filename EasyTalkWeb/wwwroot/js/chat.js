@@ -245,9 +245,10 @@ function showChatDetails(e) {
     const description = modal.querySelector('.description');
     modalTitle.innerHTML = currentChatData.title;
     description.innerHTML = currentChatData.description;
-    membersList.innerHTML = currentChatData.members.map(
-      (member) => `${member.FirstName} ${member.LastName}`
-    );
+    const members = currentChatData.members.map(
+        (member) => `<div class="member">${member.FirstName} ${member.LastName}</div>`
+      ).join('');
+    membersList.insertAdjacentHTML('afterbegin', members);
 
     if (currentChatData.user.Role === 'Client' && !buttonAdded) {
       modalContent.append(getBtn());
