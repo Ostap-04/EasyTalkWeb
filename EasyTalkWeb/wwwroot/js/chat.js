@@ -140,6 +140,13 @@ chatButtons.forEach((chatBtn, idx) => {
 
 chatHead.addEventListener('click', showChatDetails());
 
+document.addEventListener('keypress', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        sendMsgButton.click();
+    }
+});
+
 sendMsgButton.addEventListener('click', function (event) {
   event.preventDefault();
   if (messageInput.value.trim().length) {
