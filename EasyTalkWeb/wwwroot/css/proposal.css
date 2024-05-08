@@ -1,0 +1,64 @@
+﻿.container-proposals {
+    padding-top: 50px;
+    position: relative;
+    font-size: 100%;
+    line-height: 1;
+    -ms-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    background-image: linear-gradient(45deg, rgb(92, 73, 227), rgb(68, 135, 227), rgb(34, 177, 196));
+    min-height: 1000px;
+}
+
+.proposal-form {
+    margin: 50px 25% 0 25%;
+
+}
+
+.form-label {
+    color: #eaeaea;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.button {
+    background-color: #eaeaea;
+    padding: 10px 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    color: #001b48;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    height: 100%;
+    display: inline-block;
+}
+
+.table-titles {
+    color: #eaeaea;
+    font-size: 30px;
+}
+
+.button-proposal {
+    background-color: #eaeaea;
+    padding: 10px 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    color: #001b48;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    height: 100%;
+    display: inline-block;
+}
+
+.list-text-item {
+    color: #eaeaea;
+}
+
+.list-technologies {
+    max-width: 200px;
+}
+
+.buttons-edit {
+    display: flex;
+    gap: 20px;
+}
