@@ -9,6 +9,7 @@
         public Guid FreelancerId { get; set; }
         public Guid ClientId { get; set; }
         public Guid ChatId { get; set; }
+        public string? Status { get; set; }
 
     }
 }

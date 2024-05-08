@@ -67,7 +67,7 @@ namespace EasyTalkWeb.Controllers
             await proposalRepository.AddAsync(proposal);
             //proposal.Technologies = selectedTech;
             await proposalRepository.Update(proposal);
-            return View("WriteProposal");
+            return RedirectToAction("Index");
         }
     }
 }
