@@ -1,4 +1,4 @@
-﻿.container-job-post {
+﻿.start-chat-container {
     padding-top: 70px;
     position: relative;
     font-size: 100%;
@@ -10,37 +10,29 @@
     min-height: 1000px;
 }
 
-.table-titles {
-    color:#eaeaea;
-    font-size:30px;
+.start-chat-form {
+    margin: 70px 30% 0 30%;
+    
 }
 
-.list-text-item {
-    color: #eaeaea;
-}
-
-.button-job-post {
-    background-color: #eaeaea;
-    padding: 10px 20px;
-    margin: 4px 2px;
+.create-chat-button {
+    border-radius: 40px;
+    background-color: royalblue;
+    padding: 20px 40px;
+    margin: 8px 4px;
+    font-size: 25px;
     cursor: pointer;
-    border-radius: 10px;
-    color: #001b48;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-    height: 100%;
-    display: inline-block;
-}
-
-.job-post-form {
-    margin: 0 20% 0 20%;
-}
-
-.form-label {
     color: #eaeaea;
-    font-size: 20px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    display: inline-block;
+    width: 100%;
 }
 
-.buttons-edit {
-    display:flex;
-    gap: 20px;
+.create-chat-button:hover {
+    background-color: #eaeaea;
+    color:royalblue;
+}
+
+.form input {
+
 }

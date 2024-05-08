@@ -264,7 +264,7 @@ main {
 
 @media(max-width: 576px) {
     .container-fluid {
-        background-color: #86acefff;
+        background-image: linear-gradient(45deg, rgb(92, 73, 227), rgb(68, 135, 227), rgb(34, 177, 196));
         padding-bottom: 20px;
     }
 }
