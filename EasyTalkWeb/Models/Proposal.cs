@@ -11,5 +11,7 @@ namespace EasyTalkWeb.Models
 		public Guid FreelancerId { get; set; }
 		public Freelancer Freelancer { get; set; }
         public ICollection<Technology>? Technologies { get; set; }
+		public JobPost JobPost { get; set; }
+		public Guid JobPostId { get; set; }
     }
 }

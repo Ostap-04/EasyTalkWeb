@@ -6,13 +6,20 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EasyTalkWeb.Migrations
 {
     /// <inheritdoc />
-    public partial class ChatJobpostProjectRelations : Migration
+    public partial class newrelations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "FreelancerProject");
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "JobPostId",
+                table: "Proposals",
+                type: "uuid",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
             migrationBuilder.AddColumn<Guid>(
                 name: "ChatId",
@@ -36,6 +43,11 @@ namespace EasyTalkWeb.Migrations
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
             migrationBuilder.CreateIndex(
+                name: "IX_Proposals_JobPostId",
+                table: "Proposals",
+                column: "JobPostId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Projects_ChatId",
                 table: "Projects",
                 column: "ChatId",
@@ -51,6 +63,13 @@ namespace EasyTalkWeb.Migrations
                 table: "Projects",
                 column: "JobPostId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Freelancers_Specialization",
+                table: "Freelancers",
+                column: "Specialization")
+                .Annotation("Npgsql:IndexMethod", "GIN")
+                .Annotation("Npgsql:TsVectorConfig", "english");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Projects_Chats_ChatId",
@@ -75,6 +94,14 @@ namespace EasyTalkWeb.Migrations
                 principalTable: "JobPosts",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Proposals_JobPosts_JobPostId",
+                table: "Proposals",
+                column: "JobPostId",
+                principalTable: "JobPosts",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
@@ -92,6 +119,14 @@ namespace EasyTalkWeb.Migrations
                 name: "FK_Projects_JobPosts_JobPostId",
                 table: "Projects");
 
+            migrationBuilder.DropForeignKey(
+                name: "FK_Proposals_JobPosts_JobPostId",
+                table: "Proposals");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Proposals_JobPostId",
+                table: "Proposals");
+
             migrationBuilder.DropIndex(
                 name: "IX_Projects_ChatId",
                 table: "Projects");
@@ -103,6 +138,14 @@ namespace EasyTalkWeb.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_Projects_JobPostId",
                 table: "Projects");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Freelancers_Specialization",
+                table: "Freelancers");
+
+            migrationBuilder.DropColumn(
+                name: "JobPostId",
+                table: "Proposals");
 
             migrationBuilder.DropColumn(
                 name: "ChatId",

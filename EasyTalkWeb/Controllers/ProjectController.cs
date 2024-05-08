@@ -14,39 +14,48 @@ namespace EasyTalkWeb.Controllers
         private readonly ClientRepository _clientRepository;
         private readonly FreelancerRepository _freelancerRepository;
         private readonly ProjectRepository _projectRepository;
+        private readonly ChatRepository _chatRepository;
 
-        public ProjectController(UserManager<Person> userManager, ClientRepository clientRepository, FreelancerRepository freelancerRepository, ProjectRepository projectRepository)
+        public ProjectController(UserManager<Person> userManager, ClientRepository clientRepository, FreelancerRepository freelancerRepository, ProjectRepository projectRepository, ChatRepository chatRepository)
         {
             _userManager = userManager;
             _clientRepository = clientRepository;
             _freelancerRepository = freelancerRepository;
             _projectRepository = projectRepository;
+            _chatRepository = chatRepository;
         }
 
         [Authorize(Roles = "Client")]
         public async Task<IActionResult> StartProject(Guid id)
         {
+
             var chosen = await _freelancerRepository.GetByIdAsync(id);
             ProjectRequest project = new ProjectRequest() { FreelancerId = chosen.FreelancerId };
 
             return View(project);
         }
 
+        [HttpPost]
         [Authorize(Roles = "Client")]
-        public async Task<IActionResult> SaveProject(ProjectRequest request)
+        public async Task<IActionResult> SaveProject([FromBody]ProjectRequest request)
         {
-            var curuser = await _userManager.GetUserAsync(User);
-            var client = _clientRepository.GetClientByPersonId(curuser.Id);
+            var chat = await _chatRepository.GetChatWithJobPostAsync(request.ChatId);
+            var freelancer = await _freelancerRepository.GetFreelancerByPersonId(request.FreelancerId);
+            var client =  _clientRepository.GetClientByPersonId(request.ClientId);
             Project project = new Project()
             {
                 ClientId = client.ClientId,
                 CreatedDate = DateTime.UtcNow,
-                FreelancerId = request.FreelancerId,
+                FreelancerId = freelancer.FreelancerId,
                 Description = request.Description,
                 Name = request.Name,
                 Price = request.Price,
+                Status = request.Status,
                 ModifiedDate = DateTime.UtcNow,
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                ChatId = request.ChatId,
+                JobPostId = chat.JobPost.Id,
+
             };
             await _projectRepository.AddAsync(project);
 
