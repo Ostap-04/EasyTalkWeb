@@ -17,13 +17,17 @@ namespace EasyTalkWeb.Controllers
         private readonly PersonRepository _personRepo;
         private readonly ChatRepository _chatRepo;
         private readonly FreelancerRepository _freelancerRepo;
+        private readonly JobPostRepository _jobPostRepo;
+        private readonly ProposalRepository _proposalRepo;
 
-        public ChatController(UserManager<Person> userManager, PersonRepository personRepo, ChatRepository chatRepo, FreelancerRepository freelancerRepo)
+        public ChatController(UserManager<Person> userManager, PersonRepository personRepo, ChatRepository chatRepo, FreelancerRepository freelancerRepo, JobPostRepository jobPostRepo, ProposalRepository proposalRepo)
         {
             _userManager = userManager;
             _personRepo = personRepo;
             _chatRepo = chatRepo;
             _freelancerRepo = freelancerRepo;
+            _jobPostRepo = jobPostRepo;
+            _proposalRepo = proposalRepo;
         }
 
         public async Task<IActionResult> Index()
@@ -36,11 +40,13 @@ namespace EasyTalkWeb.Controllers
             return View("Chat", chatListViewModel);
         }
 
-        [HttpGet]
         [Authorize(Roles = "Client")]
-        public async Task<IActionResult> StartChat(Guid id)
+        public async Task<IActionResult> StartChat(Guid jobPostId, Guid proposalId, Guid freelancerId)
         {
-            TempData["freelancerId"] = id;
+            TempData["jobPostId"] = jobPostId;
+            TempData["proposalId"] = proposalId;
+            TempData["freelancerId"] = freelancerId;
+
             return View("CreateChat");
         }
 
@@ -49,6 +55,7 @@ namespace EasyTalkWeb.Controllers
         public async Task<IActionResult> CreateChat(CreateChatViewModel model)
         {
             var clientIdentity = await _userManager.GetUserAsync(User);
+            var jobpost = await _jobPostRepo.GetByIdAsyncProposalsOnly(Guid.Parse(TempData["jobPostId"]?.ToString()));
             bool parsed = Guid.TryParse(TempData["freelancerId"]?.ToString(), out Guid freelancerId);
             if (!parsed)
             {
@@ -56,6 +63,7 @@ namespace EasyTalkWeb.Controllers
             }
             var personFreelancer = await _freelancerRepo.GetPersonByFreelancerId(freelancerId);
             var personClient = await _personRepo.GetByIdAsync(clientIdentity.Id);
+           
             var chat = new Chat()
             {
                 Id = Guid.NewGuid(),
@@ -66,6 +74,7 @@ namespace EasyTalkWeb.Controllers
             };
             await _chatRepo.AddAsync(chat);
             chat.Persons = new List<Person>() { personClient, personFreelancer };
+            chat.JobPost = jobpost;
             await _chatRepo.Update(chat);
             return RedirectToAction("Index");
         }
@@ -83,7 +92,7 @@ namespace EasyTalkWeb.Controllers
             return Json(new { chatData,  userId = _userManager.GetUserId(User) });
         }
 
-        private ICollection<ChatPreviewViewModel> GetChatPreviews(ICollection<Chat> chats)
+        public ICollection<ChatPreviewViewModel> GetChatPreviews(ICollection<Chat> chats)
         {
             var previews = new List<ChatPreviewViewModel>();
             foreach (var chat in chats)

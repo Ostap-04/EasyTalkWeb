@@ -24,7 +24,7 @@ namespace EasyTalkWeb.Controllers
             return View(freelancers as List<Freelancer>);
         }
         
-        public async Task<IActionResult> FindFreelancer(string inputData)
+        public  async Task<IActionResult> FindFreelancer(string inputData)
         {
             IEnumerable<Freelancer> freelancers;
             if (inputData == null)

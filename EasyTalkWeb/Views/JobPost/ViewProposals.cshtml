@@ -1,0 +1,29 @@
+﻿@model EasyTalkWeb.Models.ViewModels.ChatViewModels.CreateChatViewModel
+@{
+}
+<div>
+
+    <h1><b>@Model.JobPost.Title by @Model.JobPost.Client.Person.FirstName @Model.JobPost.Client.Person.LastName</b></h1>
+
+    <h2>@Model.Description </h2>
+    <hr />
+
+    <p>
+
+        @foreach (var prop in Model.JobPost.Proposals)
+        {
+        <p>@prop.Title</p>
+        <div>@prop.Freelancer.Person.FirstName</div>
+        <p>@prop.Text</p>
+        <a asp-area=""
+           asp-controller="Chat"
+           asp-action="StartChat"
+           asp-route-jobPostId="@Model.JobPost.Id"
+           asp-route-proposalId="@prop.Id"
+           asp-route-freelancerId="@prop.FreelancerId">
+            Start Chat
+        </a>
+        <hr />
+        }
+    </p>
+</div>

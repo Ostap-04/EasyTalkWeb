@@ -9,21 +9,22 @@ namespace EasyTalkWeb.Models.Repositories
     {
         public FreelancerRepository(AppDbContext _context) : base(_context) { }
 
-        public async Task<Freelancer> GetFreelancerByPersonId(Guid personId)
+        public virtual  Freelancer GetFreelancerByPersonId(Guid personId)
         {
-            var personWithFreelancer = await _context.People
+            var personWithFreelancer =  _context.People
                 .Include(p => p.Freelancer)
-                .FirstOrDefaultAsync(p => p.Id == personId);
+                .FirstOrDefault(p => p.Id == personId);
 
             var freelancer = personWithFreelancer?.Freelancer;
 
             return freelancer;
         }
 
-        public async Task<Person> GetPersonByFreelancerId(Guid freelancerId)
+        public virtual async Task<Person> GetPersonByFreelancerId(Guid freelancerId)
         {
             var freelancer = await _context.Freelancers
                 .Include(f => f.Person)
+                
                 .FirstOrDefaultAsync(f => f.FreelancerId == freelancerId);
 
             var person = freelancer?.Person;
@@ -31,7 +32,7 @@ namespace EasyTalkWeb.Models.Repositories
             return person;
         }
 
-        public async Task<IEnumerable<Freelancer>> GetAllAsyncWithPerson()
+        public virtual async Task<IEnumerable<Freelancer>> GetAllAsyncWithPerson()
         {
             return await _context.Freelancers
                 .Include(j => j.Person)
@@ -39,7 +40,7 @@ namespace EasyTalkWeb.Models.Repositories
                 .Include(t=>t.Technologies)
                 .ToListAsync();
         }
-        public async Task<IEnumerable<Freelancer>> GetFreelancersBySearch(string searchTerm)
+        public virtual async Task<IEnumerable<Freelancer>> GetFreelancersBySearch(string searchTerm)
         {
             // Construct the tsquery string
             //var tsQuery = $"to_tsquery('english', '{searchTerm}')";

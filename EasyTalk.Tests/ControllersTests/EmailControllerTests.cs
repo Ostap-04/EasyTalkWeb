@@ -13,16 +13,7 @@ namespace EasyTalk.Tests.ControllersTests
         public EmailControllerTests()
         {
             _userManagerMock = new Mock<UserManager<Person>>(
-                /* IUserStore<TUser> store */Mock.Of<IUserStore<Person>>(),
-                /* IOptions<IdentityOptions> optionsAccessor */null!,
-                /* IPasswordHasher<TUser> passwordHasher */null!,
-                /* IEnumerable<IUserValidator<TUser>> userValidators */null!,
-                /* IEnumerable<IPasswordValidator<TUser>> passwordValidators */null!,
-                /* ILookupNormalizer keyNormalizer */null!,
-                /* IdentityErrorDescriber errors */null!,
-                /* IServiceProvider services */null!,
-                /* ILogger<UserManager<TUser>> logger */null!
-                );
+                Mock.Of<IUserStore<Person>>(), null!, null!, null!, null!, null!, null!, null!, null!);
         }
 
         [Fact]

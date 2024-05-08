@@ -18,7 +18,7 @@ namespace EasyTalkWeb.Models.Repositories
             return chats;
         }
 
-        public async Task<ICollection<Chat>> GetChatsWithMsgsForPersonAsync(Guid personId)
+        public virtual async Task<ICollection<Chat>> GetChatsWithMsgsForPersonAsync(Guid personId)
         {
             var chats = await _context.Chats
                 .Include(c => c.Messages)
@@ -28,13 +28,21 @@ namespace EasyTalkWeb.Models.Repositories
             return chats;
         }
 
-        public async Task<Chat> GetChatWithMsgsAsync(Guid chatId)
+        public virtual async Task<Chat> GetChatWithMsgsAsync(Guid chatId)
         {
             var chat = await _context.Chats
                 .Include(c => c.Messages)
                 .Include(c => c.Persons)
                 .FirstOrDefaultAsync(c => c.Id == chatId);
 
+            return chat;
+        }
+
+        public async Task<Chat> GetChatWithJobPostAsync(Guid chatId)
+        {
+            var chat = await _context.Chats
+                .Include(c => c.JobPost)
+                .FirstOrDefaultAsync(c => c.Id == chatId);
             return chat;
         }
     }

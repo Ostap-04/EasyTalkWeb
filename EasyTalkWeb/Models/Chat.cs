@@ -15,5 +15,7 @@ namespace EasyTalkWeb.Models
         public ICollection<Message>? Messages { get; set; }
 
         public ICollection<Person>? Persons { get; set; }
+
+        public JobPost? JobPost { get; set; }
     }
 }

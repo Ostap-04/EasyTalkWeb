@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyTalkWeb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240426095308_AddFullTextsearch")]
-    partial class AddFullTextsearch
+    [Migration("20240430114717_chatJobPost_relation")]
+    partial class chatJobPost_relation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -182,6 +182,9 @@ namespace EasyTalkWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("ChatId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uuid");
 
@@ -204,6 +207,9 @@ namespace EasyTalkWeb.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChatId")
+                        .IsUnique();
 
                     b.HasIndex("ClientId");
 
@@ -342,6 +348,9 @@ namespace EasyTalkWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uuid");
 
@@ -354,6 +363,9 @@ namespace EasyTalkWeb.Migrations
                         .HasColumnType("character varying(4096)");
 
                     b.Property<Guid>("FreelancerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("JobPostId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -372,9 +384,15 @@ namespace EasyTalkWeb.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ChatId")
+                        .IsUnique();
+
                     b.HasIndex("ClientId");
 
                     b.HasIndex("FreelancerId");
+
+                    b.HasIndex("JobPostId")
+                        .IsUnique();
 
                     b.ToTable("Projects");
                 });
@@ -390,6 +408,9 @@ namespace EasyTalkWeb.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("FreelancerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("JobPostId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -408,6 +429,8 @@ namespace EasyTalkWeb.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FreelancerId");
+
+                    b.HasIndex("JobPostId");
 
                     b.ToTable("Proposals");
                 });
@@ -686,11 +709,17 @@ namespace EasyTalkWeb.Migrations
 
             modelBuilder.Entity("EasyTalkWeb.Models.JobPost", b =>
                 {
+                    b.HasOne("EasyTalkWeb.Models.Chat", "Chat")
+                        .WithOne("JobPost")
+                        .HasForeignKey("EasyTalkWeb.Models.JobPost", "ChatId");
+
                     b.HasOne("EasyTalkWeb.Models.Client", "Client")
                         .WithMany("JobPosts")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Chat");
 
                     b.Navigation("Client");
                 });
@@ -716,6 +745,12 @@ namespace EasyTalkWeb.Migrations
 
             modelBuilder.Entity("EasyTalkWeb.Models.Project", b =>
                 {
+                    b.HasOne("EasyTalkWeb.Models.Chat", "Chat")
+                        .WithOne("Project")
+                        .HasForeignKey("EasyTalkWeb.Models.Project", "ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EasyTalkWeb.Models.Client", "Client")
                         .WithMany("Projects")
                         .HasForeignKey("ClientId")
@@ -728,9 +763,19 @@ namespace EasyTalkWeb.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EasyTalkWeb.Models.JobPost", "JobPost")
+                        .WithOne("Project")
+                        .HasForeignKey("EasyTalkWeb.Models.Project", "JobPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
                     b.Navigation("Client");
 
                     b.Navigation("Freelancer");
+
+                    b.Navigation("JobPost");
                 });
 
             modelBuilder.Entity("EasyTalkWeb.Models.Proposal", b =>
@@ -741,7 +786,15 @@ namespace EasyTalkWeb.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EasyTalkWeb.Models.JobPost", "JobPost")
+                        .WithMany("Proposals")
+                        .HasForeignKey("JobPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Freelancer");
+
+                    b.Navigation("JobPost");
                 });
 
             modelBuilder.Entity("EasyTalkWeb.Models.Topic", b =>
@@ -853,7 +906,11 @@ namespace EasyTalkWeb.Migrations
 
             modelBuilder.Entity("EasyTalkWeb.Models.Chat", b =>
                 {
+                    b.Navigation("JobPost");
+
                     b.Navigation("Messages");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("EasyTalkWeb.Models.Client", b =>
@@ -866,6 +923,13 @@ namespace EasyTalkWeb.Migrations
             modelBuilder.Entity("EasyTalkWeb.Models.Freelancer", b =>
                 {
                     b.Navigation("Projects");
+
+                    b.Navigation("Proposals");
+                });
+
+            modelBuilder.Entity("EasyTalkWeb.Models.JobPost", b =>
+                {
+                    b.Navigation("Project");
 
                     b.Navigation("Proposals");
                 });

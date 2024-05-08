@@ -19,7 +19,7 @@ namespace EasyTalkWeb.Models.Repositories
                 .Include(j => j.Technologies)
                 .ToListAsync();
         }
-        public async Task<Proposal> GetProposaltByIdForFreelancer(Guid freelancerId, Guid proposalId)
+        public virtual async Task<Proposal> GetProposaltByIdForFreelancer(Guid freelancerId, Guid proposalId)
         {
             var freelancer = await _appDbContext.Freelancers
                 .Include(c => c.Proposals)
