@@ -44,3 +44,8 @@ button {
     height: 100%;
     display: inline-block;
 }
+
+.form-label {
+    color: #eaeaea;
+    font-size: 20px;
+}

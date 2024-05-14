@@ -12,8 +12,8 @@
             </div>
         </form>
     </div>
-    <div class="col-md-6">
-        <a asp-action="Index" class="text-dark">Back to full list</a>
+    <div class="col-md-6" style="margin-bottom:20px; margin-left: 10px">
+        <a asp-action="Index" style="color:#eaeaea">Back to full list</a>
     </div>
     <div>
         @if (Model != null && Model.Any())
@@ -42,9 +42,10 @@
                                 }
                             </div>
                         </td>
-                        <td>@jobpost.Client.Person.FirstName @jobpost.Client.Person.LastName </td>
+                            <td class="list-text-item">@jobpost.Client.Person.FirstName @jobpost.Client.Person.LastName </td>
                         <td>
-                            <a asp-area=""
+                            <a style="color:#eaeaea"
+                                asp-area=""
                                asp-controller="FindJob"
                                asp-action="WriteProposal"
                                asp-route-id="@jobpost.Id">
