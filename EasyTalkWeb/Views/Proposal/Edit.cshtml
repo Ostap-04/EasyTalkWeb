@@ -1,44 +1,47 @@
 ﻿@model EasyTalkWeb.Models.ViewModels.EditProposalRequest
-@{
-}
-<div class="container py-5">
-    @if (Model != null)
-    {
-        <form method="post">
-            <input type="hidden" asp-for="Id" />
-            <div class="mb-3">
-                <label class="form-label">Title</label>
-                <input type="text" class="form-control" id="heading" asp-for="Title" />
-            </div>
-         
+<link rel="stylesheet" href="~/css/proposal.css" />
 
-            <div class="mb-3">
-                <label class="form-label">Text</label>
-                <textarea class="form-control" id="content" asp-for="Text"></textarea>
-            </div>
-            @if (Model != null)
-            {
+<div class="container-proposals">
+    <div class="proposal-form">
+        @if (Model != null)
+        {
+            <form method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="mb-3">
+                    <label class="form-label">Title</label>
+                    <input type="text" class="form-control" id="heading" asp-for="Title" />
+                </div>
 
-            }
-            <div class="mb-3 d-flex">
-                <button type="submit" class="btn btn-dark">Update</button>
 
-                <button type="submit"
-                        class="btn btn-danger ms-2"
-                        asp-controller="Proposal"
-                        asp-action="Delete">
-                    Delete
-                </button>
-            </div>
+                <div class="mb-3">
+                    <label class="form-label">Text</label>
+                    <textarea class="form-control" id="content" asp-for="Text"></textarea>
+                </div>
+                @if (Model != null)
+                {
 
-        </form>
-    }
+                }
+                <div class="buttons-edit">
+                    <button type="submit" class="button-proposal">Update</button>
 
-    else
-    {
-        <p>No proposals found!</p>
+                    <button type="submit"
+                            class="button-proposal"
+                            style="background-color:lightcoral; color: #eaeaea;"
+                            asp-controller="Proposal"
+                            asp-action="Delete">
+                        Delete
+                    </button>
+                </div>
 
-    }
+            </form>
+        }
+
+        else
+        {
+            <p>No proposals found!</p>
+
+        }
+    </div>
 
 
 </div>

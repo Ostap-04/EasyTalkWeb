@@ -1,23 +1,27 @@
 ﻿@model List<EasyTalkWeb.Models.JobPost>
+<link rel="stylesheet" href="../css/find-job.css" />
+
 @{
 }
-<div class="row">
-    <div class="col-md-6">
-        <form class="d-flex" asp-action="Index" asp-controller="FindJob">
-            <input name="searchString" class="form-control me-1" type="search" placeholder="Search" aria-label ="Search" />    
-            <button class="btn btn-dark" type="submit">Search by title </button>
+<div class="container-jobs">
+    <div class="search-job">
+        <form asp-action="Index" asp-controller="FindJob">
+            <div class="search-items">
+                <input name="searchString" class="form-control me-1" type="search" placeholder="Search" aria-label="Search" />
+                <button class="btn btn-dark" type="submit">Search by title </button>
+            </div>
         </form>
     </div>
     <div class="col-md-6">
         <a asp-action="Index" class="text-dark">Back to full list</a>
     </div>
 </div>
-<div class="container py-5">
+<div>
     @if (Model != null && Model.Any())
     {
         <table class="table">
             <thead>
-                <tr>
+                <tr class="table-titles">
                     <td>Title</td>
                     <td>Description</td>
                     <td>Technologies</td>
@@ -29,8 +33,8 @@
                 @foreach (var jobpost in Model)
                 {
                     <tr>
-                        <td>@jobpost.Title</td>
-                        <td>@jobpost.Description</td>
+                        <td class="list-text-item">@jobpost.Title</td>
+                        <td class="list-text-item">@jobpost.Description</td>
                         <td>
                             <div class="d-flex">
                                 @foreach (var tech in jobpost.Technologies)

@@ -1,12 +1,12 @@
 ﻿@model List<EasyTalkWeb.Models.Proposal>
-@{
-}
-<div class="container py-5">
+<link rel="stylesheet" href="~/css/proposal.css" />
+
+<div class="container-proposals">
     @if (Model != null && Model.Any())
     {
         <table class="table">
             <thead>
-                <tr>
+                <tr class="table-titles">
                     <td>Title</td>
                     <td>Text</td>
                     <td>Technologies</td>
@@ -18,10 +18,10 @@
                 @foreach (var proposal in Model)
                 {
                     <tr>
-                        <td>@proposal.Title</td>
-                        <td>@proposal.Text</td>
+                        <td class="list-text-item">@proposal.Title</td>
+                        <td class="list-text-item">@proposal.Text</td>
                         <td>
-                            <div class="d-flex">
+                            <div class="list-technologies">
                                 @foreach (var tech in proposal.Technologies)
                                 {
                                     <span class="badge bg-secondary me-1">@tech.Name</span>
@@ -29,7 +29,8 @@
                             </div>
                         </td>
                         <td>
-                            <a asp-area=""
+                            <a class=" button-proposal"
+                                asp-area=""
                                asp-controller="Proposal"
                                asp-action="Edit"
                                asp-route-id="@proposal.Id">
