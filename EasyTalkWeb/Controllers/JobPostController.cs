@@ -2,12 +2,14 @@
 using EasyTalkWeb.Models.Repositories;
 using EasyTalkWeb.Models.ViewModels;
 using EasyTalkWeb.Models.ViewModels.ChatViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EasyTalkWeb.Controllers
 {
+    [Authorize(Roles = "Client")]
     public class JobPostController : Controller
     {
         private readonly JobPostRepository _jobPostRepository;

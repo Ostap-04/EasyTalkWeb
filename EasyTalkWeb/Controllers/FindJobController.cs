@@ -29,7 +29,7 @@ namespace EasyTalkWeb.Controllers
             {
                 jobPosts=jobPosts.Where(n=>n.Title.Contains(searchString)).ToList();
             }
-            return View(jobPosts);
+            return View(jobPosts.ToList());
         }
 
         public async Task<IActionResult> WriteProposal(Guid id)

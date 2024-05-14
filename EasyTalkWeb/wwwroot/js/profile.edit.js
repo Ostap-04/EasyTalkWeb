@@ -35,17 +35,21 @@ const debouncedSortOptions = debounce(sortOptions, 300);
 document.getElementById('searchTechnology').addEventListener('input', debouncedSortOptions);
 sortOptions();
 
+const saveBtn = document.querySelector("#save-button");
 const form = document.forms.editProfileForm;
-form.addEventListener('submit', async (e) => {
+saveBtn.addEventListener('click', async (e) => {
     e.preventDefault();
-    checkedTechnologies = checkboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.getAttribute("id"));
-    const formData = new FormData(form);
-    formData.set("selectedTechnologies", checkedTechnologies.join());
+    if (form.checkValidity()) {
+        checkedTechnologies = checkboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.getAttribute("id"));
+        const formData = new FormData(form);
+        formData.set("selectedTechnologies", checkedTechnologies.join());
 
-    await fetch('/Profile/Edit', {
-        method: 'POST',
-        body: formData
-    });
+        await fetch('/Profile/Edit', {
+            method: 'POST',
+            body: formData
+        });
+        alert("Profile saved successfully");
+    }
 });
 
 const techCheckboxes = document.querySelectorAll('input.technology-checkbox');

@@ -1,11 +1,13 @@
 ﻿using EasyTalkWeb.Models;
 using EasyTalkWeb.Models.Repositories;
 using EasyTalkWeb.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EasyTalkWeb.Controllers
 {
+    [Authorize(Roles = "Freelancer")]
     public class ProposalController : Controller
     {
         private readonly ProposalRepository proposalRepository;

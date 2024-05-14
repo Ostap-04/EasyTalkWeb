@@ -15,12 +15,11 @@
     <div class="col-md-6">
         <a asp-action="Index" class="text-dark">Back to full list</a>
     </div>
-</div>
-<div>
-    @if (Model != null && Model.Any())
-    {
-        <table class="table">
-            <thead>
+    <div>
+        @if (Model != null && Model.Any())
+        {
+            <table class="table">
+                <thead>
                 <tr class="table-titles">
                     <td>Title</td>
                     <td>Description</td>
@@ -28,8 +27,8 @@
                     <td>Author</td>
                     <td> </td>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 @foreach (var jobpost in Model)
                 {
                     <tr>
@@ -54,12 +53,13 @@
                         </td>
                     </tr>
                 }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>No job Posts Found!</p>
-    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No job Posts Found!</p>
+        }
 
+    </div>
 </div>

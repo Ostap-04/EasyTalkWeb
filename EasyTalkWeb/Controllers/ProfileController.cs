@@ -88,7 +88,7 @@ namespace EasyTalkWeb.Controllers
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
             {
-                return RedirectToAction("Deleted", "Profile");
+                return RedirectToAction("Index", "Home");
             }
             else
             {
