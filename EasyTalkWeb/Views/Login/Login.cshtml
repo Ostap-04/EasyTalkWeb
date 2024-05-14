@@ -29,9 +29,8 @@
                         <label class="form-check-label" for="rememberMe">Remember Me</label>
                     </div>
                     <div class="buttons">
-                        <div class="input-box">
+                        <div>
                             <button type="submit" class="register-button" asp-controller="Login" asp-action="Login">Login</button>
-                            
                         </div>
                         <p>Or login with:</p>
                         @foreach (var provider in await SignInManager.GetExternalAuthenticationSchemesAsync())
