@@ -30,7 +30,7 @@ namespace EasyTalkWeb.Identity.EmailHost
             mailMessage.Body = confirmationLink;
 
             SmtpClient client = new SmtpClient(_mailSettings.Server);
-            string password = _configuration.GetSection("google_auth").GetValue<string>("ostaphutsal04@gmail.com");
+            string password = _configuration.GetSection("google_auth").GetValue<string>("password");
             client.Credentials = new NetworkCredential(_mailSettings.UserName, password);
             client.Port = _mailSettings.Port;
             client.EnableSsl = true;
