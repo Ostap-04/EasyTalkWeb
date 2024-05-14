@@ -2,12 +2,13 @@
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    margin-bottom: 20px;
 }
 
 .technology {
     padding: 5px;
     border: 2px solid #0c2d69;
     border-radius: 10px;
-    background-color: #86acefff;
+    background-color: #a6c1f1b2;
     color: white;
 }

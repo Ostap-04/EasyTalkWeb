@@ -1,4 +1,10 @@
-﻿function debounce(callback, delay) {
+﻿window.addEventListener("DOMContentLoaded", () => {
+    const checkedItems = document.querySelectorAll(".technology-checkbox[checked]");
+    console.log(checkedItems);
+    checkedItems.forEach(item => item.parentElement.classList.add('checked'));
+});
+
+function debounce(callback, delay) {
     let timeoutId;
     return async (...args) => {
         if (timeoutId !== undefined) clearTimeout(timeoutId);

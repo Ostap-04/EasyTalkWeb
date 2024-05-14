@@ -13,18 +13,25 @@ namespace EasyTalkWeb.Controllers
         private readonly IMailService _mailService;
         private readonly FreelancerRepository _freelancerRepository;
         private readonly ClientRepository _clientRepository;
+        private readonly SignInManager<Person> _signInManager;
 
-
-        public RegisterController(UserManager<Person> userManager, IMailService mailService, FreelancerRepository freelancerRepository, ClientRepository clientRepository)
+        public RegisterController(UserManager<Person> userManager, IMailService mailService, FreelancerRepository freelancerRepository, ClientRepository clientRepository, SignInManager<Person> signInManager)
         {
             _userManager = userManager;
             _mailService = mailService;
             _clientRepository = clientRepository;
             _freelancerRepository = freelancerRepository;
+            _signInManager = signInManager;
         }
 
         public IActionResult Register()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+
+            }
+
             return View();
         }
 

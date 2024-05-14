@@ -51,19 +51,6 @@
                     <label style="color:#eaeaea; font-size:20px; margin-bottom:15px;">Technologies</label>
                     <div class="search-technologies">
                         <input class="search-input" placeholder="Search Technology" id="searchTechnology" />
-                        @*  <select id="technologies" class="technologies" multiple size="3" asp-for="SelectedTechnologiesData">
-                    @foreach (var technology in Model.Technologies)
-                    {
-                    if (Model.SelectedTechnologiesData.Contains(technology.Name))
-                    {
-                    <option value="@technology.Id" selected="selected"> @technology.Name </option>
-                    }
-                    else
-                    {
-                    <option value="@technology.Id"> @technology.Name </option>
-                    }
-                    }
-                    </select> *@
                         <div id="technologies">
                             @foreach (var technology in Model.Technologies)
                             {

@@ -22,8 +22,14 @@ namespace EasyTalkWeb.Controllers
             _mailService = mailService;
         }
 
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+
+            }
+
             return View();
         }
 
