@@ -140,6 +140,13 @@ chatButtons.forEach((chatBtn, idx) => {
 
 chatHead.addEventListener('click', showChatDetails());
 
+document.addEventListener('keypress', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        sendMsgButton.click();
+    }
+});
+
 sendMsgButton.addEventListener('click', function (event) {
   event.preventDefault();
   if (messageInput.value.trim().length) {
@@ -209,22 +216,31 @@ function showChatDetails(e) {
       btn.setAttribute('type', 'button');
       btn.classList.add('start-project');
       btn.innerHTML = 'Start project';
-      btn.addEventListener('click', (e) => {
-        const finalPrice = modal.querySelector('.final-price');
-        fetch('/Project/StartProject', {
-          method: 'POST',
-          body: JSON.stringify({
-            ChatId: currentChatData.currentRoomId,
-            FreelancerId: currentChatData.members.find(
-              (member) => member.Role === 'Freelancer'
-            ).Id,
-            Name: currentChatData.title,
-            Description: currentChatData.description,
-            //! to add price
-            Status: 'InProgress',
-            Price: finalPrice.value.match(/\d+/)?.at(0) || null,
-          }),
-        });
+      btn.addEventListener('click', async (e) => {
+          const finalPrice = modal.querySelector('.final-price');
+          try { 
+
+              const response = await fetch('/Project/SaveProject', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                      ChatId: currentChatData.currentRoomId,
+                      FreelancerId: currentChatData.members.find(
+                          (member) => member.Role === 'Freelancer'
+                      ).Id,
+                      ClientId: currentChatData.members.find(
+                          (member) => member.Role === 'Client'
+                      ).Id,
+                      Name: currentChatData.title,
+                      Description: currentChatData.description,
+                      Status: 'InProgress',
+                      Price: finalPrice.value.match(/\d+/)?.at(0) || null,
+                  }),
+              });
+          }
+           catch (e) { console.log(e.message); }
       });
 
       return btn;

@@ -37,5 +37,13 @@ namespace EasyTalkWeb.Models.Repositories
 
             return chat;
         }
+
+        public async Task<Chat> GetChatWithJobPostAsync(Guid chatId)
+        {
+            var chat = await _context.Chats
+                .Include(c => c.JobPost)
+                .FirstOrDefaultAsync(c => c.Id == chatId);
+            return chat;
+        }
     }
 }

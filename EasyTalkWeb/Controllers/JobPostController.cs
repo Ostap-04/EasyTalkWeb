@@ -1,6 +1,7 @@
 ﻿using EasyTalkWeb.Models;
 using EasyTalkWeb.Models.Repositories;
 using EasyTalkWeb.Models.ViewModels;
+using EasyTalkWeb.Models.ViewModels.ChatViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -113,6 +114,16 @@ namespace EasyTalkWeb.Controllers
              await _jobPostRepository.DeleteAsync(jobPostRequest.Id);
           
             return RedirectToAction("List");
+        }
+
+        public async Task<IActionResult> ViewProposals(Guid id)
+        {
+            var jobpost = await _jobPostRepository.GetByIdAsyncWthProposals(id);
+            CreateChatViewModel createChatViewModel = new CreateChatViewModel()
+            {
+                JobPost = jobpost
+            };
+            return View(createChatViewModel);
         }
     }
 }

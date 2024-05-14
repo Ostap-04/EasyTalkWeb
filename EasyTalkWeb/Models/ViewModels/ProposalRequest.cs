@@ -6,5 +6,7 @@
         public string Text { get; set; }
         public ICollection<Technology>? Technologies { get; set; }
         public string[] SelectedTech { get; set; } = Array.Empty<string>();
+        public JobPost JobPost { get; set; }
+        public Guid JobPostId { get; set; }
     }
 }

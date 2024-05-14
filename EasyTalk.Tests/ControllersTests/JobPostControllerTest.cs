@@ -202,7 +202,5 @@ namespace EasyTalk.Tests.Controllers
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("List", redirectToActionResult.ActionName);
         }
-
     }
-
 }

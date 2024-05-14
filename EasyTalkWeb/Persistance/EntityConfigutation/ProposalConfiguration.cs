@@ -34,6 +34,11 @@ namespace EasyTalkWeb.Persistance.EntityConfigutation
             builder
               .HasMany(f => f.Technologies)
               .WithMany(t => t.Proposals);
+			builder
+				.HasOne(j => j.JobPost)
+				.WithMany(p => p.Proposals)
+				.HasForeignKey(f => f.JobPostId);
+
         }
-	}
+    }
 }

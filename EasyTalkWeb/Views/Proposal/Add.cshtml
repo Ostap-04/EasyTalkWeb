@@ -7,18 +7,14 @@
 <div class="container-proposals">
     <div class="proposal-form">
         <form method="post">
-
             <div class="mb-3">
                 <label class="form-label">Title</label>
                 <input type="text" class="form-control" id="heading" asp-for="Title" />
             </div>
-
-
             <div class="mb-3">
                 <label class="form-label">Text</label>
                 <textarea class="form-control" id="content" asp-for="Text"></textarea>
             </div>
-
             <div class="mb-3">
                 <label class="form-label">Technologies</label>
                 <select class="form-select" asp-for="SelectedTech">
@@ -29,15 +25,11 @@
                     }
                 </select>
             </div>
-
-
             <div class="mb-3">
                 <button type="submit" class="button">
                     Save
                 </button>
             </div>
-
-
         </form>
     </div>
 </div>
