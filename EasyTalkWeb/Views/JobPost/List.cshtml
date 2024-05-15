@@ -6,10 +6,11 @@
     {
         <table class="table">
             <thead>
-                <tr>
+                <tr class="table-titles">
                     <td>Title</td>
                     <td>Description</td>
                     <td>Tags</td>
+                    <td>Edit</td>
                     <td>Proposals </td>
                 </tr>
             </thead>
@@ -36,7 +37,7 @@
                             </a>
                         </td>
                     <td>
-                        <a asp-area=""
+                            <a class="button-job-post" asp-area=""
                            asp-controller="JobPost"
                            asp-action="ViewProposals"
                            asp-route-id="@jobpost.Id">

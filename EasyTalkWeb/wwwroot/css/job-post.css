@@ -44,3 +44,8 @@
     display:flex;
     gap: 20px;
 }
+
+.table-titles {
+    color: #eaeaea;
+    font-size: 30px;
+}
