@@ -53,7 +53,7 @@ namespace EasyTalk.Tests.ControllersTests
             };
             mockJobPostRepository.Setup(repo => repo.GetAllAsync()).ReturnsAsync(jobPosts);
 
-            var controller = new FindJobController(mockJobPostRepository.Object);
+            var controller = new FindJobController(mockJobPostRepository.Object, _proposalRepositoryMock.Object, _techRepositoryMock.Object, _userManagerMock.Object, _freelancerRepositoryMock.Object);
 
             // Act
             var result = await controller.Index(null);
@@ -81,7 +81,7 @@ namespace EasyTalk.Tests.ControllersTests
             };
             mockJobPostRepository.Setup(repo => repo.GetAllAsync()).ReturnsAsync(jobPosts);
 
-            var controller = new FindJobController(mockJobPostRepository.Object);
+            var controller = new FindJobController(mockJobPostRepository.Object, _proposalRepositoryMock.Object, _techRepositoryMock.Object, _userManagerMock.Object, _freelancerRepositoryMock.Object);
 
             // Act
             var result = await controller.Index("Software");

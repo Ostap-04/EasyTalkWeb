@@ -30,6 +30,8 @@ namespace EasyTalk.Tests.ControllersTests
         private readonly Mock<PersonRepository> _personRepoMock;
         private readonly Mock<ChatRepository> _chatRepoMock;
         private readonly Mock<FreelancerRepository> _freelancerRepoMock;
+        private readonly Mock<JobPostRepository> _jobPostRepoMock;
+        private readonly Mock<ProposalRepository> _proposalRepoMock;
 
         public ChatControllerTests()
         {
@@ -38,12 +40,14 @@ namespace EasyTalk.Tests.ControllersTests
             _personRepoMock = new Mock<PersonRepository>(_dbContextMock);
             _chatRepoMock = new Mock<ChatRepository>(_dbContextMock);
             _freelancerRepoMock = new Mock<FreelancerRepository>(_dbContextMock);
+            _jobPostRepoMock = new Mock<JobPostRepository>(_dbContextMock);
+            _proposalRepoMock = new Mock<ProposalRepository>(_dbContextMock);
         }
 
         [Fact]
         public void GetChatPreviews_ReturnsCorrectChatPreviews()
         {
-            var controller = new ChatController(_userManagerMock.Object, _personRepoMock.Object, _chatRepoMock.Object, _freelancerRepoMock.Object);
+            var controller = new ChatController(_userManagerMock.Object, _personRepoMock.Object, _chatRepoMock.Object, _freelancerRepoMock.Object, _jobPostRepoMock.Object, _proposalRepoMock.Object);
             
             var chats = new List<Chat>
             {
@@ -93,7 +97,7 @@ namespace EasyTalk.Tests.ControllersTests
             _userManagerMock.Setup(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(currentUser);
             _chatRepoMock.Setup(m => m.GetChatsWithMsgsForPersonAsync(It.IsAny<Guid>())).ReturnsAsync(chats);
 
-            var controller = new ChatController(_userManagerMock.Object, _personRepoMock.Object, _chatRepoMock.Object, _freelancerRepoMock.Object);
+            var controller = new ChatController(_userManagerMock.Object, _personRepoMock.Object, _chatRepoMock.Object, _freelancerRepoMock.Object, _jobPostRepoMock.Object, _proposalRepoMock.Object);
             var claims = new List<Claim> { new Claim(ClaimTypes.NameIdentifier, currentUser.Id.ToString()) };
             var identity = new ClaimsIdentity(claims, "TestAuth");
             var claimsPrincipal = new ClaimsPrincipal(identity);
@@ -124,24 +128,30 @@ namespace EasyTalk.Tests.ControllersTests
         [Fact]
         public async Task StartChat_ReturnsCreateChatViewWithFreelancerIdInTempData()
         {
-            var controller = new ChatController(_userManagerMock.Object, _personRepoMock.Object, _chatRepoMock.Object, _freelancerRepoMock.Object);
+            var controller = new ChatController(_userManagerMock.Object, _personRepoMock.Object, _chatRepoMock.Object, _freelancerRepoMock.Object, _jobPostRepoMock.Object, _proposalRepoMock.Object);
 
             controller.TempData = new TempDataDictionary(new DefaultHttpContext(), Mock.Of<ITempDataProvider>());
-            var id = Guid.NewGuid();
+            var jobPostId = Guid.NewGuid();
+            var proposalId = Guid.NewGuid();
+            var freelancerId = Guid.NewGuid();
 
-            var result = await controller.StartChat(id) as ViewResult;
+            var result = await controller.StartChat(jobPostId, proposalId, freelancerId) as ViewResult;
 
             Assert.NotNull(result);
             Assert.Equal("CreateChat", result.ViewName);
 
             Assert.True(controller.TempData.ContainsKey("freelancerId"));
-            Assert.Equal(id, controller.TempData["freelancerId"]);
+            Assert.Equal(freelancerId, controller.TempData["freelancerId"]);
+            Assert.True(controller.TempData.ContainsKey("jobPostId"));
+            Assert.Equal(jobPostId, controller.TempData["jobPostId"]);
+            Assert.True(controller.TempData.ContainsKey("proposalId"));
+            Assert.Equal(proposalId, controller.TempData["proposalId"]);
         }
 
         [Fact]
         public async Task LoadChatData_ReturnsJsonResultWithChatDataAndUserId()
         {
-            var controller = new ChatController(_userManagerMock.Object, _personRepoMock.Object, _chatRepoMock.Object, _freelancerRepoMock.Object);
+            var controller = new ChatController(_userManagerMock.Object, _personRepoMock.Object, _chatRepoMock.Object, _freelancerRepoMock.Object, _jobPostRepoMock.Object, _proposalRepoMock.Object);
 
             var chatId = Guid.NewGuid();
             var chat = new Chat { Id = chatId, Persons = new List<Person>(), Messages = new List<Message>() };
@@ -170,7 +180,7 @@ namespace EasyTalk.Tests.ControllersTests
         [Fact]
         public async Task CreateChat_ReturnsRedirectToAction_Index_When_SuccessfullyCreated()
         {
-            var controller = new ChatController(_userManagerMock.Object, _personRepoMock.Object, _chatRepoMock.Object, _freelancerRepoMock.Object);
+            var controller = new ChatController(_userManagerMock.Object, _personRepoMock.Object, _chatRepoMock.Object, _freelancerRepoMock.Object, _jobPostRepoMock.Object, _proposalRepoMock.Object);
             controller.TempData = new TempDataDictionary(new DefaultHttpContext(), Mock.Of<ITempDataProvider>());
 
             var model = new CreateChatViewModel();
@@ -196,7 +206,7 @@ namespace EasyTalk.Tests.ControllersTests
         [Fact]
         public async Task CreateChat_ReturnsViewResult_Error_When_TempDataParseFailed()
         {
-            var controller = new ChatController(_userManagerMock.Object, _personRepoMock.Object, _chatRepoMock.Object, _freelancerRepoMock.Object);
+            var controller = new ChatController(_userManagerMock.Object, _personRepoMock.Object, _chatRepoMock.Object, _freelancerRepoMock.Object, _jobPostRepoMock.Object, _proposalRepoMock.Object);
             controller.TempData = new TempDataDictionary(new DefaultHttpContext(), Mock.Of<ITempDataProvider>());
 
             var clientIdentity = new Person { Id = Guid.NewGuid() };

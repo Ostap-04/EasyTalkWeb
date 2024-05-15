@@ -24,6 +24,8 @@ namespace EasyTalk.Tests.ControllersTests
         private readonly Mock<ClientRepository> _clientRepositoryMock;
         private readonly Mock<FreelancerRepository> _freelancerRepositoryMock;
         private readonly Mock<ProjectRepository> _projectRepositoryMock;
+        private readonly Mock<ChatRepository> _chatRepositoryMock;
+
 
         public ProjectControllerTests()
         {
@@ -32,12 +34,13 @@ namespace EasyTalk.Tests.ControllersTests
             _clientRepositoryMock = new Mock<ClientRepository>(_dbContextMock);
             _freelancerRepositoryMock = new Mock<FreelancerRepository>(_dbContextMock);
             _projectRepositoryMock = new Mock<ProjectRepository>(_dbContextMock);
+            _chatRepositoryMock = new Mock<ChatRepository>(_dbContextMock);
         }
 
         [Fact]
         public async Task StartProject_WithValidId_ReturnsView()
         {
-            var controller = new ProjectController(_userManagerMock.Object, _clientRepositoryMock.Object, _freelancerRepositoryMock.Object, _projectRepositoryMock.Object);
+            var controller = new ProjectController(_userManagerMock.Object, _clientRepositoryMock.Object, _freelancerRepositoryMock.Object, _projectRepositoryMock.Object, _chatRepositoryMock.Object);
             var userId = Guid.NewGuid().ToString();
             var freelancerId = Guid.NewGuid();
             var chosenFreelancer = new Freelancer { FreelancerId = freelancerId };
@@ -68,7 +71,7 @@ namespace EasyTalk.Tests.ControllersTests
         [Fact]
         public async Task SaveProject_WithValidRequest_ReturnsRedirectToActionResult()
         {
-            var controller = new ProjectController(_userManagerMock.Object, _clientRepositoryMock.Object, _freelancerRepositoryMock.Object, _projectRepositoryMock.Object);
+            var controller = new ProjectController(_userManagerMock.Object, _clientRepositoryMock.Object, _freelancerRepositoryMock.Object, _projectRepositoryMock.Object, _chatRepositoryMock.Object);
             var userId = Guid.NewGuid();
             var clientId = Guid.NewGuid();
             var freelancerId = Guid.NewGuid();
@@ -102,7 +105,7 @@ namespace EasyTalk.Tests.ControllersTests
         [Fact]
         public async Task Edit_WithValidId_ReturnsViewWithProjectRequestModel()
         {
-            var controller = new ProjectController(null, null, null, _projectRepositoryMock.Object);
+            var controller = new ProjectController(null, null, null, _projectRepositoryMock.Object, _chatRepositoryMock.Object);
             var projectId = Guid.NewGuid();
             var project = new Project
             {
@@ -128,7 +131,7 @@ namespace EasyTalk.Tests.ControllersTests
         [Fact]
         public async Task List_ReturnsViewResultWithProjects()
         {
-            var controller = new ProjectController(null, null, null, _projectRepositoryMock.Object);
+            var controller = new ProjectController(null, null, null, _projectRepositoryMock.Object, _chatRepositoryMock.Object);
             var projects = new List<Project>
             {
                 new Project { Id = Guid.NewGuid(), Name = "Project 1", Description = "Description 1", Price = 100 },
@@ -149,7 +152,7 @@ namespace EasyTalk.Tests.ControllersTests
         [Fact]
         public async Task Edit_WithInvalidId_ReturnsViewWithNullModel()
         {
-            var controller = new ProjectController(null, null, null, _projectRepositoryMock.Object);
+            var controller = new ProjectController(null, null, null, _projectRepositoryMock.Object, _chatRepositoryMock.Object);
             var projectId = Guid.NewGuid();
 
             _projectRepositoryMock.Setup(m => m.GetByIdAsync(projectId)).ReturnsAsync((Project)null);
@@ -163,7 +166,7 @@ namespace EasyTalk.Tests.ControllersTests
         [Fact]
         public async Task Edit_WithValidProjectRequest_ReturnsRedirectToActionResult()
         {
-            var controller = new ProjectController(null, null, null, _projectRepositoryMock.Object);
+            var controller = new ProjectController(null, null, null, _projectRepositoryMock.Object, _chatRepositoryMock.Object);
             var projectId = Guid.NewGuid();
             var projectRequest = new ProjectRequest
             {
@@ -191,7 +194,7 @@ namespace EasyTalk.Tests.ControllersTests
         [Fact]
         public async Task Delete_WithValidProjectRequest_ReturnsRedirectToActionResult()
         {
-            var controller = new ProjectController(null, null, null, _projectRepositoryMock.Object);
+            var controller = new ProjectController(null, null, null, _projectRepositoryMock.Object, _chatRepositoryMock.Object);
             var projectId = Guid.NewGuid();
             var projectRequest = new ProjectRequest
             {

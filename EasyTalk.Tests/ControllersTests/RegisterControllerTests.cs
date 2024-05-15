@@ -23,6 +23,7 @@ namespace EasyTalk.Tests.Controllers
         private readonly Mock<FreelancerRepository> _freelancerRepositoryMock;
         private readonly Mock<ClientRepository> _clientRepositoryMock;
         private readonly Mock<JobPostRepository> _jobPostRepositoryMock;
+        private readonly Mock<SignInManager<Person>> _signInManagerMock;
 
         public RegisterControllerTests()
         {
@@ -32,12 +33,20 @@ namespace EasyTalk.Tests.Controllers
             _freelancerRepositoryMock = new Mock<FreelancerRepository>(_dbContextMock);
             _clientRepositoryMock = new Mock<ClientRepository>(_dbContextMock);
             _jobPostRepositoryMock = new Mock<JobPostRepository>(_dbContextMock);
+            _signInManagerMock = new Mock<SignInManager<Person>>(
+                _userManagerMock.Object,
+                /* IHttpContextAccessor contextAccessor */Mock.Of<IHttpContextAccessor>(),
+                /* IUserClaimsPrincipalFactory<TUser> claimsFactory */Mock.Of<IUserClaimsPrincipalFactory<Person>>(),
+                /* IOptions<IdentityOptions> optionsAccessor */null!,
+                /* ILogger<SignInManager<TUser>> logger */null!,
+                /* IAuthenticationSchemeProvider schemes */null!,
+                /* IUserConfirmation<TUser> confirmation */null!);
         }
 
         [Fact]
         public void Register_Returns_ViewResult()
         {
-            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object);
+            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object, _signInManagerMock.Object);
 
             var result = controller.Register();
 
@@ -52,7 +61,7 @@ namespace EasyTalk.Tests.Controllers
             services.AddHttpContextAccessor();
             var serviceProvider = services.BuildServiceProvider();
 
-            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object)
+            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object, _signInManagerMock.Object)
             {
                 ControllerContext = new ControllerContext
                 {
@@ -111,7 +120,7 @@ namespace EasyTalk.Tests.Controllers
         [Fact]
         public async Task Register_InvalidModel_Returns_ViewResult_With_ErrorMessages()
         {
-            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object);
+            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object, _signInManagerMock.Object);
             controller.ModelState.AddModelError("Email", "Email is required");
 
             var model = new RegisterViewModel();
@@ -129,7 +138,7 @@ namespace EasyTalk.Tests.Controllers
         [Fact]
         public async Task Register_CreateAsyncFails_Returns_ViewResult_With_ErrorMessages()
         {
-            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object);
+            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object, _signInManagerMock.Object);
             var model = new RegisterViewModel();
             _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<Person>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Error creating user" }));
@@ -163,7 +172,7 @@ namespace EasyTalk.Tests.Controllers
 
             app.MapControllers();
 
-            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object)
+            var controller = new RegisterController(_userManagerMock.Object, _mailServiceMock.Object, _freelancerRepositoryMock.Object, _clientRepositoryMock.Object, _signInManagerMock.Object)
             {
                 ControllerContext = new ControllerContext
                 {
