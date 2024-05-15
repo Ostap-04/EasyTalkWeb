@@ -1,43 +1,51 @@
 ﻿@model EasyTalkWeb.Models.ViewModels.ProposalRequest
 @{
 }
-<div>
-    
-    <h1><b>@Model.JobPost.Title by @Model.JobPost.Client.Person.FirstName @Model.JobPost.Client.Person.LastName</b></h1>
+<link rel="stylesheet" href="~/css/write-proposal.css" />
 
-    <h2>@Model.JobPost.Description </h2>
-    <hr/>
+<div class="container-proposals">
+    <div class="proposals-placement">
+        <div>
 
-    <p>
+            <h1 class="proposal-title"><b>@Model.JobPost.Title by @Model.JobPost.Client.Person.FirstName @Model.JobPost.Client.Person.LastName</b></h1>
 
-        @foreach (var prop in Model.JobPost.Proposals)
-        {
-            <p>@prop.Title</p>
-            <div>@prop.Freelancer.Person.FirstName</div>
-            <p>@prop.Text</p>
-            
-            <hr/>
-        }
-    </p>
+            <h2 class="proposal-title" style="font-size:18px">@Model.JobPost.Description </h2>
+            <hr />
+
+            <p>
+
+                @foreach (var prop in Model.JobPost.Proposals)
+                {
+                <p style="color: #eaeaea">@prop.Title</p>
+                <div style="color: #eaeaea">@prop.Freelancer.Person.FirstName</div>
+                <p style="color: #eaeaea">@prop.Text</p>
+
+                <hr />
+                }
+            </p>
+        </div>
+        <div class="add-proposal-form">
+            <form method="post">
+                @if (Model != null)
+                {
+                    <input type="hidden" asp-for="JobPostId" />
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" id="heading" asp-for="Title" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" id="content" asp-for="Text"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" asp-route-id="@Model.JobPostId" asp-controller="FindJob" asp-action="SaveProposal" class="post-proposal">
+                            Save
+                        </button>
+                    </div>
+
+                }
+            </form>
+        </div>
+    </div>
 </div>
-<form method="post">
-    @if (Model != null)
-    {
-        <input type="hidden" asp-for="JobPostId" />
-        <div class="mb-3">
-            <label class="form-label">Name</label>
-            <input type="text" class="form-control" id="heading" asp-for="Title" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Description</label>
-            <textarea class="form-control" id="content" asp-for="Text"></textarea>
-        </div>
-      
-        <div class="mb-3">
-            <button type="submit" asp-route-id="@Model.JobPostId" asp-controller="FindJob" asp-action="SaveProposal" class="btn btn-dark">
-                Save
-            </button>
-        </div>
-
-    }
-</form>
