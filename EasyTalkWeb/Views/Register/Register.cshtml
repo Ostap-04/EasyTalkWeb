@@ -1,0 +1,101 @@
+﻿@model EasyTalkWeb.Models.ViewModels.RegisterViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Person> SignInManager
+<link rel="stylesheet" href="~/css/register.css" asp-append-version="true" />
+
+<div class="container-register">
+    <div class="page-items">
+        <div class="col-12 col-lg-6">
+           <div class="title">
+                <h1>
+                    Register
+                </h1>
+           </div>
+            <div class="input-form">
+                <form method="post">
+                    <div class="text-danger" asp-validation-summary="All"></div>
+                    <div class="input-box">
+                        <label class="form-label">Firstname</label>
+                        <input type="text" id="username" class="form-control" asp-for="FirstName" required />
+                        <span class="text-danger" asp-validation-for="FirstName"></span>
+                    </div>
+                    <div class="input-box">
+                        <label class="form-label">LastName</label>
+                        <input type="text" id="username" class="form-control" asp-for="LastName" required />
+                        <span class="text-danger" asp-validation-for="LastName"></span>
+                    </div>
+                    <div class="input-box">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="email" class="form-control" asp-for="Email" required />
+                        <span class="text-danger" asp-validation-for="Email"></span>
+                    </div>
+                    <div class="input-box">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="password" class="form-control" asp-for="Password" required minlength="6" />
+                        <span class="text-danger" asp-validation-for="Password"></span>
+                    </div>
+                    <div class="input-box">
+                        <label class="form-label">Location</label>
+                        <input type="text" id="username" class="form-control" asp-for="Location" required />
+                        <span class="text-danger" asp-validation-for="Location"></span>
+                    </div>
+
+
+                    <div class="input-box">
+                        <label class="form-label">DateOfBirth</label>
+                        <input type="date" id="username" class="form-control" asp-for="DateOfBirth" required />
+                        <span class="text-danger" asp-validation-for="DateOfBirth"></span>
+                    </div>
+
+                    <div class="radio-buttons">
+                        <div class="choices">
+                            <label class="form-label">Gender</label><br />
+                            <div class="radio-choice">
+                                <input type="radio" id="male" name="Gender" value="Male" checked>
+                                <label for="male" class="choice-label">Male</label><br>
+                                <input type="radio" id="female" name="Gender" value="Female">
+                                <label for="female" class="choice-label">Female</label><br>
+                                <input type="radio" id="other" name="Gender" value="Other">
+                                <label for="other" class="choice-label">Other</label><br>
+                            </div>
+                        </div>
+                        <div class="choices">
+                            <label class="form-label">Role</label><br />
+                            <div class="radio-choice">
+                                <input type="radio" id="client" name="Role" value="Client" checked>
+                                <label for="client" class="choice-label">Client</label><br>
+                                <input type="radio" id="freelancer" name="Role" value="Freelancer">
+                                <label for="freelancer" class="choice-label">Freelancer</label><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <button type="submit" class="register-button" asp-controller="Register" asp-action="Register">Register</button>
+                    
+                        <p>Or register with:</p>
+                        @foreach (var provider in await SignInManager.GetExternalAuthenticationSchemesAsync())
+                        {
+                            <a class="register-button"
+                               id="externalRegisterButton"
+                               name="provider"
+                               asp-controller="ExternalAuth"
+                               asp-action="ExternalAuth"
+                               asp-route-provider=@provider.Name>
+                                @provider.Name
+                            </a>
+                        }
+                    </div>
+                </form>
+           </div>
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("externalRegisterButton").addEventListener("click", function () {
+            window.location.href = "@Url.Action("ExternalAuth", "ExternalAuth")";
+        });
+    </script>
+}

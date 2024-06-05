@@ -1,0 +1,20 @@
+﻿@model EasyTalkWeb.Models.ViewModels.ChatViewModels.CreateChatViewModel
+<link rel="stylesheet" href="~/css/start-chat.css" />
+
+<link rel="stylesheet" href="~/css/chat/createChat.css" />
+<div class="start-chat-container">
+    <div class="start-chat-form">
+        <form class="form" id="createChatForm" method="post">
+            <p class="name">
+                <input name="name" asp-for="Name" type="text" class="form-control" placeholder="Name" id="name" />
+            </p>
+            <p class="description">
+                <textarea name="description" asp-for="Description" type="text" class="form-control" id="description" placeholder="Description"></textarea>
+            </p>
+            <div class="submit">
+                <button type="submit" class="create-chat-button" asp-controller="Chat" asp-action="CreateChat">Create</button>
+               @*  <div class="ease"></div> *@
+            </div>
+        </form>
+    </div>
+</div>

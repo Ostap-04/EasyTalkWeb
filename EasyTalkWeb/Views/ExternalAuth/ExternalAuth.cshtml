@@ -1,0 +1,17 @@
+﻿@model EasyTalkWeb.Models.ViewModels.ExternalAuthViewModel
+@{
+    ViewData["Title"] = "External Login";
+}
+<link rel="stylesheet" href="../css/base.css" />
+
+
+<div class="container-base">
+    <h1>External Login</h1>
+
+    <p>You don't have an account with us yet. Would you like to create one?</p>
+
+    <form asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+        <input type="hidden" asp-for="Email" value="@ViewData["Email"]" />
+        <button type="submit">Create Account</button>
+    </form>
+</div>

@@ -1,3 +1,12 @@
+using EasyTalkWeb.Hubs;
+using EasyTalkWeb.Identity;
+using EasyTalkWeb.Identity.EmailHost;
+using EasyTalkWeb.Models;
+using EasyTalkWeb.Models.Repositories;
+using EasyTalkWeb.Persistance;
+using EasyTalkWeb.Persistance.Seeders;
+using Microsoft.AspNetCore.Identity;
+
 namespace EasyTalkWeb
 {
     public class Program
@@ -6,30 +15,49 @@ namespace EasyTalkWeb
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddPersistanceServices(builder.Configuration);
+            builder.Services.AddIdentityServices();
+            builder.Services.AddHubServices();
+            builder.Services.AddAuthorization();
+            builder.Services.AddIdentityApiEndpoints<Person>();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSignalR();
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+            builder.Services.AddTransient<IMailService, MailService>();
+           
+            builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                var secrets = builder.Configuration.GetSection("google_auth");
+                googleOptions.ClientId = secrets.GetValue<string>("client_id");
+                googleOptions.ClientSecret = secrets.GetValue<string>("client_secret");
+                googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
+            });
 
             var app = builder.Build();
+            RoleSeeder.SeedRolesAsync(app).Wait();
+            TechnologySeeder.SeedTechnologiesAsync(app).Wait();
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
+            app.MapIdentityApi<Person>();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthorization();
-
+            
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapHub<ChatHub>("/chatHub");
 
+            app.MapControllers();
+            
             app.Run();
         }
     }

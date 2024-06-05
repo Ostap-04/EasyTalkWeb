@@ -1,0 +1,66 @@
+﻿@model List<EasyTalkWeb.Models.Freelancer>
+<link rel="stylesheet" href="../css/freelancers.css" />
+
+<div class="container-freelancers">
+    <div class="search-freelancer">
+        <form method="post">
+            <div class="search-items">
+                <input class="form-control" style="width: 40%;" type="text" name="inputData" , value="@TempData["searchTerm"]">
+                <button type="submit" asp-controller="FindFreelancer" asp-action="FindFreelancer">Find</button>
+            </div>
+        </form>
+    </div>
+    
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr class="table-titles">
+                    <td>Firstname</td>
+                    <td>LastName</td>
+                    <td>Technologies</td>
+                    <td>Proposal</td>
+                    <td> </td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var freelancer in Model)
+                {
+                    <tr>
+                        <td class="list-text-item">@freelancer.Person.FirstName</td>
+                           <td class="list-text-item">@freelancer.Person.LastName</td> 
+                        
+                <td>
+                <div class="d-flex">
+                @foreach (var tech in freelancer.Technologies)
+                {
+                <span class="badge bg-secondary me-1">@tech.Name</span>
+                }
+                </div>
+                </td>
+                        <td>
+                            <div class="d-flex">
+                                @foreach (var proposal in freelancer.Proposals)
+                                {
+                                    <span class="badge bg-secondary me-1">@proposal.Title</span>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <a class="chat-button" asp-area=""
+                               asp-controller="Chat"
+                               asp-action="StartChat"
+                               asp-route-id="@freelancer.FreelancerId">
+                                Start Chat
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No freelancer Found!</p>
+    }
+</div>

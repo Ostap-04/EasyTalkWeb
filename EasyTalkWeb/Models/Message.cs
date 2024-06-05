@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Persistance.EntityConfiguration;
 
 namespace EasyTalkWeb.Models
 {
+    [EntityTypeConfiguration(typeof(MessageConfiguration))]
     public class Message : BaseEntity
     {
         public string? Text { get; set; }
@@ -14,6 +16,6 @@ namespace EasyTalkWeb.Models
 
         public Chat? Chat { get; set; }
 
-        public Attachment? Attachment { get; set; }
+        public ICollection<Attachment>? Attachments { get; set; }
     }
 }

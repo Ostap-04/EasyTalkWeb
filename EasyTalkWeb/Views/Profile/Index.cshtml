@@ -1,0 +1,69 @@
+﻿@model EasyTalkWeb.Models.ViewModels.ProfileViewModel
+@using Microsoft.AspNetCore.Identity
+<link rel="stylesheet" href="../css/register.css"/>
+<link rel="stylesheet" href="~/css//profile.css" />
+<div class="container-register">
+    <div class="page-items">
+        <div class="profile-items">
+            <div>
+                <div class="profile-inner">
+                    <div class="title">
+                        <h1>Profile</h1>
+                    </div>
+                    <div class="input-form">
+                        <div>
+                            <label class="form-label">First Name</label>
+                            <input type="text" placeholder="@Model.FirstName" class="form-control" asp-for="FirstName" readonly />
+                        </div>
+                        <div>
+                            <label class="form-label">Last Name</label>
+                            <input type="text" placeholder="@Model.LastName" class="form-control" asp-for="LastName" readonly />
+                        </div>
+                        <div>
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" placeholder=" @Model.DateOfBirth" class="form-control" asp-for="DateOfBirth" readonly />
+                        </div>
+                        <div>
+                            <label class="form-label">Location</label>
+                            <input type="text" placeholder="@Model.Location" class="form-control" asp-for="Location" readonly />
+                        </div>
+                        <div>
+                            <label class="form-label">Email</label>
+                            <input type="email" placeholder="@Model.Email" class="form-control" asp-for="Email" readonly />
+                        </div>
+                    </div>
+                </div>
+                @if (User.IsInRole("Freelancer"))
+                {
+                    <div class="input-form">
+                        <label class="form-label">Specialization</label>
+                        <textarea style="height: 120px; resize: none" type="text" placeholder="@Model.Specialization" class="form-control" asp-for="Specialization" readonly></textarea>
+                        <span class="text-danger" asp-validation-for="Specialization"></span>
+                    </div>
+                    <div>
+                        <label class="form-label">Technologies</label>
+                        <div class="technologies">
+                            @if (Model.Technologies != null)
+                            {
+                                @foreach (Technology technology in Model.Technologies)
+                                {
+                                    <div class="technology">@technology.Name</div>
+                                }
+                            }
+                            else
+                            {
+                                <p>No technologies found</p>
+                            }
+                        </div>
+                    </div>
+                    
+                }
+                <div class="edit-button">
+                    <a class="register-button" asp-controller="Profile" asp-action="Edit">Edit</a>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+</div>

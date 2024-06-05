@@ -1,11 +1,17 @@
-﻿namespace EasyTalkWeb.Models
+﻿using EasyTalkWeb.Persistance.EntityConfigutation;
+using Microsoft.EntityFrameworkCore;
+
+namespace EasyTalkWeb.Models
 {
-	public class Proposal : BaseEntity
+    [EntityTypeConfiguration(typeof(ProposalConfiguration))]
+    public class Proposal : BaseEntity
 	{
-		public Guid Id {  get; set; }
 		public string Title { get; set; }
 		public string Text { get; set; }
-
+		public Guid FreelancerId { get; set; }
 		public Freelancer Freelancer { get; set; }
-	}
+        public ICollection<Technology>? Technologies { get; set; }
+		public JobPost JobPost { get; set; }
+		public Guid JobPostId { get; set; }
+    }
 }

@@ -1,0 +1,61 @@
+﻿@model List<EasyTalkWeb.Models.JobPost>
+<link rel="stylesheet" href="../css/job-post.css" />
+
+<div class="container-job-post">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr class="table-titles">
+                    <td>Title</td>
+                    <td>Description</td>
+                    <td>Tags</td>
+                    <td>Edit</td>
+                    <td>Proposals </td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var jobpost in Model)
+                {
+                    <tr>
+                        <td class="list-text-item">@jobpost.Title</td>
+                        <td class="list-text-item">@jobpost.Description</td>
+                        <td>
+                            <div class="d-flex">
+                                @foreach (var tech in jobpost.Technologies)
+                                {
+                                    <span class="badge bg-secondary me-1">@tech.Name</span>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <a class="button-job-post" asp-area =""
+                               asp-controller="JobPost"
+                               asp-action="Edit"
+                               asp-route-id="@jobpost.Id">
+                                Edit
+                            </a>
+                        </td>
+                    <td>
+                            <a class="button-job-post" asp-area=""
+                           asp-controller="JobPost"
+                           asp-action="ViewProposals"
+                           asp-route-id="@jobpost.Id">
+                           View Proposals
+                        </a>
+                    </td>
+                    </tr>
+                            
+                        
+                       
+                    
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No job Posts Found!</p>
+    }
+
+</div>
