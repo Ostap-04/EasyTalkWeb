@@ -31,7 +31,7 @@
                            <td class="list-text-item">@freelancer.Person.LastName</td> 
                         
                 <td>
-                <div class="d-flex">
+                            <div class="d-flex" style="display: flex; flex-wrap: wrap; max-width: 100px; row-gap: 8px">
                 @foreach (var tech in freelancer.Technologies)
                 {
                 <span class="badge bg-secondary me-1">@tech.Name</span>
